@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Media Buying Plan Template — خطة ميديا باينج</title>
+    <!-- Google Fonts Cairo (Arabic) & Outfit (English/Numbers) -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* cspell:disable-file */
+        :root {
+            --bg-space: #07080d;
+            --bg-panel: rgba(15, 18, 28, 0.7);
+            --bg-card: rgba(25, 30, 48, 0.45);
+            --bg-card-hover: rgba(30, 37, 58, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-border-focus: rgba(0, 102, 255, 0.4);
+            --glass-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            
+            --neon-blue: #0052ff;
+            --neon-cyan: #00f0ff;
+            --neon-crimson: #ff0055;
+            --neon-green: #10b981;
+            --neon-amber: #f59e0b;
+            
+            --font-arabic: 'Cairo', sans-serif;
+            --font-english: 'Outfit', sans-serif;
+            
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Smooth scroll & Print Adjustments */
+        html {
+            scroll-behavior: smooth;
+            background-color: var(--bg-space);
+            color: var(--text-primary);
+            font-family: var(--font-arabic);
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        /* Glowing space background circles decoupled onto fixed GPU layer for 60FPS scrolling */
+        body {
+            margin: 0;
+            padding: 90px 24px 48px; /* space for floating progress header */
+            min-height: 100vh;
+            background-color: var(--bg-space);
+            line-height: 1.6;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+            background-image: 
+                radial-gradient(circle at 10% 10%, rgba(0, 82, 255, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(255, 0, 85, 0.06) 0%, transparent 45%);
+            pointer-events: none;
+            transform: translate3d(0, 0, 0);
+            backface-visibility: hidden;
+        }
+
+        /* Scrollbar styles */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Typography Styles */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-arabic);
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.3;
+            letter-spacing: -0.01em;
+            margin-bottom: 0.5em;
+        }
+
+        h1 {
+            font-size: 2.25rem;
+            background: linear-gradient(135deg, #ffffff 30%, var(--text-secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 12px;
+            margin-top: 2rem;
+        }
+
+        h2 {
+            font-size: 1.65rem;
+            margin-top: 2.5rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        h2::after {
+            content: "";
+            flex-grow: 1;
+            height: 1px;
+            background: linear-gradient(90deg, var(--glass-border) 0%, transparent 100%);
+            margin-right: 15px;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            margin-top: 1.75rem;
+            color: var(--text-secondary);
+        }
+
+        p, li {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        strong {
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+        a, a.visited {
+            color: var(--neon-cyan);
+            text-decoration: none;
+            transition: var(--transition-smooth);
+            border-bottom: 1px dashed rgba(0, 240, 255, 0.3);
+        }
+
+        a:hover {
+            color: #ffffff;
+            border-bottom-color: #ffffff;
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
+        }
+
+        /* Layout Structure */
+        .page {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .page-cover-image {
+            display: block;
+            object-fit: cover;
+            width: 100%;
+            height: 220px;
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+            margin-bottom: -40px;
+        }
+
+        .page-header-icon {
+            font-size: 3.5rem;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-panel);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            box-shadow: var(--glass-shadow);
+            backdrop-filter: blur(25px);
+            margin-right: 40px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .page-header-icon img.icon {
+            width: 48px;
+            height: 48px;
+            filter: drop-shadow(0 0 8px rgba(0, 82, 255, 0.4));
+        }
+
+        .page-title {
+            font-size: 2.75rem;
+            font-weight: 800;
+            margin: 20px 40px 10px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            background: linear-gradient(135deg, #ffffff 40%, #8294c4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .page-description {
+            margin: 0 40px 30px;
+            color: var(--text-muted);
+        }
+
+        /* Custom Dynamic Grid for RTL layout: Content & Sticky TOC */
+        @media (min-width: 1024px) {
+            .page-body {
+                display: flex;
+                flex-direction: row-reverse; /* Sticky TOC on the right for RTL layout */
+                gap: 40px;
+                align-items: start;
+            }
+            .table_of_contents {
+                width: 320px;
+                flex-shrink: 0;
+                position: sticky;
+                top: 100px;
+            }
+            /* The rest of the content takes the remaining space */
+            .page-body > div:not([style*="contents"]) {
+                flex-grow: 1;
+                min-width: 0;
+            }
+            /* Notion uses direct div[style*="contents"] wrapper */
+            .page-body > div[style*="contents"] {
+                flex-grow: 1;
+                min-width: 0;
+            }
+        }
+
+        /* Glassmorphism Sidebar Table of Contents */
+        .table_of_contents {
+            background: var(--bg-panel);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 24px;
+            backdrop-filter: blur(25px);
+            box-shadow: var(--glass-shadow);
+            max-height: calc(100vh - 150px);
+            overflow-y: auto;
+        }
+
+        .toc-search-container {
+            position: relative;
+            margin-bottom: 18px;
+        }
+
+        .toc-search-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            padding: 10px 14px;
+            color: var(--text-primary);
+            font-family: var(--font-arabic);
+            font-size: 0.85rem;
+            outline: none;
+            transition: var(--transition-smooth);
+            text-align: right;
+            direction: rtl;
+        }
+
+        .toc-search-input:focus {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: var(--glass-border-focus);
+            box-shadow: 0 0 10px rgba(0, 82, 255, 0.2);
+        }
+
+        .table_of_contents-item.hidden {
+            display: none !important;
+        }
+
+        .table_of_contents-item {
+            display: block;
+            margin-bottom: 8px;
+            transition: var(--transition-smooth);
+        }
+
+        .table_of_contents-link {
+            font-size: 0.925rem;
+            color: var(--text-secondary);
+            text-decoration: none !important;
+            border-bottom: none !important;
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: var(--transition-smooth);
+            font-weight: 500;
+        }
+
+        .table_of_contents-link:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary) !important;
+            transform: translateX(-4px); /* move left slightly for RTL hover */
+        }
+
+        .table_of_contents-indent-1 {
+            padding-right: 15px;
+        }
+
+        .table_of_contents-indent-2 {
+            padding-right: 30px;
+        }
+
+        .table_of_contents-indent-3 {
+            padding-right: 45px;
+        }
+
+        /* Glass Content Containers */
+        .callout {
+            background: var(--bg-panel);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 24px;
+            margin: 28px 0;
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            backdrop-filter: blur(25px);
+            box-shadow: var(--glass-shadow);
+            transition: var(--transition-smooth);
+        }
+
+        .callout:hover {
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+            border-color: rgba(255, 255, 255, 0.12);
+        }
+
+        .block-color-red_background.callout {
+            border-right: 5px solid var(--neon-crimson);
+            background: rgba(255, 0, 85, 0.03);
+        }
+
+        .block-color-blue_background.callout {
+            border-right: 5px solid var(--neon-blue);
+            background: rgba(0, 82, 255, 0.03);
+        }
+
+        .block-color-gray_background.callout {
+            border-right: 5px solid var(--text-muted);
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .callout .icon {
+            font-size: 1.75rem;
+            flex-shrink: 0;
+            filter: drop-shadow(0 0 10px rgba(255,255,255,0.1));
+        }
+
+        .callout p {
+            margin: 0;
+            color: var(--text-primary);
+        }
+
+        /* Column Layout system */
+        .column-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+            margin: 28px 0;
+        }
+
+        .column {
+            flex: 1;
+            min-width: 280px;
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 28px;
+            backdrop-filter: blur(20px);
+            box-shadow: var(--glass-shadow);
+            transition: var(--transition-smooth);
+        }
+
+        .column:hover {
+            transform: translateY(-6px);
+            background: var(--bg-card-hover);
+            border-color: var(--glass-border-focus);
+            box-shadow: 0 25px 50px rgba(0, 82, 255, 0.15);
+        }
+
+        .column h3 {
+            margin-top: 0 !important;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* Premium Executive Tables */
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 32px 0;
+            background: var(--bg-panel);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            overflow: hidden;
+            backdrop-filter: blur(25px);
+            box-shadow: var(--glass-shadow);
+        }
+
+        th, td {
+            border: none;
+            padding: 16px 20px;
+            text-align: right; /* RTL align */
+        }
+
+        th {
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text-primary);
+            font-family: var(--font-arabic);
+            font-weight: 700;
+            font-size: 0.95rem;
+            border-bottom: 1px solid var(--glass-border);
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            color: var(--text-secondary);
+            font-size: 0.925rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            transition: var(--transition-smooth);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+            color: var(--text-primary);
+        }
+
+        /* Inline Bracket Editable System */
+        .editable-slot {
+            display: inline-block;
+            background: rgba(0, 82, 255, 0.08);
+            border: 1px dashed rgba(0, 82, 255, 0.3);
+            border-radius: 6px;
+            padding: 2px 10px;
+            color: var(--neon-cyan);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            min-width: 60px;
+            text-align: center;
+            outline: none;
+            font-family: var(--font-arabic);
+        }
+
+        .editable-slot:hover {
+            background: rgba(0, 82, 255, 0.15);
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+        }
+
+        .editable-slot:focus {
+            background: var(--bg-space);
+            border-style: solid;
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+            color: #ffffff;
+            cursor: text;
+        }
+
+        .editable-slot.has-value {
+            background: rgba(16, 185, 129, 0.08);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #ffffff;
+        }
+
+        .editable-slot.has-value:hover {
+            background: rgba(16, 185, 129, 0.15);
+            border-color: var(--neon-green);
+        }
+
+        /* Checklists and Custom Checkboxes */
+        ul.to-do-list {
+            padding-inline-start: 0;
+            list-style: none;
+        }
+
+        ul.to-do-list > li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 12px 0;
+            transition: var(--transition-smooth);
+        }
+
+        .checkbox {
+            cursor: pointer;
+            width: 22px;
+            height: 22px;
+            border-radius: 6px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition-smooth);
+            background: transparent;
+            flex-shrink: 0;
+        }
+
+        .checkbox-on {
+            background: var(--neon-blue);
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 12px rgba(0, 82, 255, 0.5);
+        }
+
+        .checkbox-on::after {
+            content: "✓";
+            color: #ffffff;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .checkbox-off:hover {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+        }
+
+        .to-do-checked span {
+            text-decoration: line-through;
+            opacity: 0.4;
+            color: var(--text-muted);
+        }
+
+        /* Toggle Elements */
+        details {
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin: 16px 0;
+            transition: var(--transition-smooth);
+        }
+
+        details[open] {
+            background: rgba(255, 255, 255, 0.02);
+            border-color: rgba(255, 255, 255, 0.12);
+        }
+
+        summary {
+            font-weight: 700;
+            color: var(--text-primary);
+            cursor: pointer;
+            outline: none;
+            font-size: 1.05rem;
+            list-style: none; /* remove legacy arrows */
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        summary::-webkit-details-marker {
+            display: none; /* chrome arrows remove */
+        }
+
+        summary::before {
+            content: "✦";
+            color: var(--neon-cyan);
+            font-size: 0.9rem;
+            transition: transform 0.3s ease;
+        }
+
+        details[open] summary::before {
+            transform: rotate(45deg);
+            color: var(--neon-crimson);
+        }
+
+        hr {
+            border: none;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--glass-border), transparent);
+            margin: 48px 0;
+        }
+
+        /* Floating Progress Dashboard Header */
+        .floating-progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 76px;
+            background: rgba(7, 8, 13, 0.85);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-bottom: 1px solid var(--glass-border);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+        }
+
+        .header-logo-container {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .header-badge {
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-cyan));
+            color: #ffffff;
+            font-size: 0.75rem;
+            font-weight: 800;
+            padding: 4px 12px;
+            border-radius: 20px;
+            letter-spacing: 1px;
+            box-shadow: 0 0 12px rgba(0, 82, 255, 0.4);
+            font-family: var(--font-english);
+        }
+
+        .header-title {
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: var(--text-primary);
+            font-family: var(--font-arabic);
+        }
+
+        .progress-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-grow: 1;
+            max-width: 600px;
+            justify-content: flex-end;
+            margin: 0 40px;
+        }
+
+        .progress-label {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            font-family: var(--font-arabic);
+            white-space: nowrap;
+        }
+
+        .progress-container {
+            width: 250px;
+            background: rgba(255, 255, 255, 0.05);
+            height: 10px;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-cyan));
+            border-radius: 20px;
+            box-shadow: 0 0 12px var(--neon-cyan);
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Elegant Floating Button */
+        .btn {
+            font-family: var(--font-arabic);
+            background: linear-gradient(135deg, var(--neon-blue) 0%, rgba(0, 82, 255, 0.7) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            padding: 10px 20px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            box-shadow: 0 8px 20px rgba(0, 82, 255, 0.25);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+            box-shadow: none;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--neon-crimson) 0%, rgba(255, 0, 85, 0.7) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            box-shadow: 0 8px 20px rgba(255, 0, 85, 0.15);
+        }
+
+        .btn-danger:hover {
+            background: linear-gradient(135deg, var(--neon-crimson) 0%, #ff007f 100%);
+            box-shadow: 0 12px 25px rgba(255, 0, 85, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        /* Saved Indicator Pulse animation */
+        @keyframes green-pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.8);
+            }
+            70% {
+                box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+            }
+        }
+
+        .saved-pulse {
+            animation: green-pulse 1.2s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+            background: linear-gradient(135deg, var(--neon-green), #34d399) !important;
+            box-shadow: 0 0 12px rgba(16, 185, 129, 0.5) !important;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(0, 82, 255, 0.4);
+            border-color: rgba(255, 255, 255, 0.3);
+            background: linear-gradient(135deg, var(--neon-blue) 0%, var(--neon-cyan) 100%);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        /* Highlight classes */
+        .highlight-gray { color: var(--text-muted); }
+        .highlight-blue { color: var(--neon-blue); }
+        .highlight-red { color: var(--neon-crimson); }
+        
+        .block-color-red_background {
+            background-color: rgba(255, 0, 85, 0.05);
+        }
+        
+        .selected-value {
+            display: inline-block;
+            padding: 2px 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 6px;
+            margin-right: 8px;
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        /* ---------------------------------
+           Print & PDF Generation Styling 
+           --------------------------------- */
+        @media print {
+            body {
+                background: #ffffff !important;
+                color: #000000 !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+
+            .floating-progress-bar {
+                display: none !important;
+            }
+
+            .table_of_contents {
+                display: none !important;
+            }
+
+            .page-body {
+                display: block !important;
+                width: 100% !important;
+            }
+
+            .column {
+                background: #f8fafc !important;
+                border: 1px solid #e2e8f0 !important;
+                color: #000000 !important;
+                box-shadow: none !important;
+                break-inside: avoid;
+                margin-bottom: 20px;
+            }
+
+            .callout {
+                background: #f1f5f9 !important;
+                border: 1px solid #cbd5e1 !important;
+                color: #000000 !important;
+                box-shadow: none !important;
+                break-inside: avoid;
+            }
+
+            table {
+                background: #ffffff !important;
+                border: 1px solid #cbd5e1 !important;
+                box-shadow: none !important;
+                page-break-inside: auto;
+            }
+
+            tr {
+                page-break-inside: avoid;
+                page-break-after: auto;
+            }
+
+            th {
+                background: #f1f5f9 !important;
+                color: #000000 !important;
+                border-bottom: 2px solid #cbd5e1 !important;
+            }
+
+            td {
+                color: #334155 !important;
+                border-bottom: 1px solid #e2e8f0 !important;
+            }
+
+            /* Clean printable editables */
+            .editable-slot {
+                background: transparent !important;
+                border: none !important;
+                color: #000000 !important;
+                padding: 0 !important;
+                border-bottom: 1px solid #000000 !important;
+                border-radius: 0 !important;
+                min-width: auto !important;
+            }
+
+            .editable-slot:empty::after {
+                content: "........................";
+                color: #cbd5e1 !important;
+            }
+
+            h1, h2, h3 {
+                color: #000000 !important;
+                background: none !important;
+                -webkit-text-fill-color: initial !important;
+                text-shadow: none !important;
+            }
+
+            .checkbox {
+                border-color: #000000 !important;
+            }
+
+            .checkbox-on {
+                background: #000000 !important;
+            }
+        }
+    </style>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // 1. Create Floating Progress Header dynamically
+            const header = document.createElement('div');
+            header.className = 'floating-progress-bar';
+            header.innerHTML = `
+                <div class="header-logo-container">
+                    <span id="live-badge" class="header-badge">LIVE PLAN</span>
+                    <span class="header-title">خطة ميديا باينج — لوحة تحكم تفاعلية</span>
+                </div>
+                <div class="progress-wrapper">
+                    <span id="progress-text" class="progress-label">نسبة ملء الخطة: 0%</span>
+                    <div class="progress-container">
+                        <div id="progress-fill" class="progress-fill"></div>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-secondary" onclick="window.downloadFilledPlan()">
+                        <span>💾</span> تحميل الخطة
+                    </button>
+                    <button class="btn btn-danger" onclick="window.resetTemplate()">
+                        <span>🧹</span> إعادة تعيين
+                    </button>
+                    <button class="btn btn-primary" onclick="window.print()">
+                        <span>🖨️</span> تصدير PDF
+                    </button>
+                </div>
+            `;
+            document.body.insertBefore(header, document.body.firstChild);
+
+            const fillElement = document.getElementById('progress-fill');
+            const textElement = document.getElementById('progress-text');
+            const badgeElement = document.getElementById('live-badge');
+
+            // 2. Wrap all standard checklist checkboxes in interactive elements
+            const checkboxes = document.querySelectorAll('.checkbox');
+            checkboxes.forEach((box, idx) => {
+                // Attach stable reference index
+                box.setAttribute('data-check-idx', idx);
+
+                // Determine initial state
+                if (box.classList.contains('checkbox-on')) {
+                    const li = box.closest('li');
+                    if (li) li.classList.add('to-do-checked');
+                } else {
+                    box.classList.add('checkbox-off');
+                }
+
+                // Attach click event
+                box.addEventListener('click', () => {
+                    box.classList.toggle('checkbox-on');
+                    box.classList.toggle('checkbox-off');
+                    const li = box.closest('li');
+                    if (li) {
+                        li.classList.toggle('to-do-checked');
+                    }
+                    debouncedUpdateProgress();
+                    triggerAutoSave();
+                });
+            });
+
+            // 3. TreeWalk the document body text to dynamically convert brackets [xxx] to editable slots
+            const walk = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+            const textNodes = [];
+            while (walk.nextNode()) {
+                const node = walk.currentNode;
+                // Skip script, style and code elements
+                const tag = node.parentElement.tagName;
+                if (tag === 'STYLE' || tag === 'SCRIPT' || tag === 'CODE' || node.parentElement.classList.contains('editable-slot') || node.parentElement.closest('.floating-progress-bar')) {
+                    continue;
+                }
+                if (node.nodeValue.includes('[') && node.nodeValue.includes(']')) {
+                    textNodes.push(node);
+                }
+            }
+
+            let slotCounter = 0;
+            textNodes.forEach(node => {
+                const parent = node.parentElement;
+                const text = node.nodeValue;
+                const frag = document.createDocumentFragment();
+                
+                let lastIndex = 0;
+                const regex = /\[([^\]]*)\]/g;
+                let match;
+                while ((match = regex.exec(text)) !== null) {
+                    if (match.index > lastIndex) {
+                        frag.appendChild(document.createTextNode(text.substring(lastIndex, match.index)));
+                    }
+                    
+                    const placeholder = match[1] || 'اكتب هنا';
+                    const span = document.createElement('span');
+                    span.className = 'editable-slot';
+                    span.contentEditable = 'true';
+                    span.spellcheck = false;
+                    span.textContent = `[${placeholder}]`;
+                    span.setAttribute('data-placeholder', placeholder);
+                    span.setAttribute('data-slot-idx', slotCounter++);
+                    
+                    span.addEventListener('focus', () => {
+                        if (span.textContent === `[${placeholder}]`) {
+                            span.textContent = '';
+                        }
+                    });
+                    
+                    span.addEventListener('blur', () => {
+                        const val = span.textContent.trim();
+                        if (val === '' || val === `[${placeholder}]`) {
+                            span.textContent = `[${placeholder}]`;
+                            span.classList.remove('has-value');
+                        } else {
+                            span.classList.add('has-value');
+                        }
+                        debouncedUpdateProgress();
+                        triggerAutoSave();
+                    });
+                    
+                    span.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter') {
+                            e.preventDefault();
+                            span.blur();
+                        }
+                    });
+                    
+                    span.addEventListener('input', () => {
+                        debouncedUpdateProgress();
+                    });
+
+                    frag.appendChild(span);
+                    lastIndex = regex.lastIndex;
+                }
+                
+                if (lastIndex < text.length) {
+                    frag.appendChild(document.createTextNode(text.substring(lastIndex)));
+                }
+                
+                parent.replaceChild(frag, node);
+            });
+
+            // 4. Sidebar search and filter for Table of Contents
+            const toc = document.querySelector('.table_of_contents');
+            if (toc) {
+                const searchContainer = document.createElement('div');
+                searchContainer.className = 'toc-search-container';
+                searchContainer.innerHTML = `
+                    <input type="text" id="toc-search" class="toc-search-input" placeholder="🔍 بحث في الأقسام...">
+                `;
+                toc.insertBefore(searchContainer, toc.firstChild);
+
+                const searchInput = document.getElementById('toc-search');
+                searchInput.addEventListener('input', (e) => {
+                    const query = e.target.value.toLowerCase().trim();
+                    const items = document.querySelectorAll('.table_of_contents-item');
+                    items.forEach(item => {
+                        const link = item.querySelector('.table_of_contents-link');
+                        if (link) {
+                            const text = link.textContent.toLowerCase();
+                            if (text.includes(query)) {
+                                item.classList.remove('hidden');
+                            } else {
+                                item.classList.add('hidden');
+                            }
+                        }
+                    });
+                });
+            }
+
+            // 5. Debounced and Immediate Progress Bar calculators
+            function calculateProgress() {
+                const slots = document.querySelectorAll('.editable-slot');
+                const checks = document.querySelectorAll('.checkbox');
+                
+                let total = slots.length + checks.length;
+                let completed = 0;
+                
+                slots.forEach(slot => {
+                    const placeholder = slot.getAttribute('data-placeholder');
+                    const text = slot.textContent.trim();
+                    if (slot.classList.contains('has-value') && text !== `[${placeholder}]` && text !== '') {
+                        completed++;
+                    }
+                });
+                
+                checks.forEach(check => {
+                    if (check.classList.contains('checkbox-on')) {
+                        completed++;
+                    }
+                });
+                
+                const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
+                if (fillElement) fillElement.style.width = percent + '%';
+                if (textElement) textElement.textContent = `نسبة ملء الخطة: ${percent}%`;
+            }
+
+            function debounce(func, wait) {
+                let timeout;
+                return function(...args) {
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => func.apply(this, args), wait);
+                };
+            }
+
+            const debouncedUpdateProgress = debounce(calculateProgress, 250);
+
+            // 6. Persistence & Auto-Save
+            function triggerAutoSave() {
+                const slotsData = {};
+                document.querySelectorAll('.editable-slot').forEach(slot => {
+                    const idx = slot.getAttribute('data-slot-idx');
+                    const placeholder = slot.getAttribute('data-placeholder');
+                    const text = slot.textContent.trim();
+                    if (slot.classList.contains('has-value') && text !== `[${placeholder}]` && text !== '') {
+                        slotsData[idx] = text;
+                    }
+                });
+
+                const checksData = [];
+                document.querySelectorAll('.checkbox').forEach(check => {
+                    const idx = check.getAttribute('data-check-idx');
+                    if (check.classList.contains('checkbox-on')) {
+                        checksData.push(idx);
+                    }
+                });
+
+                localStorage.setItem('media_buying_plan_slots', JSON.stringify(slotsData));
+                localStorage.setItem('media_buying_plan_checks', JSON.stringify(checksData));
+
+                // Auto-saved pulse visual cue on Live Plan badge
+                if (badgeElement) {
+                    badgeElement.classList.add('saved-pulse');
+                    badgeElement.textContent = 'SAVED';
+                    setTimeout(() => {
+                        badgeElement.classList.remove('saved-pulse');
+                        badgeElement.textContent = 'LIVE PLAN';
+                    }, 1500);
+                }
+            }
+
+            function loadState() {
+                try {
+                    const slotsData = JSON.parse(localStorage.getItem('media_buying_plan_slots') || '{}');
+                    const checksData = JSON.parse(localStorage.getItem('media_buying_plan_checks') || '[]');
+
+                    document.querySelectorAll('.editable-slot').forEach(slot => {
+                        const idx = slot.getAttribute('data-slot-idx');
+                        if (slotsData[idx] !== undefined) {
+                            slot.textContent = slotsData[idx];
+                            slot.classList.add('has-value');
+                        }
+                    });
+
+                    document.querySelectorAll('.checkbox').forEach(check => {
+                        const idx = check.getAttribute('data-check-idx');
+                        if (checksData.includes(idx)) {
+                            check.classList.add('checkbox-on');
+                            check.classList.remove('checkbox-off');
+                            const li = check.closest('li');
+                            if (li) li.classList.add('to-do-checked');
+                        }
+                    });
+                } catch (e) {
+                    console.error('Error loading data from localStorage', e);
+                }
+            }
+
+            // Expose controls to global window scope
+            window.resetTemplate = function() {
+                if (confirm('هل أنت متأكد من مسح جميع البيانات المدخلة وإعادة ضبط الخطة للوضع الافتراضي؟')) {
+                    localStorage.removeItem('media_buying_plan_slots');
+                    localStorage.removeItem('media_buying_plan_checks');
+                    
+                    document.querySelectorAll('.editable-slot').forEach(slot => {
+                        const placeholder = slot.getAttribute('data-placeholder');
+                        slot.textContent = `[${placeholder}]`;
+                        slot.classList.remove('has-value');
+                    });
+
+                    document.querySelectorAll('.checkbox').forEach(check => {
+                        check.classList.remove('checkbox-on');
+                        check.classList.add('checkbox-off');
+                        const li = check.closest('li');
+                        if (li) li.classList.remove('to-do-checked');
+                    });
+
+                    calculateProgress();
+                }
+            };
+
+            window.downloadFilledPlan = function() {
+                // Clone current document element
+                const clone = document.documentElement.cloneNode(true);
+                
+                // Strip interactive additions from downloaded static file
+                const header = clone.querySelector('.floating-progress-bar');
+                if (header) header.remove();
+                
+                const search = clone.querySelector('.toc-search-container');
+                if (search) search.remove();
+
+                // Lock in editable slot values as markup defaults
+                const originalSlots = document.querySelectorAll('.editable-slot');
+                const clonedSlots = clone.querySelectorAll('.editable-slot');
+                clonedSlots.forEach((slot, idx) => {
+                    const originalSlot = originalSlots[idx];
+                    if (originalSlot) {
+                        slot.textContent = originalSlot.textContent;
+                        if (originalSlot.classList.contains('has-value')) {
+                            slot.className = 'editable-slot has-value';
+                        } else {
+                            slot.className = 'editable-slot';
+                        }
+                    }
+                });
+
+                // Lock in checkbox states as markup defaults
+                const originalChecks = document.querySelectorAll('.checkbox');
+                const clonedChecks = clone.querySelectorAll('.checkbox');
+                clonedChecks.forEach((check, idx) => {
+                    const originalCheck = originalChecks[idx];
+                    if (originalCheck) {
+                        if (originalCheck.classList.contains('checkbox-on')) {
+                            check.className = 'checkbox checkbox-on';
+                            const li = check.closest('li');
+                            if (li) li.className = 'to-do-checked';
+                        } else {
+                            check.className = 'checkbox checkbox-off';
+                        }
+                    }
+                });
+
+                const doctype = '<!DOCTYPE html>\n';
+                const blob = new Blob([doctype + clone.outerHTML], { type: 'text/html;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'خطة_ميديا_باينج_معدلة.html';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            };
+
+            // Run initial Load, followed by immediate progress computation
+            loadState();
+            calculateProgress();
+
+            // Tab-close safety net: auto-blur active inputs to guarantee zero data loss
+            window.addEventListener('beforeunload', () => {
+                const active = document.activeElement;
+                if (active && active.classList.contains('editable-slot')) {
+                    active.blur();
+                }
+            });
+        });
+    </script>
+</head>
+<body><article id="df248a13-964c-4d04-a8fc-dc22fc78211b" class="page sans"><header><img class="page-cover-image" src="https://images.unsplash.com/photo-1536604673810-81370412626d?ixlib=rb-4.1.0&amp;q=85&amp;fm=jpg&amp;crop=entropy&amp;cs=srgb" style="object-position:center 50%"/><div class="page-header-icon page-header-icon-with-cover"><img class="icon notion-static-icon" src="https://app.notion.com/icons/megaphone_blue.svg"/></div><h1 class="page-title" dir="auto">Media Buying Plan Template — خطة ميديا باينج</h1><p class="page-description" dir="auto"></p></header><div class="page-body"><div style="display:contents" dir="ltr"><figure class="block-color-red_background callout" style="white-space:pre-wrap;display:flex" id="a6b0630a-4405-4ecd-b391-557041c71c5a"><div style="font-size:1.5em"><img class="icon notion-static-icon" src="https://app.notion.com/icons/target_red.svg"/></div><div style="width:100%"><div style="display:contents" dir="auto"><p id="e656ea88-2fc0-4a79-a43a-21c004074ece" class=""><strong>املأ الخانات بين [ ]</strong> ثم شارك الصفحة مع الفريق.  </p></div><div style="display:contents" dir="auto"><p id="a4f4e59b-263d-4f67-84b8-7da94472568f" class=""><mark class="highlight-gray">نسخة مُقترحة لخطة شهرية — عدّلها حسب البراند والقنوات.</mark></p></div></div></figure></div><div style="display:contents" dir="ltr"><nav id="cdc2d52c-0069-479b-96c9-eaf2d388edea" class="table_of_contents"><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#bce63b35-21b4-41c9-86e1-10e976c9d09b">1) ملخص تنفيذي (Executive Summary)</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#984c7158-adc2-4671-8d1e-e49d0eea30f5">1.1) ملفات البراند (Brand Profiles) — السعودية</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#0e8419a3-78cb-433e-a67f-e8f8699356e4">2) الأهداف الرئيسية (Campaign Objectives)</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#347fdbf3-dc46-4a5d-af84-b820b2be502e">3) الجمهور والرسالة (Audience &amp; Messaging)</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#8c725f59-ee5c-4397-b122-568eeb37304b">3.1 شرائح الجمهور (Segments)</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#9586e8ea-1a25-45c9-91bf-a8de5cc87195">3.2 زوايا البيع (Angles)</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#edbdbe9b-f364-418f-9310-7518c7353f31">3.3 العروض (Offers)</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#a00e102a-2b21-433b-abe0-d651ee4a300a">3.4) “وصفات” TOFU لكل براند (TOFU Recipes)</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#9c088c95-03d9-4c30-80e9-922facef920e">H For Less — TOFU</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#6e916690-795b-4722-83ca-51b9e8055dbe">H Brand — TOFU</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#52d0a409-22d8-4f4b-958b-156cdfa1acde">4) الاستراتيجية حسب القمع (Funnel Strategy)</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#ce74e50f-a06a-4c42-912e-00d1aea6ef1e">TOFU — Cold Audience</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#3eade33c-3cef-451d-8227-d79099e1e700">MOFU — Warm Audience</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#fefce3bc-2998-4096-a21b-231d28dfc344">BOFU — Hot Audience</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#f68ceee0-aabe-479e-8ec5-f3d8c939e8bd">5) توزيع الميزانية (Budget Split)</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#4b54fa8f-486d-40ba-a17e-c11a958b8055">6) خطة التنسيق مع الأقسام الأخرى (Cross-Department Sync)</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#710174be-a988-4851-9a9f-0db4fdd1e621">6.1 مع فريق الكرييتف والمحتوى (Designers &amp; Copywriters)</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#cf965200-1d96-45e8-ad9b-c634f4c4ba76">6.2 مع فريق خدمة العملاء / المبيعات (Moderation &amp; Sales)</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#f8a54fc3-ee2f-47cd-aeef-0a31505998a3">6.3 مع الفريق التقني (Tracking)</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#870a5467-99dc-41fc-9941-1a7c010164fe">6.4) مكتبة الكرييتف والموشن (Creative Library)</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#52d57c0b-9d9b-4f6c-9ee4-c4a4402a0795">7) جدول الاختبار والتحسين (Testing &amp; Optimization Plan)</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#02dfde5b-8fad-407b-bf28-44ebd8051a7e">8) التقارير والمتابعة (Reporting)</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#d7c9757e-8081-4618-82c2-e8a51def192c">9) قائمة ما قبل الإطلاق (Pre-Launch Checklist)</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#a8617d3e-b6c6-4868-97fc-37ecd6453532">10) Tracking &amp; Attribution (Website + Pixels)</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#21818b69-f7a9-490b-9d20-16be6131accc">11) Decision Rules (Kill / Scale / Rotate)</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#a370c8f9-3e63-4342-a676-76010698ae48">12) Catalog / DPA (قيد الضبط)</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#e3ab9672-f533-4fa7-9078-aa4c26ef75e5">13) تشغيل السعودية (KSA Ops)</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#921df010-674b-4267-bd8d-0f4df0ad94e8">14) ICP + Persona (مين هنبيع لمين؟)</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#54033ffc-e102-4fe5-90ba-316de9e2bead">15) Offer &amp; Pricing Sheet (3 عروض جاهزة)</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#63c1a5f7-780f-457f-9750-27896e53b618">16) Landing + Checkout QA (قبل أي ضخ)</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#3a08aa7a-e3ab-4e10-9cdc-8475e124bc78">17) Naming Convention (تسمية موحّدة للحملات)</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#4a09384a-2a71-439b-83a7-bc027f828c55">18) Budget Pacing + Guardrails (تحكم بالصرف)</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#47d091ab-f743-4fe1-bd50-1b472c0e4ce3">19) Full Funnel Tracking Sheet (مبيعات + ليدز + رسائل)</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#f3dc3a7f-45fd-486a-81bf-cb57ab7e4069">20) Creative Scorecard (تقييم الكرييتف)</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#66cca30d-036c-4a89-955c-cdbfdfdf0080">21) Retargeting Map (تقسيم BOFU واضح)</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#dee08377-a553-4f1a-9663-3d1dff3ae49e">22) Experiment Backlog (قائمة اختبارات جاهزة)</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#72499e99-1336-4041-820f-c59023a18f85">23) Post-Mortem آخر الشهر (تعلميات + قرارات)</a></div></nav></div><div style="display:contents" dir="auto"><hr id="bc49b2d6-0f1d-4cd4-be33-0f34776de019"/></div><div style="display:contents" dir="auto"><h2 id="bce63b35-21b4-41c9-86e1-10e976c9d09b" class="">1) ملخص تنفيذي (Executive Summary)</h2></div><div style="display:contents" dir="ltr"><table id="d2ebd7c9-511f-4800-b75b-f4290b6eec6b" class="simple-table"><thead class="simple-table-header"><div style="display:contents" dir="ltr"><tr id="3973ef03-ff3c-4980-85f9-5cfb5c969df0"><th id="P}LT" class="simple-table-header-color simple-table-header">العنصر</th><th id="xzEO" class="simple-table-header-color simple-table-header">القيمة</th></tr></div></thead><tbody><div style="display:contents" dir="ltr"><tr id="bbb49b95-c621-4b07-8005-90caf567141d"><td id="P}LT" class="">اسم الحملة</td><td id="xzEO" class="">[اسم الحملة]</td></tr></div><div style="display:contents" dir="ltr"><tr id="88662022-3660-488e-8681-04530b70b796"><td id="P}LT" class="">الفترة</td><td id="xzEO" class="">[من] → [إلى]</td></tr></div><div style="display:contents" dir="ltr"><tr id="3ebf4c21-e873-4e1d-b9ee-61ecde08bebf"><td id="P}LT" class="">الهدف الأساسي</td><td id="xzEO" class="">[مبيعات / ليدز / زيارات / رسائل]</td></tr></div><div style="display:contents" dir="ltr"><tr id="6b701e1b-6b28-4844-96c4-26b2e1a81820"><td id="P}LT" class="">الميزانية الإجمالية</td><td id="xzEO" class="">[الرقم] + العملة</td></tr></div><div style="display:contents" dir="ltr"><tr id="73ddbfac-bf2a-40d7-9dff-d293911b304c"><td id="P}LT" class="">القنوات الأساسية</td><td id="xzEO" class="">[Meta / TikTok / Google / Snapchat / Others]</td></tr></div><div style="display:contents" dir="ltr"><tr id="e17e4231-27e1-4fe8-9924-93e5834b24a0"><td id="P}LT" class="">الـ KPI الرئيسي</td><td id="xzEO" class="">[Target CPL / Target CPA / Target ROAS / CAC]</td></tr></div></tbody></table></div><div style="display:contents" dir="ltr"><figure class="block-color-blue_background callout" style="white-space:pre-wrap;display:flex" id="a927f2f3-8669-4291-a679-630d9dc4eef3"><div style="font-size:1.5em"><img class="icon" src="https://app.notion.comi"/></div><div style="width:100%"><div style="display:contents" dir="auto"><p id="856136b5-02c0-40cd-8f86-59ad81b088a4" class=""><strong>Quick KPI Targets</strong></p></div><div style="display:contents" dir="auto"><ul id="0404c7a7-e017-4ede-ab11-11b9d24d978e" class="bulleted-list"><li style="list-style-type:disc">Spend: <strong>[الميزانية]</strong></li></ul></div><div style="display:contents" dir="auto"><ul id="0a31b7c7-a9d9-4f4e-b3cf-75cc4afa1b78" class="bulleted-list"><li style="list-style-type:disc">CPL/CPA: <strong>[الرقم]</strong></li></ul></div><div style="display:contents" dir="auto"><ul id="67fd7dd0-45e3-454b-9802-1d9dcaea64b0" class="bulleted-list"><li style="list-style-type:disc">ROAS: <strong>[الرقم]</strong></li></ul></div><div style="display:contents" dir="auto"><ul id="d8dc17d7-018e-41de-aa1a-73272a922520" class="bulleted-list"><li style="list-style-type:disc">Break-even ROAS: <strong>[الرقم]</strong></li></ul></div></div></figure></div><div style="display:contents" dir="auto"><hr id="f922ce32-25c1-48f7-988a-7ba2dacb080c"/></div><div style="display:contents" dir="auto"><h2 id="984c7158-adc2-4671-8d1e-e49d0eea30f5" class="">1.1) ملفات البراند (Brand Profiles) — السعودية</h2></div><div style="display:contents" dir="ltr"><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="a22cf9d1-c7a0-4a7e-9680-718e31091111"><div style="font-size:1.5em"><img class="icon" src="https://app.notion.comi"/></div><div style="width:100%"><div style="display:contents" dir="auto"><p id="681ceca1-947d-424b-81ca-e92eab20c454" class=""><strong>هدفنا:</strong> مبيعات عبر Website باستخدام Meta + TikTok.  </p></div><div style="display:contents" dir="auto"><p id="8b62ac53-c37b-4918-be78-68f7200e2b22" class=""><strong>ملاحظة:</strong> COD و Catalog/DPA “قيد الضبط” — استخدم الخانات لتوثيق القرار أول ما يتأكد.</p></div></div></figure></div><div style="display:contents" dir="ltr"><table id="b84a665d-0325-4a3c-85ff-a4ddad6945d4" class="simple-table"><thead class="simple-table-header"><div style="display:contents" dir="ltr"><tr id="0b883a3e-2c38-4fb5-8485-019a1fdc4ffe"><th id="gcX\" class="simple-table-header-color simple-table-header">Brand</th><th id="mnFw" class="simple-table-header-color simple-table-header">المنتجات</th><th id="}GK&gt;" class="simple-table-header-color simple-table-header">USP / نقاط البيع</th><th id="~LIW" class="simple-table-header-color simple-table-header">Hero SKUs / Categories</th><th id="eDYx" class="simple-table-header-color simple-table-header">ملاحظات تشغيل</th></tr></div></thead><tbody><div style="display:contents" dir="ltr"><tr id="33c4759b-e1be-4cc2-aa78-4de53d5ec055"><td id="gcX\" class="">H For Less</td><td id="mnFw" class="">مستلزمات منزلية</td><td id="}GK&gt;" class="">[سعر/تنوع/عروض Bundles/توصيل سريع]</td><td id="~LIW" class="">[أفضل 10 منتجات/أقسام]</td><td id="eDYx" class="">[مواسم/عروض/قيود]</td></tr></div><div style="display:contents" dir="ltr"><tr id="972a3ae9-f1e9-4111-aa79-41a8eff5e805"><td id="gcX\" class="">H Brand</td><td id="mnFw" class="">ملابس + أحذية + شنط</td><td id="}GK&gt;" class="">[ستايل/جودة/ترند/استبدال سهل]</td><td id="~LIW" class="">[Sneakers/Bags/…]</td><td id="eDYx" class="">[مقاسات/سياسة استبدال/مواسم]</td></tr></div></tbody></table></div><div style="display:contents" dir="auto"><ul id="4a3f73e3-1860-411e-bf6c-228ce2f8343b" class="toggle"><li><details open=""><summary>Checklist سريع قبل إطلاق أي شهر</summary><div style="display:contents" dir="auto"><ul id="2d4e392c-aa19-4c45-9590-1a6b0b830a21" class="to-do-list"><li><div class="checkbox checkbox-off"></div> <span class="to-do-children-unchecked">COD: [Yes/No/To confirm]</span><div class="indented"></div></li></ul></div><div style="display:contents" dir="auto"><ul id="13890cc5-d5dd-4f47-8a98-626cf427834c" class="to-do-list"><li><div class="checkbox checkbox-off"></div> <span class="to-do-children-unchecked">Catalog: [Meta/TikTok/None/To confirm]</span><div class="indented"></div></li></ul></div><div style="display:contents" dir="auto"><ul id="110b13bc-04fd-451a-8bb5-6c2207c48bc0" class="to-do-list"><li><div class="checkbox checkbox-off"></div> <span class="to-do-children-unchecked">الشحن داخل السعودية: [المدة] + [المدن]</span><div class="indented"></div></li></ul></div><div style="display:contents" dir="auto"><ul id="4d81b29d-92fc-44eb-b2cb-130c5f602b1a" class="to-do-list"><li><div class="checkbox checkbox-off"></div> <span class="to-do-children-unchecked">سياسة الاستبدال/المرتجعات واضحة على الموقع (مهم جدًا لـ H Brand)</span><div class="indented"></div></li></ul></div></details></li></ul></div><div style="display:contents" dir="auto"><hr id="924e839d-d377-41f6-8706-ed843b23ee72"/></div><div style="display:contents" dir="auto"><h2 id="0e8419a3-78cb-433e-a67f-e8f8699356e4" class="">2) الأهداف الرئيسية (Campaign Objectives)</h2></div><div style="display:contents" dir="auto"><p id="f9da8582-46dd-46ea-abe9-499dcbceb19f" class=""><strong>سؤال الإدارة الأول:</strong> <em>إحنا هنصرف كام عشان نجيب إيه؟</em></p></div><div style="display:contents" dir="auto"><ul id="eb3f7eb3-1289-4fa4-b12a-61ee625c10e8" class="bulleted-list"><li style="list-style-type:disc"><strong>الهدف البيعي:</strong> تحقيق مبيعات بقيمة <strong>[اكتب الرقم]</strong> أو الحصول على <strong>[عدد]</strong> ليدز خلال <strong>[الفترة]</strong>.  </li></ul></div><div style="display:contents" dir="auto"><ul id="cddcabac-8d5e-461a-ae62-7bd2e834539b" class="bulleted-list"><li style="list-style-type:disc"><strong>الميزانية المقترحة (Budget):</strong> <strong>[الرقم الإجمالي]</strong>  <div style="display:contents" dir="auto"><ul id="4a4eb875-0821-4830-9940-f84f283cb11b" class="bulleted-list"><li style="list-style-type:circle">تقسيمة مبدئية: <strong>[70% Meta]</strong> / <strong>[30% TikTok]</strong> (عدّل حسب الحالة)  </li></ul></div></li></ul></div><div style="display:contents" dir="auto"><ul id="9e80503a-b2dc-454e-90dd-74e37e904b7f" class="bulleted-list"><li style="list-style-type:disc"><strong>الـ KPI المستهدف:</strong>  <div style="display:contents" dir="auto"><ul id="12cfd060-c482-4e3d-9a06-4b4b134ae99a" class="bulleted-list"><li style="list-style-type:circle">Target CPL: <strong>[الرقم]</strong>  </li></ul></div><div style="display:contents" dir="auto"><ul id="fdaf8dc9-cd68-4172-bfd8-60e9621ad172" class="bulleted-list"><li style="list-style-type:circle">أو Target ROAS: <strong>[الرقم]</strong>  </li></ul></div></li></ul></div><div style="display:contents" dir="auto"><ul id="97ab3f6a-8647-41eb-bfb7-75b4ddfdc6b2" class="bulleted-list"><li style="list-style-type:disc"><strong>الافتراضات (Assumptions):</strong>  <div style="display:contents" dir="auto"><ul id="481cfa7f-79ce-4f09-a08d-d59faef0478b" class="bulleted-list"><li style="list-style-type:circle">AOV متوسط السلة: <strong>[الرقم]</strong>  </li></ul></div><div style="display:contents" dir="auto"><ul id="0824a6dd-df5e-4476-ac39-02cc35518852" class="bulleted-list"><li style="list-style-type:circle">معدل التحويل المتوقع: <strong>[الرقم%]</strong>  </li></ul></div><div style="display:contents" dir="auto"><ul id="84f84ee3-3e56-47d0-b8e4-9f77ee662ad6" class="bulleted-list"><li style="list-style-type:circle">هامش الربح: <strong>[الرقم%]</strong></li></ul></div></li></ul></div><div style="display:contents" dir="auto"><ul id="e639308d-54f0-4917-bb22-dd63356c22f4" class="toggle"><li><details open=""><summary>ملاحظات مهمة قبل البدء (للمدير/العميل)</summary><div style="display:contents" dir="auto"><ul id="98998da3-768b-42d5-8c26-7ab900568569" class="bulleted-list"><li style="list-style-type:disc"><strong>الـ KPI لازم يتحدد قبل الإطلاق</strong> (CPL/CPA/ROAS) عشان مايبقاش فيه تغيير أهداف أثناء التشغيل.</li></ul></div><div style="display:contents" dir="auto"><ul id="9ec90a74-369d-4fe9-a2a6-713afce978d9" class="bulleted-list"><li style="list-style-type:disc"><strong>الميزانية اليومية</strong>: [حد أدنى] — [حد أقصى] لتفادي Over/Under delivery.</li></ul></div><div style="display:contents" dir="auto"><ul id="475aeb96-46aa-4235-9ef4-c69d74508085" class="bulleted-list"><li style="list-style-type:disc"><strong>تعريف Conversion</strong>: [Purchase/Lead/WhatsApp] + نافذة الإسناد (Attribution).</li></ul></div></details></li></ul></div><div style="display:contents" dir="auto"><hr id="ccea7d27-eef9-4727-a547-7f9e778578ab"/></div><div style="display:contents" dir="auto"><h2 id="347fdbf3-dc46-4a5d-af84-b820b2be502e" class="">3) الجمهور والرسالة (Audience &amp; Messaging)</h2></div><div style="display:contents" dir="auto"><h3 id="8c725f59-ee5c-4397-b122-568eeb37304b" class="">3.1 شرائح الجمهور (Segments)</h3></div><div style="display:contents" dir="auto"><ul id="bc9899b6-a99b-464b-9232-1e81856f9403" class="bulleted-list"><li style="list-style-type:disc"><strong>Cold (جديد):</strong> [وصف سريع]  </li></ul></div><div style="display:contents" dir="auto"><ul id="a9266afb-801e-456b-be57-aca6c3c619ed" class="bulleted-list"><li style="list-style-type:disc"><strong>Warm (متفاعل):</strong> [زيارات موقع / فيديو Views / تفاعل IG]  </li></ul></div><div style="display:contents" dir="auto"><ul id="d2145a02-15d6-4dd3-a20a-9ee37c7dd4df" class="bulleted-list"><li style="list-style-type:disc"><strong>Hot (جاهز للشراء):</strong> [ATC / Initiate Checkout / WhatsApp Leads]</li></ul></div><div style="display:contents" dir="auto"><h3 id="9586e8ea-1a25-45c9-91bf-a8de5cc87195" class="">3.2 زوايا البيع (Angles)</h3></div><div style="display:contents" dir="auto"><ul id="49ebdb32-1a5b-4d76-85ad-584d1577fead" class="bulleted-list"><li style="list-style-type:disc">زاوية 1: <strong>[سعر/قيمة]</strong></li></ul></div><div style="display:contents" dir="auto"><ul id="36c69870-b333-45c2-9e47-89a1278454e0" class="bulleted-list"><li style="list-style-type:disc">زاوية 2: <strong>[جودة/نتائج]</strong></li></ul></div><div style="display:contents" dir="auto"><ul id="8db068d7-262e-4c30-b81d-b54b9f98fe50" class="bulleted-list"><li style="list-style-type:disc">زاوية 3: <strong>[شحن/ضمان/سهولة]</strong></li></ul></div><div style="display:contents" dir="auto"><h3 id="edbdbe9b-f364-418f-9310-7518c7353f31" class="">3.3 العروض (Offers)</h3></div><div style="display:contents" dir="auto"><ul id="b1292de4-3987-4fb7-87a3-7da3d0d9c720" class="bulleted-list"><li style="list-style-type:disc">العرض الرئيسي: <strong>[خصم/Bundle/شحن مجاني]</strong></li></ul></div><div style="display:contents" dir="auto"><ul id="455d3560-a03f-46d5-a9b5-59aaed0fa2e4" class="bulleted-list"><li style="list-style-type:disc">شروط العرض: <strong>[حد أدنى/مدة/كود]</strong></li></ul></div><div style="display:contents" dir="auto"><ul id="7bbe650b-be70-412c-8c03-1057463d42c7" class="toggle"><li><details open=""><summary>رسائل جاهزة (Message House) — اختياري</summary><div style="display:contents" dir="auto"><ul id="baab0f27-14d7-46d7-b0fb-84c6254498d1" class="bulleted-list"><li style="list-style-type:disc"><strong>Headline 1:</strong> [وعد/نتيجة]</li></ul></div><div style="display:contents" dir="auto"><ul id="db3dcba3-eda3-4364-9200-2f09ae4907ce" class="bulleted-list"><li style="list-style-type:disc"><strong>Headline 2:</strong> [حل المشكلة]</li></ul></div><div style="display:contents" dir="auto"><ul id="2cca866d-0850-494c-8d60-d311286512fd" class="bulleted-list"><li style="list-style-type:disc"><strong>Proof:</strong> [أرقام/تجارب/ضمان]</li></ul></div><div style="display:contents" dir="auto"><ul id="39d4298e-1928-43e3-ab8c-373f4fdf1237" class="bulleted-list"><li style="list-style-type:disc"><strong>CTA:</strong> [اشترِ الآن / اطلب / ابعت رسالة]</li></ul></div></details></li></ul></div><div style="display:contents" dir="auto"><hr id="88e11295-a2c0-4704-a97b-5173bcd5c33b"/></div><div style="display:contents" dir="auto"><h2 id="a00e102a-2b21-433b-abe0-d651ee4a300a" class="">3.4) “وصفات” TOFU لكل براند (TOFU Recipes)</h2></div><div style="display:contents" dir="auto"><div id="9dc0ae5b-e91e-4d90-b9a1-6fca5d571933" class="column-list"><div style="display:contents" dir="auto"><div id="7a38089c-f68b-446f-9d23-322f437b3585" style="width:100%" class="column"><div style="display:contents" dir="auto"><h3 id="9c088c95-03d9-4c30-80e9-922facef920e" class="block-color-gray_background">H For Less — TOFU</h3></div><div style="display:contents" dir="auto"><p id="b6093112-f3bb-4377-a4c6-b645cc06bb9c" class=""><strong>Angles جاهزة:</strong>  </p></div><div style="display:contents" dir="auto"><ul id="a37d393a-a8ab-4871-810c-f5cf5d72160f" class="bulleted-list"><li style="list-style-type:disc">Problem/Solution (حل سريع للبيت)  </li></ul></div><div style="display:contents" dir="auto"><ul id="d67214e6-ce62-4b30-9c24-afbab4b22512" class="bulleted-list"><li style="list-style-type:disc">Before/After (تنظيم/توفير مساحة)  </li></ul></div><div style="display:contents" dir="auto"><ul id="0e04c690-c9ac-43ea-91a8-1075c44dc63b" class="bulleted-list"><li style="list-style-type:disc">Bundles &amp; Savings (وفر في الباقة)  </li></ul></div><div style="display:contents" dir="auto"><p id="522d22f1-df28-4ede-b8c6-3d20ea70ae09" class=""><strong>Formats:</strong> UGC + Demo سريع + مقارنة سعر/حجم  </p></div><div style="display:contents" dir="auto"><p id="51bbe985-ef41-4bd8-9558-a471a44a2e80" class=""><strong>Landing:</strong> Best Deals / Bundles / Collections  </p></div><div style="display:contents" dir="auto"><p id="43a15d48-b1ac-4fb1-83af-59b24841a144" class=""><strong>CTA:</strong> اشترِ الآن / شوف العروض</p></div></div></div><div style="display:contents" dir="auto"><div id="c36b8400-73fe-4933-a6d7-90c145bfd81a" style="width:100%" class="column"><div style="display:contents" dir="auto"><h3 id="6e916690-795b-4722-83ca-51b9e8055dbe" class="block-color-gray_background">H Brand — TOFU</h3></div><div style="display:contents" dir="auto"><p id="6b2a2c61-9188-4221-9f57-18982407ed4d" class=""><strong>Angles جاهزة:</strong>  </p></div><div style="display:contents" dir="auto"><ul id="d7a5b4bc-2d59-443e-a3b7-efbeabfff9a2" class="bulleted-list"><li style="list-style-type:disc">Outfit Ideas (لوك كامل)  </li></ul></div><div style="display:contents" dir="auto"><ul id="4f898df6-c2de-4cc0-874a-3f4b2f424027" class="bulleted-list"><li style="list-style-type:disc">Try-on / Haul  </li></ul></div><div style="display:contents" dir="auto"><ul id="575be7f5-e7d0-4676-aee0-6f2f60af5bf0" class="bulleted-list"><li style="list-style-type:disc">Trending styles + “ستايل بميزانية”  </li></ul></div><div style="display:contents" dir="auto"><p id="7208e376-ee7e-46de-ae84-82755b40745d" class=""><strong>Formats:</strong> Creator style + transitions + close-ups  </p></div><div style="display:contents" dir="auto"><p id="ea7625cc-57fe-4ae9-9dfd-08a15f0d9d60" class=""><strong>Landing:</strong> New In / Best Sellers / Category pages  </p></div><div style="display:contents" dir="auto"><p id="0e453bd8-bba4-47cb-9ff9-bd6ccd752e5f" class=""><strong>CTA:</strong> اطلب الآن / شوف الجديد</p></div></div></div></div></div><div style="display:contents" dir="auto"><hr id="c52796f3-81e3-4e3a-98c7-4f2d0e30b783"/></div><div style="display:contents" dir="auto"><h2 id="52d0a409-22d8-4f4b-958b-156cdfa1acde" class="">4) الاستراتيجية حسب القمع (Funnel Strategy)</h2></div><div style="display:contents" dir="auto"><div id="d018875b-7d7f-4a9e-9d1c-74cd9490eef4" class="column-list"><div style="display:contents" dir="auto"><div id="8e31bf93-53ee-4f14-a28d-4a396546a857" style="width:100%" class="column"><div style="display:contents" dir="auto"><h3 id="ce74e50f-a06a-4c42-912e-00d1aea6ef1e" class="block-color-gray_background">TOFU — Cold Audience</h3></div><div style="display:contents" dir="auto"><p id="e6fc31c0-f24f-4861-97e6-0e4f16350855" class=""><strong>الهدف:</strong> الوصول لناس جديدة أول مرة تسمع عن البراند.  </p></div><div style="display:contents" dir="auto"><p id="60084221-837a-40cf-b953-034b7c230534" class=""><strong>القنوات/الأنواع:</strong>  </p></div><div style="display:contents" dir="auto"><ul id="816df882-07e1-4616-a8d1-e077bc811de0" class="bulleted-list"><li style="list-style-type:disc">TikTok: فيديوهات قصيرة + Spark Ads (لو مناسب)  </li></ul></div><div style="display:contents" dir="auto"><ul id="f2b7385a-5036-417a-b1fb-ad9eb31e27d1" class="bulleted-list"><li style="list-style-type:disc">Meta: Video Views / Engagement / Broad Prospecting  </li></ul></div><div style="display:contents" dir="auto"><p id="5d407f6c-d8f0-459e-a4d7-d82fbaf98683" class=""><strong>المحتوى المطلوب:</strong>  </p></div><div style="display:contents" dir="auto"><ul id="1af7856b-fac8-4f81-b1a5-c77eaa3aeeda" class="to-do-list"><li><div class="checkbox checkbox-off"></div> <span class="to-do-children-unchecked">فيديوهات تريندنج (Reels)  </span><div class="indented"></div></li></ul></div><div style="display:contents" dir="auto"><ul id="4cd22fbf-9f27-4540-8620-383ba5aa55fc" class="to-do-list"><li><div class="checkbox checkbox-off"></div> <span class="to-do-children-unchecked">Problem/Solution  </span><div class="indented"></div></li></ul></div><div style="display:contents" dir="auto"><ul id="da5db814-0847-41e9-b013-455fa65341bb" class="to-do-list"><li><div class="checkbox checkbox-off"></div> <span class="to-do-children-unchecked">UGC Hooks  </span><div class="indented"></div></li></ul></div><div style="display:contents" dir="auto"><p id="4e821e9c-b24b-43da-a542-8531d81ae005" class=""><strong>مؤشرات نجاح:</strong> CPM / VTR / CTR / CPC</p></div></div></div><div style="display:contents" dir="auto"><div id="13061a78-6f9f-4bbc-ab75-cfcd5b4f0b07" style="width:100%" class="column"><div style="display:contents" dir="auto"><h3 id="3eade33c-3cef-451d-8227-d79099e1e700" class="block-color-gray_background">MOFU — Warm Audience</h3></div><div style="display:contents" dir="auto"><p id="7198884b-2020-4907-9149-cdac650aa0ec" class=""><strong>الهدف:</strong> تحويل المتفاعلين/الزوار إلى مشترين أو ليدز.  </p></div><div style="display:contents" dir="auto"><p id="11fb1ef8-c2a4-429b-bdd4-dab766940673" class=""><strong>الجمهور:</strong>  </p></div><div style="display:contents" dir="auto"><ul id="5cd324b1-459a-4139-8ad2-36fb52745115" class="bulleted-list"><li style="list-style-type:disc">Visitors 30D  </li></ul></div><div style="display:contents" dir="auto"><ul id="184f4662-f3ec-4d71-9100-75f79166bc3b" class="bulleted-list"><li style="list-style-type:disc">Engagers 30D  </li></ul></div><div style="display:contents" dir="auto"><p id="54cec256-ff09-4e94-87e2-17a474442ccd" class=""><strong>الأنواع:</strong>  </p></div><div style="display:contents" dir="auto"><ul id="53a6aef4-3a02-4250-8079-737d37d6e606" class="bulleted-list"><li style="list-style-type:disc">Sales / Leads / Messages (حسب السيستم)  </li></ul></div><div style="display:contents" dir="auto"><p id="5d57a43e-9a7f-4883-a914-19c217432713" class=""><strong>المحتوى المطلوب:</strong>  </p></div><div style="display:contents" dir="auto"><ul id="08b2f533-7289-42e9-9d51-08164ac0fa33" class="to-do-list"><li><div class="checkbox checkbox-off"></div> <span class="to-do-children-unchecked">Benefits Breakdown  </span><div class="indented"></div></li></ul></div><div style="display:contents" dir="auto"><ul id="5b588507-52e8-47eb-9334-e523c54888b1" class="to-do-list"><li><div class="checkbox checkbox-off"></div> <span class="to-do-children-unchecked">Social Proof مختصر  </span><div class="indented"></div></li></ul></div><div style="display:contents" dir="auto"><ul id="9bb028f6-1c9d-4b4c-b411-4fc6ff091847" class="to-do-list"><li><div class="checkbox checkbox-off"></div> <span class="to-do-children-unchecked">Offer Reminder  </span><div class="indented"></div></li></ul></div><div style="display:contents" dir="auto"><p id="b4465a1d-3c31-40ac-8534-a174d82d8a9f" class=""><strong>مؤشرات نجاح:</strong> CTR / Add-to-Cart / CPL / CPA</p></div></div></div><div style="display:contents" dir="auto"><div id="9a8a548a-6046-4526-a39d-cf0f7896b1dd" style="width:100%" class="column"><div style="display:contents" dir="auto"><h3 id="fefce3bc-2998-4096-a21b-231d28dfc344" class="block-color-gray_background">BOFU — Hot Audience</h3></div><div style="display:contents" dir="auto"><p id="092e698e-01b5-4624-91e0-3b16a6beb655" class=""><strong>الهدف:</strong> قفل البيعات (Retargeting) للناس الأقرب للشراء.  </p></div><div style="display:contents" dir="auto"><p id="0f794955-d44f-41a7-94b2-b491cdcd0e2f" class=""><strong>الجمهور:</strong>  </p></div><div style="display:contents" dir="auto"><ul id="7a685255-c57b-4836-a588-c761f9330f15" class="bulleted-list"><li style="list-style-type:disc">ATC 14D  </li></ul></div><div style="display:contents" dir="auto"><ul id="72b0229c-3bb7-4079-b8c0-da494812b082" class="bulleted-list"><li style="list-style-type:disc">IC 14D  </li></ul></div><div style="display:contents" dir="auto"><ul id="fdfac212-d48a-49bc-b2a7-ef70b35f7bcc" class="bulleted-list"><li style="list-style-type:disc">Checkout View 7D  </li></ul></div><div style="display:contents" dir="auto"><p id="6589a556-0ec0-48d6-85c3-67744e2bb6a2" class=""><strong>التكتيكات:</strong>  </p></div><div style="display:contents" dir="auto"><ul id="7ab885cf-3b35-4277-aabe-287e8af1afb6" class="bulleted-list"><li style="list-style-type:disc">Dynamic Product Ads (إن وجدت)  </li></ul></div><div style="display:contents" dir="auto"><ul id="9958c69c-ea90-4629-8f89-c3c8829cb518" class="bulleted-list"><li style="list-style-type:disc">Countdown / Urgency  </li></ul></div><div style="display:contents" dir="auto"><p id="17ac000e-ce71-4db9-a8c9-87f17b54524f" class=""><strong>المحتوى المطلوب:</strong>  </p></div><div style="display:contents" dir="auto"><ul id="e924b960-57cf-4c0c-a711-0dcc21d0f57f" class="to-do-list"><li><div class="checkbox checkbox-off"></div> <span class="to-do-children-unchecked">Reviews / Testimonials  </span><div class="indented"></div></li></ul></div><div style="display:contents" dir="auto"><ul id="1cbc305e-4d5d-45b4-a1de-7b1c60989050" class="to-do-list"><li><div class="checkbox checkbox-off"></div> <span class="to-do-children-unchecked">ضمان + شحن/استبدال  </span><div class="indented"></div></li></ul></div><div style="display:contents" dir="auto"><ul id="84e826fe-9b51-4138-b431-c3baeedc12cc" class="to-do-list"><li><div class="checkbox checkbox-off"></div> <span class="to-do-children-unchecked">عرض حصري “اليوم فقط”  </span><div class="indented"></div></li></ul></div><div style="display:contents" dir="auto"><p id="78491455-dfc8-4445-8647-894fb3ed199c" class=""><strong>مؤشرات نجاح:</strong> ROAS / CPA / Conversion Rate</p></div></div></div></div></div><div style="display:contents" dir="auto"><hr id="02d5411a-6bce-4fd5-824d-8e54082a3d6d"/></div><div style="display:contents" dir="auto"><h2 id="f68ceee0-aabe-479e-8ec5-f3d8c939e8bd" class="">5) توزيع الميزانية (Budget Split)</h2></div><div style="display:contents" dir="ltr"><table id="94d6a0fc-fe37-4928-a201-acb425158d6d" class="simple-table"><thead class="simple-table-header"><div style="display:contents" dir="ltr"><tr id="20388aa1-80a3-489d-a6bd-ead6bec57a03"><th id="Iz_Z" class="simple-table-header-color simple-table-header">القناة</th><th id="FYII" class="simple-table-header-color simple-table-header">النسبة</th><th id="X=]o" class="simple-table-header-color simple-table-header">الميزانية</th><th id="haFn" class="simple-table-header-color simple-table-header">هدف القناة</th><th id="wXlK" class="simple-table-header-color simple-table-header">ملاحظات</th></tr></div></thead><tbody><div style="display:contents" dir="ltr"><tr id="9eb279a4-b840-4e0d-a05c-e53075a78da8"><td id="Iz_Z" class="">Meta (FB/IG)</td><td id="FYII" class="">[ % ]</td><td id="X=]o" class="">[ رقم ]</td><td id="haFn" class="">[Sales/Leads/Video]</td><td id="wXlK" class="">[ملاحظة]</td></tr></div><div style="display:contents" dir="ltr"><tr id="0d8bd037-5739-4add-90ec-882ea5d4b7ee"><td id="Iz_Z" class="">TikTok</td><td id="FYII" class="">[ % ]</td><td id="X=]o" class="">[ رقم ]</td><td id="haFn" class="">[Sales/Traffic/Video]</td><td id="wXlK" class="">[ملاحظة]</td></tr></div><div style="display:contents" dir="ltr"><tr id="fc9f987d-7819-4390-9bf6-6e23e862c548"><td id="Iz_Z" class="">Google</td><td id="FYII" class="">[ % ]</td><td id="X=]o" class="">[ رقم ]</td><td id="haFn" class="">[Search/PMAX]</td><td id="wXlK" class="">[ملاحظة]</td></tr></div><div style="display:contents" dir="ltr"><tr id="5e41c10a-9640-49d3-89b3-a5080304cb06"><td id="Iz_Z" class="">أخرى</td><td id="FYII" class="">[ % ]</td><td id="X=]o" class="">[ رقم ]</td><td id="haFn" class="">[ ]</td><td id="wXlK" class="">[ ]</td></tr></div></tbody></table></div><div style="display:contents" dir="auto"><ul id="dfb065b4-142c-49cd-807f-a189fa62c089" class="toggle"><li><details open=""><summary>قواعد توزيع الميزانية (Rules of Thumb)</summary><div style="display:contents" dir="auto"><ul id="46e16bf1-5c38-4614-b9de-857530a4409f" class="bulleted-list"><li style="list-style-type:disc">لو البراند جديد: TOFU أعلى في أول أسبوعين، ثم نقل تدريجي لـ MOFU/BOFU.</li></ul></div><div style="display:contents" dir="auto"><ul id="bf59d2a2-ade6-4893-830c-e69148fea138" class="bulleted-list"><li style="list-style-type:disc">لو عندك بيانات قوية ومبيعات سابقة: زوّد وزن BOFU و Retargeting.</li></ul></div><div style="display:contents" dir="auto"><ul id="449ad80c-47f2-49fc-a000-975f1651f96a" class="bulleted-list"><li style="list-style-type:disc">لو الـ ROAS بيتذبذب: ثبّت 70–80% على أفضل Ad sets وخلي 20–30% للاختبارات.</li></ul></div></details></li></ul></div><div style="display:contents" dir="auto"><hr id="a31a583a-59ca-4dd1-bda8-42edfcd29f84"/></div><div style="display:contents" dir="auto"><h2 id="4b54fa8f-486d-40ba-a17e-c11a958b8055" class="">6) خطة التنسيق مع الأقسام الأخرى (Cross-Department Sync)</h2></div><div style="display:contents" dir="auto"><h3 id="710174be-a988-4851-9a9f-0db4fdd1e621" class="">6.1 مع فريق الكرييتف والمحتوى (Designers &amp; Copywriters)</h3></div><div style="display:contents" dir="auto"><ul id="7b705897-a610-4ded-950c-239ca5a82e42" class="bulleted-list"><li style="list-style-type:disc"><strong>Creative Brief (تسليم):</strong>  <div style="display:contents" dir="auto"><ul id="3ee42cbd-fe0b-40f0-8d41-4ac65d9239e1" class="to-do-list"><li><div class="checkbox checkbox-off"></div> <span class="to-do-children-unchecked">5 فيديوهات Reels  </span><div class="indented"></div></li></ul></div><div style="display:contents" dir="auto"><ul id="8ba430e1-89ac-4c80-8e1b-6fcad2c50fd4" class="to-do-list"><li><div class="checkbox checkbox-off"></div> <span class="to-do-children-unchecked">3 تصاميم عروض  </span><div class="indented"></div></li></ul></div><div style="display:contents" dir="auto"><ul id="08afa375-ddbc-4bfb-83b6-89f9e5a9f4f2" class="to-do-list"><li><div class="checkbox checkbox-off"></div> <span class="to-do-children-unchecked">2 فيديو Reviews  </span><div class="indented"></div></li></ul></div></li></ul></div><div style="display:contents" dir="auto"><ul id="48c30d9c-84b8-4c32-ad0a-8353094117c5" class="bulleted-list"><li style="list-style-type:disc"><strong>ملاحظات التنفيذ:</strong>  <div style="display:contents" dir="auto"><ul id="f9aaefe5-664f-4962-a932-9a3701639dd6" class="bulleted-list"><li style="list-style-type:circle">Aspect ratios: [9:16 / 1:1]  </li></ul></div><div style="display:contents" dir="auto"><ul id="36a44b83-f009-472d-88d0-772890d778a8" class="bulleted-list"><li style="list-style-type:circle">مدة الفيديو: [10–25s]  </li></ul></div><div style="display:contents" dir="auto"><ul id="0c0bbb86-fed3-4eff-9e7a-89bbf92d5c3a" class="bulleted-list"><li style="list-style-type:circle">CTA: [اشترِ الآن / ابعت رسالة / سجّل]</li></ul></div></li></ul></div><div style="display:contents" dir="auto"><h3 id="cf965200-1d96-45e8-ad9b-c634f4c4ba76" class="">6.2 مع فريق خدمة العملاء / المبيعات (Moderation &amp; Sales)</h3></div><div style="display:contents" dir="auto"><ul id="62d97948-89c9-4e77-84de-9214750dfc13" class="to-do-list"><li><div class="checkbox checkbox-off"></div> <span class="to-do-children-unchecked">إعلامهم بمواعيد إطلاق الحملات القوية  </span><div class="indented"></div></li></ul></div><div style="display:contents" dir="auto"><ul id="46f7baa7-c721-4b67-9838-3e6a44dccc9e" class="to-do-list"><li><div class="checkbox checkbox-off"></div> <span class="to-do-children-unchecked">Script موحّد للردود + أسئلة شائعة  </span><div class="indented"></div></li></ul></div><div style="display:contents" dir="auto"><ul id="76599b64-1e94-4de2-90e2-63f5e1e5505a" class="to-do-list"><li><div class="checkbox checkbox-off"></div> <span class="to-do-children-unchecked">SLA للرد: <strong>[X دقائق]</strong>  </span><div class="indented"></div></li></ul></div><div style="display:contents" dir="auto"><ul id="88569e20-47be-487f-abb8-c66e33126810" class="to-do-list"><li><div class="checkbox checkbox-off"></div> <span class="to-do-children-unchecked">آلية تسليم الليدز: <strong>[Sheet/CRM/WhatsApp]</strong></span><div class="indented"></div></li></ul></div><div style="display:contents" dir="auto"><h3 id="f8a54fc3-ee2f-47cd-aeef-0a31505998a3" class="">6.3 مع الفريق التقني (Tracking)</h3></div><div style="display:contents" dir="auto"><ul id="012ffb37-2e66-415b-96d1-cba504e3db29" class="to-do-list"><li><div class="checkbox checkbox-off"></div> <span class="to-do-children-unchecked">Pixel + Conversion API شغالين  </span><div class="indented"></div></li></ul></div><div style="display:contents" dir="auto"><ul id="e22dc90b-53e3-472e-864c-716f5234b158" class="to-do-list"><li><div class="checkbox checkbox-off"></div> <span class="to-do-children-unchecked">أحداث القياس: ViewContent / ATC / IC / Purchase / Lead  </span><div class="indented"></div></li></ul></div><div style="display:contents" dir="auto"><ul id="60efe075-68d3-4b52-93ea-6d048c77916e" class="to-do-list"><li><div class="checkbox checkbox-off"></div> <span class="to-do-children-unchecked">UTM موحد + Naming Convention  </span><div class="indented"></div></li></ul></div><div style="display:contents" dir="auto"><ul id="e4bdb22d-1306-4f3e-85d9-2c0692c2b73c" class="to-do-list"><li><div class="checkbox checkbox-off"></div> <span class="to-do-children-unchecked">فحص سرعة اللاندنج/صفحة الدفع</span><div class="indented"></div></li></ul></div><div style="display:contents" dir="auto"><ul id="80c1719a-c3da-480c-a137-b8e9aa09c807" class="toggle"><li><details open=""><summary>معايير قبول الكرييتف (Creative QA) — اختياري</summary><div style="display:contents" dir="auto"><ul id="65c978c2-6e4c-438d-8521-97decf3adc65" class="bulleted-list"><li style="list-style-type:disc">Hook واضح أول 2 ثانية</li></ul></div><div style="display:contents" dir="auto"><ul id="98b8876a-635c-4c36-ba62-0042309df887" class="bulleted-list"><li style="list-style-type:disc">CTA ظاهر ومناسب للـ Funnel</li></ul></div><div style="display:contents" dir="auto"><ul id="776bf1b6-858b-4d6c-be33-c05d370665e4" class="bulleted-list"><li style="list-style-type:disc">توحيد الألوان/الهوية + Logo placement</li></ul></div><div style="display:contents" dir="auto"><ul id="daa5fb66-ea9a-4e00-999e-33df2d3e1a93" class="bulleted-list"><li style="list-style-type:disc">عدم المبالغة في Claims + مراعاة سياسات المنصات</li></ul></div></details></li></ul></div><div style="display:contents" dir="auto"><hr id="b917c2f4-64f3-46eb-88b9-29827c2cc54e"/></div><div style="display:contents" dir="auto"><h2 id="870a5467-99dc-41fc-9941-1a7c010164fe" class="">6.4) مكتبة الكرييتف والموشن (Creative Library)</h2></div><div style="display:contents" dir="ltr"><table id="079f0108-7380-4f34-83c4-11a47426c795" class="simple-table"><thead class="simple-table-header"><div style="display:contents" dir="ltr"><tr id="4c954417-9928-4546-b323-3b25c1ed954e"><th id="SqqA" class="simple-table-header-color simple-table-header">Creative Name</th><th id="YA@@" class="simple-table-header-color simple-table-header">Brand</th><th id="W:ut" class="simple-table-header-color simple-table-header">Stage</th><th id="Gnvh" class="simple-table-header-color simple-table-header">Angle</th><th id="dtBo" class="simple-table-header-color simple-table-header">Format</th><th id="O?Go" class="simple-table-header-color simple-table-header">Hook (أول 2 ثانية)</th><th id="Vrrf" class="simple-table-header-color simple-table-header">Length</th><th id="hTdK" class="simple-table-header-color simple-table-header">CTA</th><th id="g&lt;@}" class="simple-table-header-color simple-table-header">Status</th><th id="&lt;BKZ" class="simple-table-header-color simple-table-header">Asset Link</th></tr></div></thead><tbody><div style="display:contents" dir="ltr"><tr id="bde284f1-66c7-4c3c-aed2-4d8df5e0ec82"><td id="SqqA" class="">[مثال: HFL_TOFU_DealHook_01]</td><td id="YA@@" class="">[H For Less]</td><td id="W:ut" class="">[TOFU]</td><td id="Gnvh" class="">[توفير/Bundle]</td><td id="dtBo" class="">[UGC/Demo]</td><td id="O?Go" class="">[هوك]</td><td id="Vrrf" class="">[6–15s]</td><td id="hTdK" class="">[اشترِ الآن]</td><td id="g&lt;@}" class="">[To do / Ready / Live / Killed]</td><td id="&lt;BKZ" class="">[رابط ملف/Drive]</td></tr></div></tbody></table></div><div style="display:contents" dir="auto"><ul id="65ea8c19-4791-4141-a934-1c9b837509d7" class="toggle"><li><details open=""><summary>Motion Specs سريعة (للـ TikTok + Meta)</summary><div style="display:contents" dir="auto"><ul id="f7058967-b0d2-4f99-850d-12e4c5b1391e" class="bulleted-list"><li style="list-style-type:disc">9:16 أساسي + نسخ 1:1 للأماكن اللي تحتاج  </li></ul></div><div style="display:contents" dir="auto"><ul id="a192778d-4460-42fc-aeb2-53525f5aba55" class="bulleted-list"><li style="list-style-type:disc">Subtitles عربي واضح + سعر/ميزة على الشاشة  </li></ul></div><div style="display:contents" dir="auto"><ul id="5353c108-ffa6-49be-b504-93baa2bd0327" class="bulleted-list"><li style="list-style-type:disc">3 Hooks لنفس المنتج (Hook A/B/C)  </li></ul></div><div style="display:contents" dir="auto"><ul id="ce270d1b-4dbd-40d2-8978-6ec0e4820c52" class="bulleted-list"><li style="list-style-type:disc">موسيقى/تريند حسب المنصة + مراعاة حقوق الاستخدام</li></ul></div></details></li></ul></div><div style="display:contents" dir="auto"><hr id="f3826c40-8079-4a76-9062-6ec3f3cda1c9"/></div><div style="display:contents" dir="auto"><h2 id="52d57c0b-9d9b-4f6c-9ee4-c4a4402a0795" class="">7) جدول الاختبار والتحسين (Testing &amp; Optimization Plan)</h2></div><div style="display:contents" dir="ltr"><table id="06bd147a-2e88-4c49-813e-39f45abc66d5" class="simple-table"><thead class="simple-table-header"><div style="display:contents" dir="ltr"><tr id="7adb022e-9426-4ec2-8874-287af27d8bd9"><th id="O]I~" class="simple-table-header-color simple-table-header">الأسبوع</th><th id="dLiI" class="simple-table-header-color simple-table-header">الهدف</th><th id="ESW[" class="simple-table-header-color simple-table-header">اختبارات أساسية</th><th id="\`HO" class="simple-table-header-color simple-table-header">قرار الأسبوع</th></tr></div></thead><tbody><div style="display:contents" dir="ltr"><tr id="9ed15a94-730f-4979-8e87-eb9b3e91eb82"><td id="O]I~" class="">الأسبوع 1</td><td id="dLiI" class="">Creative &amp; Audience Testing</td><td id="ESW[" class="">Interest vs Broad + 3–5 كرييتفز</td><td id="\`HO" class="">إيقاف الضعيف + تثبيت الأفضل</td></tr></div><div style="display:contents" dir="ltr"><tr id="056d8303-73c2-411c-b4e8-f20aa8f0b754"><td id="O]I~" class="">الأسبوع 2</td><td id="dLiI" class="">Optimize &amp; Start Scaling</td><td id="ESW[" class="">Budget re-allocation + Bid/Cost controls</td><td id="\`HO" class="">تكبير أفضل 20%</td></tr></div><div style="display:contents" dir="ltr"><tr id="9571d0ee-6955-4773-a17a-be87f0b127ce"><td id="O]I~" class="">الأسبوع 3</td><td id="dLiI" class="">Retargeting Push</td><td id="ESW[" class="">BOFU offers + testimonials</td><td id="\`HO" class="">زيادة ميزانية BOFU</td></tr></div><div style="display:contents" dir="ltr"><tr id="b4fb0946-6496-409a-8310-af835be29a25"><td id="O]I~" class="">الأسبوع 4</td><td id="dLiI" class="">Efficiency &amp; Wrap-up</td><td id="ESW[" class="">تصفية نهائية + تحضير الشهر القادم</td><td id="\`HO" class="">ملخص تعلميات + خطة تكرار</td></tr></div></tbody></table></div><div style="display:contents" dir="auto"><ul id="f2882359-8324-4f6f-a336-dc85a9e1579f" class="toggle"><li><details open=""><summary>خطة الاختبار (Test Matrix) — اختياري</summary><div style="display:contents" dir="ltr"><table id="48b1aa85-7aa1-4bfe-994a-26afbd1fc30b" class="simple-table"><thead class="simple-table-header"><div style="display:contents" dir="ltr"><tr id="fd26bf26-f32b-4f4a-a0cc-0e844123a7b1"><th id="Gc[X" class="simple-table-header-color simple-table-header">العنصر</th><th id="CzBl" class="simple-table-header-color simple-table-header">Variants</th><th id="Eus;" class="simple-table-header-color simple-table-header">مدة الاختبار</th><th id=":\;v" class="simple-table-header-color simple-table-header">شرط النجاح</th></tr></div></thead><tbody><div style="display:contents" dir="ltr"><tr id="310c795e-a456-4ed3-a6ca-34cbab064cb9"><td id="Gc[X" class="">Creatives</td><td id="CzBl" class="">[3–5]</td><td id="Eus;" class="">[3–5 أيام]</td><td id=":\;v" class="">[CPC/CTR/CPA]</td></tr></div><div style="display:contents" dir="ltr"><tr id="4c271843-1698-4c42-8647-7d2229e816d5"><td id="Gc[X" class="">Audiences</td><td id="CzBl" class="">[Broad vs Interest]</td><td id="Eus;" class="">[5–7 أيام]</td><td id=":\;v" class="">[CPA/ROAS]</td></tr></div><div style="display:contents" dir="ltr"><tr id="6956914d-88a6-412d-b2f2-d0d4339f0b1b"><td id="Gc[X" class="">Offers</td><td id="CzBl" class="">[A vs B]</td><td id="Eus;" class="">[7 أيام]</td><td id=":\;v" class="">[CVR/ROAS]</td></tr></div></tbody></table></div></details></li></ul></div><div style="display:contents" dir="auto"><hr id="941c2d2c-59cd-4f31-99e3-024bc28066ba"/></div><div style="display:contents" dir="auto"><h2 id="02dfde5b-8fad-407b-bf28-44ebd8051a7e" class="">8) التقارير والمتابعة (Reporting)</h2></div><div style="display:contents" dir="auto"><ul id="56fa9c36-a66c-4b43-82d6-5895fce43f14" class="bulleted-list"><li style="list-style-type:disc"><strong>تقرير أسبوعي مصغّر:</strong> يوم <strong>[الخميس]</strong>  <div style="display:contents" dir="auto"><ul id="00405dd7-d97f-4a17-ac9a-2d8315cf8945" class="bulleted-list"><li style="list-style-type:circle">Spend / CPL أو CPA / ROAS / أفضل كرييتف / ملاحظات  </li></ul></div></li></ul></div><div style="display:contents" dir="auto"><ul id="b5b6623b-489e-4978-9be2-1ed5a6aaec40" class="bulleted-list"><li style="list-style-type:disc"><strong>تقرير شامل نهاية الشهر:</strong>  <div style="display:contents" dir="auto"><ul id="8a488f16-b00f-494b-aa4c-0ee2b866478d" class="bulleted-list"><li style="list-style-type:circle">Performance by Channel + Funnel + Creatives  </li></ul></div><div style="display:contents" dir="auto"><ul id="45243ce9-e829-4aa2-a247-4181117075a3" class="bulleted-list"><li style="list-style-type:circle">ما تم إيقافه ولماذا  </li></ul></div><div style="display:contents" dir="auto"><ul id="2e0bab3f-4dbe-48ec-8022-30bcedd7e59a" class="bulleted-list"><li style="list-style-type:circle">توصيات الشهر القادم</li></ul></div></li></ul></div><div style="display:contents" dir="auto"><ul id="75f1a49b-164b-4e55-9522-f1c6e8d8cabc" class="toggle"><li><details open=""><summary>قالب تقرير أسبوعي سريع (Copy/Paste)</summary><div style="display:contents" dir="auto"><ul id="b4984822-1c5c-4159-8e36-fe6b6c644ee4" class="bulleted-list"><li style="list-style-type:disc"><strong>Spend:</strong> [ ]</li></ul></div><div style="display:contents" dir="auto"><ul id="ef2587da-1575-46ef-890c-b954a452bbe9" class="bulleted-list"><li style="list-style-type:disc"><strong>Revenue/Leads:</strong> [ ]</li></ul></div><div style="display:contents" dir="auto"><ul id="e9e245b8-a1fb-4a51-839e-85c29e403905" class="bulleted-list"><li style="list-style-type:disc"><strong>CPL/CPA:</strong> [ ]</li></ul></div><div style="display:contents" dir="auto"><ul id="5f0a7ea7-6b3b-48f4-ab46-ce31a2e2f90f" class="bulleted-list"><li style="list-style-type:disc"><strong>ROAS:</strong> [ ]</li></ul></div><div style="display:contents" dir="auto"><ul id="7ee7c7fa-c361-460a-9e39-3fec451e080b" class="bulleted-list"><li style="list-style-type:disc"><strong>أفضل 3 إعلانات:</strong> [روابط/أسماء]</li></ul></div><div style="display:contents" dir="auto"><ul id="c853480f-b3bb-456a-ab87-c924c4787409" class="bulleted-list"><li style="list-style-type:disc"><strong>ماذا أوقفنا؟ ولماذا؟</strong> [ ]</li></ul></div><div style="display:contents" dir="auto"><ul id="24a1b7ae-b4fe-47a4-b620-a64d42fb3980" class="bulleted-list"><li style="list-style-type:disc"><strong>ماذا سنختبر الأسبوع القادم؟</strong> [ ]</li></ul></div></details></li></ul></div><div style="display:contents" dir="auto"><hr id="f43dece3-dc52-41d8-aa99-479e1b9db142"/></div><div style="display:contents" dir="auto"><h2 id="d7c9757e-8081-4618-82c2-e8a51def192c" class="">9) قائمة ما قبل الإطلاق (Pre-Launch Checklist)</h2></div><div style="display:contents" dir="auto"><ul id="97004afe-d13b-4abd-8393-77cb06748723" class="to-do-list"><li><div class="checkbox checkbox-off"></div> <span class="to-do-children-unchecked">Naming Convention للحملات/Ad sets/Ads  </span><div class="indented"></div></li></ul></div><div style="display:contents" dir="auto"><ul id="8dfc9b54-f502-4beb-a098-b64eb4975bed" class="to-do-list"><li><div class="checkbox checkbox-off"></div> <span class="to-do-children-unchecked">Tracking + Events + UTM  </span><div class="indented"></div></li></ul></div><div style="display:contents" dir="auto"><ul id="9da3d59d-02e4-459d-8385-ccbf6d04f7aa" class="to-do-list"><li><div class="checkbox checkbox-off"></div> <span class="to-do-children-unchecked">الميزانية/الحدود اليومية + قواعد إنذار  </span><div class="indented"></div></li></ul></div><div style="display:contents" dir="auto"><ul id="6e8ff9b0-f449-4fcf-88f9-a77a3b3f5985" class="to-do-list"><li><div class="checkbox checkbox-off"></div> <span class="to-do-children-unchecked">مراجعة الكرييتف (Copy/Claims/Spelling)  </span><div class="indented"></div></li></ul></div><div style="display:contents" dir="auto"><ul id="97929eac-ad3c-46dd-908d-bc97cc203eeb" class="to-do-list"><li><div class="checkbox checkbox-off"></div> <span class="to-do-children-unchecked">مراجعة الصفحة/المنتج/السعر/سياسة الشحن</span><div class="indented"></div></li></ul></div><div style="display:contents" dir="ltr"><figure class="block-color-yellow_background callout" style="white-space:pre-wrap;display:flex" id="14493ffe-fedb-4798-9b00-3bcbca7b9b43"><div style="font-size:1.5em"><img class="icon notion-static-icon" src="https://app.notion.com/icons/flash_yellow.svg"/></div><div style="width:100%"><div style="display:contents" dir="auto"><p id="b23f2c1e-54de-47fb-ad6a-e69d04fdf606" class=""><strong>تذكير سريع:</strong> اعمل نسخة من الصفحة لكل شهر/حملة، وحافظ على نفس الـ Naming Convention عشان التقارير تبقى سهلة.</p></div></div></figure></div><div style="display:contents" dir="auto"><hr id="e7609db7-4ff2-43be-8876-83ac0d270c2a"/></div><div style="display:contents" dir="auto"><h2 id="a8617d3e-b6c6-4868-97fc-37ecd6453532" class="">10) Tracking &amp; Attribution (Website + Pixels)</h2></div><div style="display:contents" dir="ltr"><figure class="block-color-blue_background callout" style="white-space:pre-wrap;display:flex" id="70d6572a-48eb-4e83-a7db-c37aabf05ec9"><div style="font-size:1.5em"><img class="icon" src="https://app.notion.comi"/></div><div style="width:100%"><div style="display:contents" dir="auto"><p id="38e140ee-e57a-45c5-a988-65f605bc158b" class=""><strong>مهم:</strong> أي خطة ميديا = Tracking صحيح. املأ الجزء ده قبل ما تزود Spend.</p></div></div></figure></div><div style="display:contents" dir="auto"><ul id="d1e563e8-b312-4f27-9d04-5d9b4f54f96f" class="bulleted-list"><li style="list-style-type:disc"><strong>Meta Pixel + CAPI:</strong> [OK / Needs Fix / To confirm]  </li></ul></div><div style="display:contents" dir="auto"><ul id="1a1bd006-00b3-4d0e-a22f-8cf997b515c1" class="bulleted-list"><li style="list-style-type:disc"><strong>TikTok Pixel + Events API:</strong> [OK / Needs Fix / To confirm]  </li></ul></div><div style="display:contents" dir="auto"><ul id="ee177b9f-2422-4f13-85b1-112fd2a77028" class="bulleted-list"><li style="list-style-type:disc"><strong>Events المطلوبة:</strong> ViewContent / AddToCart / InitiateCheckout / Purchase  </li></ul></div><div style="display:contents" dir="auto"><ul id="52238736-e79f-4f5b-9cb7-c97483837191" class="bulleted-list"><li style="list-style-type:disc"><strong>Attribution window (للتقارير):</strong> [7D Click / 1D View / …]</li></ul></div><div style="display:contents" dir="auto"><ul id="780c9b56-581f-461c-bacf-bf9014e9f003" class="toggle"><li><details open=""><summary>UTM Template (انسخه لكل لينك)</summary><div style="display:contents" dir="auto"><ul id="9e6c2b5c-a323-407a-9b63-86427688d227" class="bulleted-list"><li style="list-style-type:disc">utm_source=[meta|tiktok]</li></ul></div><div style="display:contents" dir="auto"><ul id="b16a742a-f1fc-4767-af1e-2bb5878e76a2" class="bulleted-list"><li style="list-style-type:disc">utm_medium=paid_social</li></ul></div><div style="display:contents" dir="auto"><ul id="53ba143f-6d43-450e-94b0-1d82fa290908" class="bulleted-list"><li style="list-style-type:disc">utm_campaign=[brand_month_objective]</li></ul></div><div style="display:contents" dir="auto"><ul id="718ab16e-3ed1-46af-b8ee-04ce1bbb4ed9" class="bulleted-list"><li style="list-style-type:disc">utm_content=[angle_hook_creator]</li></ul></div></details></li></ul></div><div style="display:contents" dir="auto"><hr id="81efadf5-8998-4915-83fc-7eae07a0e49e"/></div><div style="display:contents" dir="auto"><h2 id="21818b69-f7a9-490b-9d20-16be6131accc" class="">11) Decision Rules (Kill / Scale / Rotate)</h2></div><div style="display:contents" dir="ltr"><table id="e4c3272d-e469-4824-a32d-b7cd3de1c8d2" class="simple-table"><thead class="simple-table-header"><div style="display:contents" dir="ltr"><tr id="0a4c9bcc-a447-4a57-a1d1-83ee8f4d7aad"><th id="AmO=" class="simple-table-header-color simple-table-header">القرار</th><th id="oCTl" class="simple-table-header-color simple-table-header">الشرط</th><th id="bA&lt;D" class="simple-table-header-color simple-table-header">الإجراء</th><th id="aHHK" class="simple-table-header-color simple-table-header">ملاحظات</th></tr></div></thead><tbody><div style="display:contents" dir="ltr"><tr id="6aa27936-ba7e-4785-a0f2-eced6a028d3d"><td id="AmO=" class="">Kill (TOFU)</td><td id="oCTl" class="">بعد Spend [ ] — CTR أقل من [ ] أو CPC أعلى من [ ]</td><td id="bA&lt;D" class="">بدّل Hook/Creative</td><td id="aHHK" class="">[ ]</td></tr></div><div style="display:contents" dir="ltr"><tr id="9307afe8-addb-4d67-8d3d-2e65fd2950d4"><td id="AmO=" class="">Scale</td><td id="oCTl" class="">CPA ≤ Target لمدة [3] أيام أو ROAS ≥ [ ]</td><td id="bA&lt;D" class="">زود 20–30% تدريجيًا</td><td id="aHHK" class="">حافظ على 20% testing</td></tr></div><div style="display:contents" dir="ltr"><tr id="cbdcad9f-4a3e-4a02-bef5-12a21c6efb9b"><td id="AmO=" class="">Creative Fatigue</td><td id="oCTl" class="">Frequency &gt; [ ] + CTR بينزل</td><td id="bA&lt;D" class="">Rotate creatives</td><td id="aHHK" class="">[ ]</td></tr></div></tbody></table></div><div style="display:contents" dir="auto"><hr id="0807daf4-b98b-4f48-b29b-0bb94c6f1a06"/></div><div style="display:contents" dir="auto"><h2 id="a370c8f9-3e63-4342-a676-76010698ae48" class="">12) Catalog / DPA (قيد الضبط)</h2></div><div style="display:contents" dir="auto"><ul id="c95148ea-3e3c-44f8-a91d-b870cf5fc5c3" class="bulleted-list"><li style="list-style-type:disc"><strong>Meta Catalog:</strong> [Not set / In progress / Ready]  </li></ul></div><div style="display:contents" dir="auto"><ul id="62cbe98f-9f3f-4f47-9f2c-b4d948390ac8" class="bulleted-list"><li style="list-style-type:disc"><strong>TikTok Catalog:</strong> [Not set / In progress / Ready]  </li></ul></div><div style="display:contents" dir="auto"><ul id="12855e2d-86b8-4406-9855-caa3d2512617" class="bulleted-list"><li style="list-style-type:disc"><strong>BOFU Retargeting:</strong> Dynamic Product Ads + عروض/Reviews</li></ul></div><div style="display:contents" dir="auto"><hr id="421c6cb3-527e-4be8-a228-fed97a21a2cd"/></div><div style="display:contents" dir="auto"><h2 id="e3ab9672-f533-4fa7-9078-aa4c26ef75e5" class="">13) تشغيل السعودية (KSA Ops)</h2></div><div style="display:contents" dir="auto"><ul id="d8c443e3-d52d-41e7-8f51-2e5c0943b9cc" class="bulleted-list"><li style="list-style-type:disc"><strong>COD:</strong> [To confirm] (لو موجود: اذكر نسبة الطلبات المتوقعة + تأثيره على CPA)  </li></ul></div><div style="display:contents" dir="auto"><ul id="a4e2060b-a714-452e-945d-e386f0187a05" class="bulleted-list"><li style="list-style-type:disc"><strong>الشحن:</strong> [مدة التوصيل] + [تغطية المدن]  </li></ul></div><div style="display:contents" dir="auto"><ul id="c7578e06-5dc2-49e4-baf4-b19f1cb8fff7" class="bulleted-list"><li style="list-style-type:disc"><strong>المرتجعات/الاستبدال:</strong> [مختصر السياسة + مكانها بالموقع] (مهم جدًا للموضة)  </li></ul></div><div style="display:contents" dir="auto"><ul id="c63e7eb3-6bcf-42f4-adf5-73b8297a31fe" class="bulleted-list"><li style="list-style-type:disc"><strong>جاهزية خدمة العملاء:</strong> [SLA] + [قنوات]</li></ul></div><div style="display:contents" dir="auto"><hr id="c267b82c-6bd3-4afd-bad3-139bbead3159"/></div><div style="display:contents" dir="auto"><h2 id="921df010-674b-4267-bd8d-0f4df0ad94e8" class="">14) ICP + Persona (مين هنبيع لمين؟)</h2></div><div style="display:contents" dir="ltr"><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="c6ef6384-26cc-4c72-809a-94d88d6992e6"><div style="font-size:1.5em"><img class="icon" src="https://app.notion.comi"/></div><div style="width:100%"><div style="display:contents" dir="auto"><p id="472aaea0-0283-4e5b-9958-8be1133604d9" class=""><strong>مهم:</strong> بما إن هدفنا <em>مبيعات + ليدز + رسائل</em> على Meta/TikTok، لازم نفصل Persona لكل مسار (Purchase / Lead / Message) بدل ما نخلطهم.</p></div></div></figure></div><div style="display:contents" dir="auto"><ul id="18b9b885-7b23-42bc-9b0e-b0b75153ec44" class="bulleted-list"><li style="list-style-type:disc"><strong>ICP مختصر:</strong> [العمر] • [المدن] • [الدخل] • [اهتمامات]  </li></ul></div><div style="display:contents" dir="auto"><ul id="d7c00a56-b8d3-494f-946d-c004757cdb2f" class="bulleted-list"><li style="list-style-type:disc"><strong>Persona 1 (Purchase):</strong> [وصف] — <strong>Trigger:</strong> [مناسبة/راتب/احتياج]  </li></ul></div><div style="display:contents" dir="auto"><ul id="550eb6c7-03b0-4152-a6a7-4a026d4a4ec6" class="bulleted-list"><li style="list-style-type:disc"><strong>Persona 2 (Leads):</strong> [وصف] — <strong>Objection:</strong> [اعتراض] — <strong>Reply:</strong> [رد]  </li></ul></div><div style="display:contents" dir="auto"><ul id="6675d130-3858-4a6a-b4aa-a0cfed9f0795" class="bulleted-list"><li style="list-style-type:disc"><strong>Persona 3 (Messages):</strong> [وصف] — <strong>Intent keywords:</strong> [شحن/سعر/مقاسات/متوفر؟]  </li></ul></div><div style="display:contents" dir="auto"><ul id="c05b9001-2caf-4613-a12f-2dd52140dd7b" class="toggle"><li><details open=""><summary>Objections &amp; Replies (انسخ/الصق)</summary><div style="display:contents" dir="auto"><ul id="0915684e-2bcb-4726-97df-b89514885690" class="bulleted-list"><li style="list-style-type:disc"><strong>السعر غالي:</strong> [قيمة/ضمان/بدائل/تقسيط]</li></ul></div><div style="display:contents" dir="auto"><ul id="32c00968-04a1-468e-ab1f-d2a8f0d6f1d0" class="bulleted-list"><li style="list-style-type:disc"><strong>الشحن متأخر:</strong> [مدة/مدن/تتبع]</li></ul></div><div style="display:contents" dir="auto"><ul id="7a250705-f66a-44e8-84c7-4d22d36f8950" class="bulleted-list"><li style="list-style-type:disc"><strong>المقاس/المقاسات:</strong> [دليل/استبدال]</li></ul></div><div style="display:contents" dir="auto"><ul id="edccd32f-7b9b-42de-8e0c-5c7a69eef352" class="bulleted-list"><li style="list-style-type:disc"><strong>الثقة:</strong> [Reviews/ضمان/سياسة استبدال]</li></ul></div></details></li></ul></div><div style="display:contents" dir="auto"><hr id="67d40e51-b2c4-4348-ab7e-c8ca3c6c5689"/></div><div style="display:contents" dir="auto"><h2 id="54033ffc-e102-4fe5-90ba-316de9e2bead" class="">15) Offer &amp; Pricing Sheet (3 عروض جاهزة)</h2></div><div style="display:contents" dir="auto"><ul id="f11e19ae-bd28-47bb-946f-cb253914bd79" class="bulleted-list"><li style="list-style-type:disc"><strong>Main Offer:</strong> [خصم/Bundle/شحن] — <strong>مدة:</strong> [ ] — <strong>كود:</strong> [ ]  </li></ul></div><div style="display:contents" dir="auto"><ul id="6a4f22cf-c35d-4493-9797-e07a222f802c" class="bulleted-list"><li style="list-style-type:disc"><strong>Backup Offer:</strong> [ ]  </li></ul></div><div style="display:contents" dir="auto"><ul id="20374b27-334b-4aed-93e3-3323bce853a0" class="bulleted-list"><li style="list-style-type:disc"><strong>Emergency Offer (لما الـ CPA يطلع):</strong> [ ]  </li></ul></div><div style="display:contents" dir="auto"><ul id="430093d7-d649-49c9-8bbe-291e0e26a0a8" class="bulleted-list"><li style="list-style-type:disc"><strong>حد أدنى للخصم المقبول:</strong> [ ] • <strong>هامش الربح المستهدف:</strong> [ ]%  </li></ul></div><div style="display:contents" dir="auto"><ul id="fcce3f5a-9809-4fe4-b9a9-602aad59f32e" class="bulleted-list"><li style="list-style-type:disc"><strong>Hero SKUs لازم تظهر في الكرييتف:</strong> [1] [2] [3]</li></ul></div><div style="display:contents" dir="auto"><hr id="4ae8c359-7ef0-4929-a672-ce01478ee0a3"/></div><div style="display:contents" dir="auto"><h2 id="63c1a5f7-780f-457f-9750-27896e53b618" class="">16) Landing + Checkout QA (قبل أي ضخ)</h2></div><div style="display:contents" dir="auto"><ul id="a303c1ab-4d3e-4eac-9739-00d9f524bd02" class="to-do-list"><li><div class="checkbox checkbox-off"></div> <span class="to-do-children-unchecked">سرعة الصفحة (موبايل) ممتازة + صور واضحة  </span><div class="indented"></div></li></ul></div><div style="display:contents" dir="auto"><ul id="044d78f6-1706-4ad2-9a2c-ba3b32aceb0f" class="to-do-list"><li><div class="checkbox checkbox-off"></div> <span class="to-do-children-unchecked">الشحن/المدة/المدن واضحة  </span><div class="indented"></div></li></ul></div><div style="display:contents" dir="auto"><ul id="bd1e15db-9ddc-401d-a43e-d12e1abc7748" class="to-do-list"><li><div class="checkbox checkbox-off"></div> <span class="to-do-children-unchecked">سياسة الاستبدال/المرتجعات واضحة (خصوصًا للموضة)  </span><div class="indented"></div></li></ul></div><div style="display:contents" dir="auto"><ul id="8174befb-8b78-4f10-9e90-e496393978e7" class="to-do-list"><li><div class="checkbox checkbox-off"></div> <span class="to-do-children-unchecked">وسائل الدفع + COD (لو موجود) موضحين  </span><div class="indented"></div></li></ul></div><div style="display:contents" dir="auto"><ul id="10239d4a-3cf7-444e-8046-06152b37c97a" class="to-do-list"><li><div class="checkbox checkbox-off"></div> <span class="to-do-children-unchecked">Reviews/UGC/Trust badges موجودين  </span><div class="indented"></div></li></ul></div><div style="display:contents" dir="auto"><ul id="80db4f7c-f521-4c6f-96e6-08a97294c28d" class="to-do-list"><li><div class="checkbox checkbox-off"></div> <span class="to-do-children-unchecked">صفحة الدفع سهلة ومفيش خطوات زيادة  </span><div class="indented"></div></li></ul></div><div style="display:contents" dir="auto"><hr id="24d3217e-0626-4565-aa20-0e0d457354fe"/></div><div style="display:contents" dir="auto"><h2 id="3a08aa7a-e3ab-4e10-9cdc-8475e124bc78" class="">17) Naming Convention (تسمية موحّدة للحملات)</h2></div><div style="display:contents" dir="auto"><ul id="947975ed-072b-4d38-b30c-677e57b849cd" class="toggle"><li><details open=""><summary>Template (Meta/TikTok)</summary><div style="display:contents" dir="auto"><ul id="f7304470-c5a9-4dd1-b316-5769bbbceadc" class="bulleted-list"><li style="list-style-type:disc"><strong>Campaign:</strong> [Brand]<em>[KSA]</em>[YYYYMM]<em>[Objective]</em>[TOFU/MOFU/BOFU]</li></ul></div><div style="display:contents" dir="auto"><ul id="6c0ef505-18a8-42ce-8455-cf7f5cecd9a0" class="bulleted-list"><li style="list-style-type:disc"><strong>Ad set:</strong> [Audience]<em>[Placement]</em>[Optimization]</li></ul></div><div style="display:contents" dir="auto"><ul id="c3c4674d-47a4-4034-94c6-6b84101ccc5c" class="bulleted-list"><li style="list-style-type:disc"><strong>Ad:</strong> [Angle]<em>[Hook]</em>[Creator]_[Format]_V[1]</li></ul></div></details></li></ul></div><div style="display:contents" dir="ltr"><figure class="block-color-yellow_background callout" style="white-space:pre-wrap;display:flex" id="bf81101d-7323-4de1-935e-60bad7054cc4"><div style="font-size:1.5em"><img class="icon notion-static-icon" src="https://app.notion.com/icons/flash_yellow.svg"/></div><div style="width:100%"><div style="display:contents" dir="auto"><p id="6e690bd9-a13c-4f2d-9b72-ed1971acdc2e" class=""><strong>قاعدة ذهبية:</strong> أي حاجة تتسمّى غلط = تقريرك هيبوظ، ومش هتعرف “مين اللي كسب”.</p></div></div></figure></div><div style="display:contents" dir="auto"><hr id="cca4c442-2811-43e0-a38d-ef9adf30341c"/></div><div style="display:contents" dir="auto"><h2 id="4a09384a-2a71-439b-83a7-bc027f828c55" class="">18) Budget Pacing + Guardrails (تحكم بالصرف)</h2></div><div style="display:contents" dir="auto"><ul id="f78368bf-0545-43fb-ae1d-98dd910635c1" class="bulleted-list"><li style="list-style-type:disc"><strong>Daily pacing target:</strong> [ ] (مثال: 90–110% من الميزانية اليومية)  </li></ul></div><div style="display:contents" dir="auto"><ul id="a19db558-38c5-4be1-ad66-cec4fb8e3c53" class="bulleted-list"><li style="list-style-type:disc"><strong>حد تعديل الميزانية:</strong> [20–30%] يوميًا (إلا في حالات الطوارئ)  </li></ul></div><div style="display:contents" dir="auto"><ul id="123b27fe-e178-452c-8a72-02e3269901d8" class="bulleted-list"><li style="list-style-type:disc"><strong>Guardrails:</strong>  <div style="display:contents" dir="auto"><ul id="2c9237e7-7874-4759-9785-5cf25c7347f9" class="bulleted-list"><li style="list-style-type:circle">CTR أقل من [ ]% بعد Spend [ ] ⇒ بدّل Hook/Creative  </li></ul></div><div style="display:contents" dir="auto"><ul id="03840404-25cd-45a0-96a4-a531fd7ee55d" class="bulleted-list"><li style="list-style-type:circle">CPA أعلى من Target [ ]% لمدة [ ] أيام ⇒ خفّض TOFU وادعم BOFU/Offer  </li></ul></div><div style="display:contents" dir="auto"><ul id="44fec9ad-3eab-4fd8-b962-eb79035e1f63" class="bulleted-list"><li style="list-style-type:circle">CPM طالع [ ]% ⇒ راجع الجمهور/placements/الكرييتف</li></ul></div></li></ul></div><div style="display:contents" dir="auto"><hr id="f2ef841d-85e2-497d-acab-b92fa92c36f9"/></div><div style="display:contents" dir="auto"><h2 id="47d091ab-f743-4fe1-bd50-1b472c0e4ce3" class="">19) Full Funnel Tracking Sheet (مبيعات + ليدز + رسائل)</h2></div><div style="display:contents" dir="auto"><ul id="7b7cf0b3-d2ef-4d3c-a30c-a0144ddad94b" class="toggle"><li><details open=""><summary>Daily / Weekly Tracker Columns</summary><div style="display:contents" dir="auto"><ul id="432ae9ae-f272-4b8c-b0e9-313d6f45f913" class="bulleted-list"><li style="list-style-type:disc">Date</li></ul></div><div style="display:contents" dir="auto"><ul id="21c17086-476d-414d-ad26-ffc440f7a989" class="bulleted-list"><li style="list-style-type:disc">Spend / CPM / CTR / CPC</li></ul></div><div style="display:contents" dir="auto"><ul id="bda9310c-ad0c-479c-96d4-4265d137d973" class="bulleted-list"><li style="list-style-type:disc"><strong>Purchase:</strong> ATC / IC / Purchases / CPA / ROAS / AOV / CVR</li></ul></div><div style="display:contents" dir="auto"><ul id="02fffafb-8d52-444a-a08e-789a291ea899" class="bulleted-list"><li style="list-style-type:disc"><strong>Leads:</strong> Leads / CPL / Lead→Sale rate (لو متاح)</li></ul></div><div style="display:contents" dir="auto"><ul id="17464a85-a145-48f0-911e-e082ebbf1bea" class="bulleted-list"><li style="list-style-type:disc"><strong>Messages:</strong> Conversations / Cost per convo / Qualified rate</li></ul></div><div style="display:contents" dir="auto"><ul id="fefa1fea-06e1-45ee-92be-a26d927e8421" class="bulleted-list"><li style="list-style-type:disc">Notes: “إيه اتغيّر النهارده؟”</li></ul></div></details></li></ul></div><div style="display:contents" dir="auto"><hr id="5f75e767-5bd2-4970-8d60-dcfc29b1673d"/></div><div style="display:contents" dir="auto"><h2 id="f3dc3a7f-45fd-486a-81bf-cb57ab7e4069" class="">20) Creative Scorecard (تقييم الكرييتف)</h2></div><div style="display:contents" dir="auto"><p id="e812b6cd-eaf4-4347-ba49-0dbdc5b5096d" class="">لكل Creative (في جدول 6.4):</p></div><div style="display:contents" dir="auto"><ul id="78f2267f-45a9-48c3-89f8-f1b8d7f91f9b" class="bulleted-list"><li style="list-style-type:disc"><strong>KPIs:</strong> Thumbstop/Hook rate (لو متاح) • CTR • CPC • CPA/ROAS  </li></ul></div><div style="display:contents" dir="auto"><ul id="6f51b2eb-7e0c-46cf-bbf7-4e6d6eb1d95f" class="bulleted-list"><li style="list-style-type:disc"><strong>قرار:</strong> Scale / Iterate / Kill  </li></ul></div><div style="display:contents" dir="auto"><ul id="763e7c89-dec8-432a-ae3d-3efdfe92272e" class="bulleted-list"><li style="list-style-type:disc"><strong>سبب القرار:</strong> [ ]  </li></ul></div><div style="display:contents" dir="auto"><ul id="9fc39edb-72f9-45c5-aadc-2fd311688764" class="toggle"><li><details open=""><summary>Rules سريعة</summary><div style="display:contents" dir="auto"><ul id="26dd72f5-6260-44ac-85e5-61c4de8bc31d" class="bulleted-list"><li style="list-style-type:disc">لو CTR ضعيف ⇒ المشكلة غالبًا Hook/Angle</li></ul></div><div style="display:contents" dir="auto"><ul id="e27cb207-ad41-401e-9fab-243b44d313d1" class="bulleted-list"><li style="list-style-type:disc">لو CTR كويس و CPA وحش ⇒ المشكلة Landing/Offer/Intent mismatch</li></ul></div><div style="display:contents" dir="auto"><ul id="b0e73554-ab8a-479a-8863-a13db7cbce6d" class="bulleted-list"><li style="list-style-type:disc">لو Frequency عالي + CTR بينزل ⇒ Creative fatigue ⇒ Rotate</li></ul></div></details></li></ul></div><div style="display:contents" dir="auto"><hr id="11d8e5e1-c363-4842-b5e6-1d6b858afc48"/></div><div style="display:contents" dir="auto"><h2 id="66cca30d-036c-4a89-955c-cdbfdfdf0080" class="">21) Retargeting Map (تقسيم BOFU واضح)</h2></div><div style="display:contents" dir="auto"><ul id="f47df6e9-eb53-4eb6-923c-f69c7681a672" class="bulleted-list"><li style="list-style-type:disc"><strong>Visitors:</strong> 30D  </li></ul></div><div style="display:contents" dir="auto"><ul id="13383e72-890b-42d4-a699-ece0cf43ecb9" class="bulleted-list"><li style="list-style-type:disc"><strong>Engagers:</strong> 30D (IG/FB + TikTok engagers)  </li></ul></div><div style="display:contents" dir="auto"><ul id="fceffd8f-8ef9-40db-8051-2edf8265dd9b" class="bulleted-list"><li style="list-style-type:disc"><strong>ATC:</strong> 14D  </li></ul></div><div style="display:contents" dir="auto"><ul id="3fb12844-3018-4f41-8e7b-9eb009efd2ff" class="bulleted-list"><li style="list-style-type:disc"><strong>IC:</strong> 7D  </li></ul></div><div style="display:contents" dir="auto"><ul id="de189de9-922f-422d-ba86-fd1051c3e755" class="bulleted-list"><li style="list-style-type:disc"><strong>Purchasers:</strong> 180D (للـ upsell/cross-sell)  </li></ul></div><div style="display:contents" dir="auto"><ul id="a2b2ea8f-82c1-4864-ba6c-8b93488b1940" class="bulleted-list"><li style="list-style-type:disc"><strong>Exclusions:</strong> استبعد Purchasers من كل اللي فوق (إلا لو upsell)  </li></ul></div><div style="display:contents" dir="auto"><hr id="5829ad55-30e0-4886-bd4f-6599a81f09d5"/></div><div style="display:contents" dir="auto"><h2 id="dee08377-a553-4f1a-9663-3d1dff3ae49e" class="">22) Experiment Backlog (قائمة اختبارات جاهزة)</h2></div><div style="display:contents" dir="auto"><ul id="99313d29-fbf3-4c66-95f9-c482b71b1540" class="toggle"><li><details open=""><summary>Backlog Template</summary><div style="display:contents" dir="auto"><ul id="20ad003b-3b57-428e-b5ae-68a31a72cb07" class="bulleted-list"><li style="list-style-type:disc">Hypothesis: [ ]</li></ul></div><div style="display:contents" dir="auto"><ul id="70c7fa9a-39c4-4c7e-b493-8d715227501c" class="bulleted-list"><li style="list-style-type:disc">Variable: [Audience/Offer/Hook/Landing]</li></ul></div><div style="display:contents" dir="auto"><ul id="703faf0d-02d7-4ce1-9eb1-3dc9bf96c115" class="bulleted-list"><li style="list-style-type:disc">Variant A vs B: [ ]</li></ul></div><div style="display:contents" dir="auto"><ul id="20b4d67b-549d-40b0-8ac0-6695b1bc4942" class="bulleted-list"><li style="list-style-type:disc">Budget + Duration: [ ]</li></ul></div><div style="display:contents" dir="auto"><ul id="1b5eb4f4-4df4-4eeb-8d18-3728cdcc29d6" class="bulleted-list"><li style="list-style-type:disc">Success metric: [CPA/ROAS/CPL/Cost per convo]</li></ul></div><div style="display:contents" dir="auto"><ul id="829d4da3-5153-4b60-b55a-dd4a3b7a7a0a" class="bulleted-list"><li style="list-style-type:disc">Decision: [Ship/Iterate/Kill]</li></ul></div></details></li></ul></div><div style="display:contents" dir="auto"><hr id="e48b268e-a02a-486f-a4fc-6bb02e2d579b"/></div><div style="display:contents" dir="auto"><h2 id="72499e99-1336-4041-820f-c59023a18f85" class="">23) Post-Mortem آخر الشهر (تعلميات + قرارات)</h2></div><div style="display:contents" dir="auto"><ul id="f2dc9304-f073-47ed-be93-2830a90a1965" class="bulleted-list"><li style="list-style-type:disc"><strong>Top 3 Winners:</strong> (Audience + Angle + Offer)  <div style="display:contents" dir="auto"><p id="5e90e8bb-0ceb-4c2d-abd3-b5200c3bfbe0" class="">1) [ ]  </p></div><div style="display:contents" dir="auto"><p id="e2cc0f6f-07ac-4e90-b573-09f343930735" class="">2) [ ]  </p></div><div style="display:contents" dir="auto"><p id="b0f2c65e-2af9-46a7-a091-8e5a00ed92d6" class="">3) [ ]  </p></div></li></ul></div><div style="display:contents" dir="auto"><ul id="231af54b-5530-42fc-9850-ec3f717395f1" class="bulleted-list"><li style="list-style-type:disc"><strong>Top 3 Losers + Why:</strong> [ ]  </li></ul></div><div style="display:contents" dir="auto"><ul id="80b9ccd2-8521-422c-96d4-3202cb1e331b" class="bulleted-list"><li style="list-style-type:disc"><strong>قرارات الشهر القادم (3 فقط):</strong>  <div style="display:contents" dir="auto"><ul id="b8ad7abd-8dba-4fc4-aea4-faa27d2f2826" class="bulleted-list"><li style="list-style-type:circle">[ ]  </li></ul></div><div style="display:contents" dir="auto"><ul id="f26e439c-904b-4e47-bafd-1cdf13b9795f" class="bulleted-list"><li style="list-style-type:circle">[ ]  </li></ul></div><div style="display:contents" dir="auto"><ul id="e9d3c9fa-9033-458f-a8a9-13ba3c10d5bb" class="bulleted-list"><li style="list-style-type:circle">[ ]</li></ul></div></li></ul></div><div style="display:contents" dir="auto"><p id="a4f036e0-9e09-4043-beac-d71f7d6a4a98" class=""><mark class="highlight-gray">آخر تحديث: [اكتب التاريخ] • صاحب الخطة: [الاسم]</mark></p></div></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
