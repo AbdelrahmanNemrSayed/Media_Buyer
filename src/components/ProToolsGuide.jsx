@@ -131,7 +131,6 @@ export default function ProToolsGuide() {
                         </p>
                     </div>
                 </div>
-
             </div>
         </div>
     );

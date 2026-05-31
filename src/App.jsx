@@ -277,8 +277,14 @@ function loadCampaigns() {
   try {
     const data = localStorage.getItem(CAMPAIGNS_KEY);
     if (!data) return { default: { name: 'الحملة الرئيسية', state: INITIAL_STATE } };
-    return JSON.parse(data);
-  } catch { return { default: { name: 'الحملة الرئيسية', state: INITIAL_STATE } }; }
+    const parsed = JSON.parse(data);
+    if (!parsed || typeof parsed !== 'object' || Object.keys(parsed).length === 0) {
+      return { default: { name: 'الحملة الرئيسية', state: INITIAL_STATE } };
+    }
+    return parsed;
+  } catch { 
+    return { default: { name: 'الحملة الرئيسية', state: INITIAL_STATE } }; 
+  }
 }
 
 function saveCampaigns(campaigns) {
@@ -541,7 +547,7 @@ export default function App() {
   // ─ Multi-Campaign ─
   const [campaigns, setCampaigns] = useState(loadCampaigns);
   const [activeCampaignId, setActiveCampaignIdState] = useState(getActiveCampaignId);
-  const currentCampaign = campaigns[activeCampaignId] || campaigns['default'];
+  const currentCampaign = campaigns[activeCampaignId] || campaigns['default'] || Object.values(campaigns)[0];
   const state = currentCampaign?.state || INITIAL_STATE;
 
   // ─ Undo/Redo History ─
