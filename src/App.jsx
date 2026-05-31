@@ -281,6 +281,22 @@ function loadCampaigns() {
     if (!parsed || typeof parsed !== 'object' || Object.keys(parsed).length === 0) {
       return { default: { name: 'الحملة الرئيسية', state: INITIAL_STATE } };
     }
+    
+    // Auto-migrate old default currencies from 'ر.س' to 'ج.م' for existing campaigns in localStorage
+    let hasMigrated = false;
+    Object.keys(parsed).forEach(key => {
+      if (parsed[key] && parsed[key].state) {
+        if (!parsed[key].state.currency || parsed[key].state.currency === 'ر.س') {
+          parsed[key].state.currency = 'ج.م';
+          hasMigrated = true;
+        }
+      }
+    });
+    
+    if (hasMigrated) {
+      try { localStorage.setItem(CAMPAIGNS_KEY, JSON.stringify(parsed)); } catch (e) { console.error(e); }
+    }
+    
     return parsed;
   } catch { 
     return { default: { name: 'الحملة الرئيسية', state: INITIAL_STATE } }; 
