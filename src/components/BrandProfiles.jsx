@@ -55,7 +55,7 @@ export default function BrandProfiles({ state, onChange }) {
                             <td><strong>الميزانية الإجمالية المقترحة</strong></td>
                             <td>
                                 <EditableSlot id="total_budget_summary" placeholder="الرقم الإجمالي" value={state.total_budget_summary} onChange={onChange} /> 
-                                <EditableSlot id="currency" placeholder="العملة (مثال: ر.س)" value={state.currency} onChange={onChange} />
+                                <EditableSlot id="currency" placeholder="العملة (مثال: ج.م)" value={state.currency} onChange={onChange} />
                             </td>
                         </tr>
                         <tr>

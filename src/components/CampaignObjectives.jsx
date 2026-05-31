@@ -90,7 +90,7 @@ export default function CampaignObjectives({ state, onChange }) {
                         onChange={(e) => onChange('calc_total_budget', e.target.value)}
                     />
                     <span style={{ fontSize: '1rem', fontWeight: '700', color: 'var(--neon-cyan)' }}>
-                        {state.currency || 'ر.س'}
+                        {state.currency || 'ج.م'}
                     </span>
                 </div>
 
@@ -105,7 +105,7 @@ export default function CampaignObjectives({ state, onChange }) {
                         onChange={(e) => onChange('budget_meta_pct', e.target.value)}
                     />
                     <span className="slider-value-badge">
-                        {metaPct}% ({metaVal.toLocaleString()} {state.currency || 'ر.س'})
+                        {metaPct}% ({metaVal.toLocaleString()} {state.currency || 'ج.م'})
                     </span>
                 </div>
 
@@ -120,7 +120,7 @@ export default function CampaignObjectives({ state, onChange }) {
                         onChange={(e) => onChange('budget_tiktok_pct', e.target.value)}
                     />
                     <span className="slider-value-badge">
-                        {tiktokPct}% ({tiktokVal.toLocaleString()} {state.currency || 'ر.س'})
+                        {tiktokPct}% ({tiktokVal.toLocaleString()} {state.currency || 'ج.م'})
                     </span>
                 </div>
 
@@ -135,7 +135,7 @@ export default function CampaignObjectives({ state, onChange }) {
                         onChange={(e) => onChange('budget_google_pct', e.target.value)}
                     />
                     <span className="slider-value-badge">
-                        {googlePct}% ({googleVal.toLocaleString()} {state.currency || 'ر.س'})
+                        {googlePct}% ({googleVal.toLocaleString()} {state.currency || 'ج.م'})
                     </span>
                 </div>
 
@@ -150,7 +150,7 @@ export default function CampaignObjectives({ state, onChange }) {
                         onChange={(e) => onChange('budget_other_pct', e.target.value)}
                     />
                     <span className="slider-value-badge">
-                        {otherPct}% ({otherVal.toLocaleString()} {state.currency || 'ر.س'})
+                        {otherPct}% ({otherVal.toLocaleString()} {state.currency || 'ج.م'})
                     </span>
                 </div>
 

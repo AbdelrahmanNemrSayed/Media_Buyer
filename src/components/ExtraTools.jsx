@@ -173,7 +173,7 @@ function ABTestTracker({ tests, onUpdate }) {
 // ── Budget Pacing Calculator ─────────────────────────────────────
 function BudgetPacing({ state, onChange }) {
     const totalBudget = parseFloat(state.calc_total_budget || 0) || 0;
-    const currency = state.currency || 'ر.س';
+    const currency = state.currency || 'ج.م';
     const daysInMonth = parseInt(state.pacing_days || '30') || 30;
     const daysSpent = parseInt(state.pacing_days_spent || '0') || 0;
     const actualSpend = parseFloat(state.pacing_actual_spend || '0') || 0;

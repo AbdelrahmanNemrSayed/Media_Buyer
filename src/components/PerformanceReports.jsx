@@ -137,7 +137,7 @@ export default function PerformanceReports({ onChange }) {
 
         const parseNumber = (val) => {
             if (!val) return 0;
-            let clean = val.replace(/["' $£€ر.س]/g, '').trim();
+            let clean = val.replace(/["' $£€ر.سج.مegp]/gi, '').trim();
             // If it contains both comma and dot, e.g. 1,200.50
             if (clean.includes(',') && clean.includes('.')) {
                 clean = clean.replace(/,/g, '');

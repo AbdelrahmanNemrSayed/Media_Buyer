@@ -46,7 +46,7 @@ const INITIAL_STATE = {
   period_to: '',
   main_objective: '',
   total_budget_summary: '',
-  currency: 'ر.س',
+  currency: 'ج.م',
   primary_channels: '',
   target_kpi_type: '',
   target_kpi_value: '',

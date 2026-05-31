@@ -102,7 +102,7 @@ function StatusBadge({ done, label }) {
 // ── Main Dashboard ───────────────────────────────────────────────
 export default function Dashboard({ state, progress, setActiveTab }) {
     const totalBudget = parseFloat(state.calc_total_budget || state.total_budget_summary || 0) || 0;
-    const currency = state.currency || 'ر.س';
+    const currency = state.currency || 'ج.م';
 
     const budgetSegments = [
         { label: 'Meta', pct: parseInt(state.budget_meta_pct) || 40, value: Math.round(totalBudget * ((parseInt(state.budget_meta_pct) || 40) / 100)), color: '#0052ff' },
