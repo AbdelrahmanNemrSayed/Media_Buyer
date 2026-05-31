@@ -1,4 +1,4 @@
-import{r as x,j as e}from"./index-BEr6sgav.js";import{E as r}from"./EditableSlot-CTwMJxEI.js";function h({state:i,onChange:a}){const[c,d]=x.useState(null),o=i.ai_product||"[اسم المنتج]",s=i.ai_audience||"[الجمهور المستهدف]",n=i.ai_angle||"[زاوية البيع]",p=[{title:"🎥 أمر كتابة سكريبت فيديو إعلاني (Video Script)",content:`أنت خبير تسويق رقمي وكتابة إعلانات (Direct Response Copywriter). 
+import{r as x,j as e}from"./index-063uEWSj.js";import{E as r}from"./EditableSlot-BJ0E_M0j.js";function h({state:i,onChange:a}){const[c,d]=x.useState(null),o=i.ai_product||"[اسم المنتج]",s=i.ai_audience||"[الجمهور المستهدف]",n=i.ai_angle||"[زاوية البيع]",p=[{title:"🎥 أمر كتابة سكريبت فيديو إعلاني (Video Script)",content:`أنت خبير تسويق رقمي وكتابة إعلانات (Direct Response Copywriter). 
 أريدك أن تكتب لي سكريبت فيديو إعلاني مدته 30 ثانية لمنتج: ${o}.
 الجمهور المستهدف هو: ${s}.
 زاوية البيع الأساسية التي نركز عليها هي: ${n}.
