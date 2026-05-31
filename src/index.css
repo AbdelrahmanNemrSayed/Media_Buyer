@@ -2049,3 +2049,44 @@ hr {
         border-bottom: 1px solid #e2e8f0 !important;
     }
 }
+
+/* Premium Saving Enhancements */
+.btn-save {
+    background: linear-gradient(135deg, var(--neon-green) 0%, rgba(16, 185, 129, 0.7) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.25);
+}
+
+.btn-save:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.45);
+    background: linear-gradient(135deg, var(--neon-green) 0%, #34d399 100%);
+}
+
+.last-saved-indicator {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--neon-green);
+    background: rgba(16, 185, 129, 0.08);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    padding: 6px 12px;
+    border-radius: 12px;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.1);
+    animation: saveIndicatorFadeIn 0.3s ease-out;
+}
+
+[data-theme="light"] .last-saved-indicator {
+    background: rgba(5, 150, 105, 0.06);
+    border-color: rgba(5, 150, 105, 0.15);
+}
+
+@keyframes saveIndicatorFadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+

@@ -4,6 +4,8 @@ export default function Header({
     progressPercentage, 
     badgeText, 
     isBadgeSavedState, 
+    lastSavedTime,
+    onManualSave,
     onReset, 
     onDownload,
     isDarkMode,
@@ -36,6 +38,12 @@ export default function Header({
                     {badgeText}
                 </span>
                 <span className="header-title">خطة ميديا باينج</span>
+
+                {lastSavedTime && (
+                    <span className="last-saved-indicator" title="آخر عملية حفظ تلقائي آمنة">
+                        🟢 آخر حفظ: {lastSavedTime}
+                    </span>
+                )}
 
                 {/* Campaign Switcher */}
                 <div className="campaign-switcher-wrap">
@@ -96,6 +104,11 @@ export default function Header({
             
             {/* Controls */}
             <div className="header-controls">
+                {/* Manual Save Button */}
+                <button className="btn btn-save" onClick={onManualSave} title="حفظ التغييرات يدوياً فوراً">
+                    <span>💾</span> حفظ الآن
+                </button>
+
                 {/* Undo / Redo */}
                 <button className="btn btn-secondary btn-icon" onClick={onUndo} title="تراجع (Ctrl+Z)">↩</button>
                 <button className="btn btn-secondary btn-icon" onClick={onRedo} title="إعادة (Ctrl+Y)">↪</button>

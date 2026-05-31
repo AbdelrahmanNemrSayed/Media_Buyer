@@ -550,6 +550,11 @@ export default function App() {
   const currentCampaign = campaigns[activeCampaignId] || campaigns['default'] || Object.values(campaigns)[0];
   const state = currentCampaign?.state || INITIAL_STATE;
 
+  // ─ Last Saved Time ─
+  const [lastSavedTime, setLastSavedTime] = useState(() => {
+    return localStorage.getItem('media_buyer_last_saved_time') || '';
+  });
+
   // ─ Undo/Redo History ─
   const historyRef = useRef([state]);
   const historyIdxRef = useRef(0);
@@ -596,6 +601,25 @@ export default function App() {
     });
   }, [activeCampaignId]);
 
+  // Manual save handler
+  const handleManualSave = useCallback(() => {
+    if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
+    saveCampaigns(campaigns);
+    
+    const timeStr = new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    localStorage.setItem('media_buyer_last_saved_time', timeStr);
+    setLastSavedTime(timeStr);
+    
+    setBadgeText('✓ تم الحفظ');
+    setIsSavedState(true);
+    addToast('💾 تم حفظ جميع بياناتك ومشاريعك بأمان في متصفحك!', 'success', '💾');
+    
+    setTimeout(() => {
+      setBadgeText('LIVE');
+      setIsSavedState(false);
+    }, 2000);
+  }, [campaigns, addToast]);
+
   // Auto-save campaigns to localStorage
   useEffect(() => {
     if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
@@ -607,6 +631,9 @@ export default function App() {
 
     saveTimeoutRef.current = setTimeout(() => {
       saveCampaigns(campaigns);
+      const timeStr = new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      localStorage.setItem('media_buyer_last_saved_time', timeStr);
+      setLastSavedTime(timeStr);
       setBadgeText('✓ محفوظ');
       setIsSavedState(true);
       setTimeout(() => { setBadgeText('LIVE'); setIsSavedState(false); }, 2000);
@@ -820,6 +847,8 @@ export default function App() {
         progressPercentage={progress}
         badgeText={badgeText}
         isBadgeSavedState={isSavedState}
+        lastSavedTime={lastSavedTime}
+        onManualSave={handleManualSave}
         onReset={handleReset}
         onDownload={handleDownload}
         isDarkMode={isDarkMode}
