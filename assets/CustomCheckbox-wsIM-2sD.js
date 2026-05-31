@@ -1,1 +1,0 @@
-import{j as e}from"./index-rzadLqYF.js";function r({id:t,checked:s,onChange:c,children:n}){const o=i=>{i.preventDefault(),c(t,!s)};return e.jsxs("div",{className:`checklist-item ${s?"completed":""}`,children:[e.jsx("div",{className:`custom-checkbox ${s?"checked":""}`,onClick:o}),e.jsx("span",{style:{cursor:"pointer"},onClick:o,children:n})]})}export{r as C};
