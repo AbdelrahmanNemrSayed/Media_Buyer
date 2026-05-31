@@ -1,6 +1,33 @@
 import { useEffect } from 'react';
 import EditableSlot from './EditableSlot';
 
+// ── Industry Benchmarks & Evaluation Logic ──
+const getConversionRateBenchmark = (valStr) => {
+    if (!valStr) return null;
+    const numeric = parseFloat(valStr.replace(/[^\d.]/g, ''));
+    if (isNaN(numeric)) return null;
+    if (numeric < 1.0) {
+        return { text: 'معدل تحويل منخفض (ينصح بتحسين سرعة وسلاسل إقناع المتجر لحماية الصرف إعلانيًا)', color: 'var(--neon-crimson)', bg: 'rgba(255, 0, 85, 0.05)', icon: '🔴' };
+    } else if (numeric <= 2.5) {
+        return { text: 'معدل تحويل طبيعي ومناسب تماماً للبدء والتسويق الإعلاني الناجح', color: 'var(--neon-green)', bg: 'rgba(16, 185, 129, 0.05)', icon: '🟢' };
+    } else {
+        return { text: 'معدل تحويل فائق ومثالي للتوسع والنمو ومضاعفة الميزانية بثقة', color: 'var(--neon-cyan)', bg: 'rgba(0, 240, 255, 0.05)', icon: '🔵' };
+    }
+};
+
+const getMarginBenchmark = (valStr) => {
+    if (!valStr) return null;
+    const numeric = parseFloat(valStr.replace(/[^\d.]/g, ''));
+    if (isNaN(numeric)) return null;
+    if (numeric < 30) {
+        return { text: 'هامش ربح منخفض (يزيد من مخاطر الحملات، استهدف رفع قيمة السلة AOV)', color: 'var(--neon-amber)', bg: 'rgba(245, 158, 11, 0.05)', icon: '🟡' };
+    } else if (numeric <= 50) {
+        return { text: 'هامش ربح مناسب جداً ومريح للتحكم في تكاليف الحصول على مبيعات CPA', color: 'var(--neon-green)', bg: 'rgba(16, 185, 129, 0.05)', icon: '🟢' };
+    } else {
+        return { text: 'هامش ربح ممتاز ومرتفع (فرصة هائلة للتوسع والمضاعفة السريعة للمبيعات)', color: 'var(--neon-cyan)', bg: 'rgba(0, 240, 255, 0.05)', icon: '🔵' };
+    }
+};
+
 export default function CampaignObjectives({ state, onChange }) {
     // Local auto-calculation helper for budgets
     const totalBudget = parseFloat(state.calc_total_budget || '0') || 0;
@@ -49,17 +76,138 @@ export default function CampaignObjectives({ state, onChange }) {
                     </p>
                 </div>
 
-                <div className="card-item" style={{ borderColor: 'rgba(0, 240, 255, 0.15)' }}>
-                    <h3>📊 الافتراضات الحسابية (Assumptions)</h3>
-                    <p style={{ marginTop: '12px' }}>
-                        • متوسط قيمة السلة (AOV): <strong><EditableSlot id="assumption_aov" placeholder="متوسط قيمة الطلب" value={state.assumption_aov} onChange={onChange} /></strong>
-                    </p>
-                    <p>
-                        • معدل تحويل الموقع المتوقع (CR): <strong><EditableSlot id="assumption_cr" placeholder="نسبة التحويل المتوقعة" value={state.assumption_cr} onChange={onChange} /></strong>
-                    </p>
-                    <p>
-                        • هامش ربح المنتجات التقريبي: <strong><EditableSlot id="assumption_margin" placeholder="نسبة هامش الربح" value={state.assumption_margin} onChange={onChange} /></strong>
-                    </p>
+                <div className="card-item" style={{ borderColor: 'rgba(0, 240, 255, 0.22)' }}>
+                    <h3>📊 الافتراضات الحسابية وتدقيق البيانات (Assumptions)</h3>
+                    
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '12px' }}>
+                        {/* AOV block */}
+                        <div className="integrity-row-item">
+                            <div className="integrity-field-main">
+                                <span className="integrity-field-label">
+                                    متوسط قيمة السلة (AOV)
+                                    <span className="info-tooltip-trigger" title="متوسط القيمة المالية للطلب الواحد في المتجر. احصل عليه من: لوحة المتجر > الإحصائيات > متوسط قيمة الطلب لآخر 90 يوم.">ℹ️</span>
+                                </span>
+                                <div className="integrity-input-wrap">
+                                    <strong><EditableSlot id="assumption_aov" placeholder="متوسط الطلب" value={state.assumption_aov} onChange={onChange} /></strong>
+                                    <span className="currency-badge">{state.currency || 'ج.م'}</span>
+                                </div>
+                            </div>
+                            <div className="integrity-verification-panel">
+                                <label className="verify-checkbox-label">
+                                    <input 
+                                        type="checkbox" 
+                                        checked={state.verify_aov_checked || false}
+                                        onChange={(e) => onChange('verify_aov_checked', e.target.checked)}
+                                    />
+                                    <span className="verify-checkmark"></span>
+                                    <span className="verify-label-text">{state.verify_aov_checked ? '✓ موثق' : 'توثيق'}</span>
+                                </label>
+                                <select 
+                                    className="integrity-source-select"
+                                    value={state.verify_aov_source || ''}
+                                    onChange={(e) => onChange('verify_aov_source', e.target.value)}
+                                    disabled={!state.verify_aov_checked}
+                                >
+                                    <option value="">-- اختر المصدر --</option>
+                                    <option value="لوحة تحكم المتجر (سلة / شوبيفاي)">سلة / شوبيفاي</option>
+                                    <option value="تحليلات جوجل (GA4 Analytics)">تحليلات جوجل (GA4)</option>
+                                    <option value="دراسة مالية تقديرية">دراسة تقديرية</option>
+                                    <option value="اتفاق مباشر مع العميل">اتفاق مع العميل</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        {/* CR block */}
+                        <div className="integrity-row-item">
+                            <div className="integrity-field-main">
+                                <span className="integrity-field-label">
+                                    معدل تحويل الموقع المتوقع (CR)
+                                    <span className="info-tooltip-trigger" title="نسبة زوار الموقع الذين يقومون بعملية شراء فعلية. احصل عليه من: لوحة المتجر > الإحصائيات > معدل تحويل المتجر.">ℹ️</span>
+                                </span>
+                                <div className="integrity-input-wrap">
+                                    <strong><EditableSlot id="assumption_cr" placeholder="نسبة التحويل" value={state.assumption_cr} onChange={onChange} /></strong>
+                                    <span className="currency-badge">%</span>
+                                </div>
+                            </div>
+                            <div className="integrity-verification-panel">
+                                <label className="verify-checkbox-label">
+                                    <input 
+                                        type="checkbox" 
+                                        checked={state.verify_cr_checked || false}
+                                        onChange={(e) => onChange('verify_cr_checked', e.target.checked)}
+                                    />
+                                    <span className="verify-checkmark"></span>
+                                    <span className="verify-label-text">{state.verify_cr_checked ? '✓ موثق' : 'توثيق'}</span>
+                                </label>
+                                <select 
+                                    className="integrity-source-select"
+                                    value={state.verify_cr_source || ''}
+                                    onChange={(e) => onChange('verify_cr_source', e.target.value)}
+                                    disabled={!state.verify_cr_checked}
+                                >
+                                    <option value="">-- اختر المصدر --</option>
+                                    <option value="لوحة تحكم المتجر (سلة / شوبيفاي)">سلة / شوبيفاي</option>
+                                    <option value="تحليلات جوجل (GA4 Analytics)">تحليلات جوجل (GA4)</option>
+                                    <option value="دراسة مالية تقديرية">دراسة تقديرية</option>
+                                    <option value="اتفاق مباشر مع العميل">اتفاق مع العميل</option>
+                                </select>
+                            </div>
+                            {state.assumption_cr && (() => {
+                                const benchmark = getConversionRateBenchmark(state.assumption_cr);
+                                if (!benchmark) return null;
+                                return (
+                                    <div className="benchmark-badge" style={{ backgroundColor: benchmark.bg, color: benchmark.color, borderColor: benchmark.color + '22' }}>
+                                        <span>{benchmark.icon}</span> {benchmark.text}
+                                    </div>
+                                );
+                            })()}
+                        </div>
+
+                        {/* Margin block */}
+                        <div className="integrity-row-item">
+                            <div className="integrity-field-main">
+                                <span className="integrity-field-label">
+                                    هامش ربح المنتجات التقريبي
+                                    <span className="info-tooltip-trigger" title="صافي هامش الربح التقريبي للمنتجات البطلة. المعادلة: (سعر البيع - التكلفة شاملة الشحن والتغليف) ÷ سعر البيع.">ℹ️</span>
+                                </span>
+                                <div className="integrity-input-wrap">
+                                    <strong><EditableSlot id="assumption_margin" placeholder="هامش الربح" value={state.assumption_margin} onChange={onChange} /></strong>
+                                    <span className="currency-badge">%</span>
+                                </div>
+                            </div>
+                            <div className="integrity-verification-panel">
+                                <label className="verify-checkbox-label">
+                                    <input 
+                                        type="checkbox" 
+                                        checked={state.verify_margin_checked || false}
+                                        onChange={(e) => onChange('verify_margin_checked', e.target.checked)}
+                                    />
+                                    <span className="verify-checkmark"></span>
+                                    <span className="verify-label-text">{state.verify_margin_checked ? '✓ موثق' : 'توثيق'}</span>
+                                </label>
+                                <select 
+                                    className="integrity-source-select"
+                                    value={state.verify_margin_source || ''}
+                                    onChange={(e) => onChange('verify_margin_source', e.target.value)}
+                                    disabled={!state.verify_margin_checked}
+                                >
+                                    <option value="">-- اختر المصدر --</option>
+                                    <option value="دراسة مالية وجدوى للمنتج">دراسة جدوى المنتج</option>
+                                    <option value="حسابات الإدارة المباشرة">حسابات الإدارة</option>
+                                    <option value="اتفاق مباشر مع العميل">اتفاق مع العميل</option>
+                                </select>
+                            </div>
+                            {state.assumption_margin && (() => {
+                                const benchmark = getMarginBenchmark(state.assumption_margin);
+                                if (!benchmark) return null;
+                                return (
+                                    <div className="benchmark-badge" style={{ backgroundColor: benchmark.bg, color: benchmark.color, borderColor: benchmark.color + '22' }}>
+                                        <span>{benchmark.icon}</span> {benchmark.text}
+                                    </div>
+                                );
+                            })()}
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -80,7 +228,7 @@ export default function CampaignObjectives({ state, onChange }) {
             </p>
 
             <div className="budget-calculator-box">
-                <div className="budget-input-group">
+                <div className="budget-input-group" style={{ flexWrap: 'wrap' }}>
                     <span style={{ fontSize: '1rem', fontWeight: '700' }}>الميزانية الكلية للحسابات:</span>
                     <input 
                         type="number" 
@@ -89,9 +237,34 @@ export default function CampaignObjectives({ state, onChange }) {
                         value={state.calc_total_budget || ''}
                         onChange={(e) => onChange('calc_total_budget', e.target.value)}
                     />
-                    <span style={{ fontSize: '1rem', fontWeight: '700', color: 'var(--neon-cyan)' }}>
+                    <span style={{ fontSize: '1rem', fontWeight: '700', color: 'var(--neon-cyan)', marginLeft: '24px' }}>
                         {state.currency || 'ج.م'}
                     </span>
+
+                    {/* Total budget verification */}
+                    <div className="budget-integrity-wrap" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 12px', borderRadius: '10px', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--glass-border)' }}>
+                        <label className="verify-checkbox-label" style={{ margin: 0 }}>
+                            <input 
+                                type="checkbox" 
+                                checked={state.verify_budget_checked || false}
+                                onChange={(e) => onChange('verify_budget_checked', e.target.checked)}
+                            />
+                            <span className="verify-checkmark"></span>
+                            <span style={{ fontSize: '0.8rem', fontWeight: '700' }}>{state.verify_budget_checked ? '✓ موثق' : 'توثيق الميزانية'}</span>
+                        </label>
+                        <select 
+                            className="integrity-source-select"
+                            style={{ padding: '4px 8px', fontSize: '0.75rem', height: '28px', minWidth: '130px' }}
+                            value={state.verify_budget_source || ''}
+                            onChange={(e) => onChange('verify_budget_source', e.target.value)}
+                            disabled={!state.verify_budget_checked}
+                        >
+                            <option value="">-- المصدر --</option>
+                            <option value="الخطة المالية السنوية">الخطة المالية للشركة</option>
+                            <option value="حد الصرف اليومي للمحفظة">حد المحفظة الإعلانية</option>
+                            <option value="الاتفاق المباشر المعتمد">اتفاق مباشر معتمد</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div className="slider-group">

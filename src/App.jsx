@@ -75,6 +75,16 @@ const INITIAL_STATE = {
   assumption_aov: '',
   assumption_cr: '',
   assumption_margin: '',
+  
+  // Data Verification Fields
+  verify_aov_checked: false,
+  verify_aov_source: '',
+  verify_cr_checked: false,
+  verify_cr_source: '',
+  verify_margin_checked: false,
+  verify_margin_source: '',
+  verify_budget_checked: false,
+  verify_budget_source: '',
   daily_budget_min: '',
   daily_budget_max: '',
   conversion_event_def: '',
@@ -443,6 +453,37 @@ function buildExportHTML(state, progress) {
     </div>
   `).join('');
 
+  const verifiedItems = [
+    { label: 'متوسط قيمة السلة (AOV)', checked: state.verify_aov_checked, source: state.verify_aov_source },
+    { label: 'معدل تحويل الموقع (CR)', checked: state.verify_cr_checked, source: state.verify_cr_source },
+    { label: 'هامش ربح المنتجات (Margin)', checked: state.verify_margin_checked, source: state.verify_margin_source },
+    { label: 'الميزانية الكلية للحملة', checked: state.verify_budget_checked, source: state.verify_budget_source },
+  ].filter(item => item.checked && item.source);
+
+  let integrityHTML = '';
+  if (verifiedItems.length > 0) {
+    integrityHTML = `
+      <div class="export-section" style="border: 2px solid #10b981; border-radius: 12px; overflow: hidden; page-break-inside: avoid; margin-top: 24px;">
+        <h2 style="background: #ecfdf5; color: #065f46; border-bottom: 2px solid #10b981; font-size: 1.1rem; font-weight: 800; padding: 14px 20px;">
+          🛡️ تقرير موثوقية وجودة البيانات (Data Integrity Certificate)
+        </h2>
+        <p style="padding: 12px 20px; font-size: 0.85rem; color: #047857; background: #f0fdf4; font-weight: 600;">
+          تم تدقيق وتأكيد صحة هذه البيانات الإدارية والمالية وإسنادها إلى مصادرها الرسمية الفعالة:
+        </p>
+        <table style="width: 100%; border-collapse: collapse;">
+          <tbody>
+            ${verifiedItems.map(item => `
+              <tr>
+                <th style="text-align: right; padding: 11px 20px; background: #f8fafc; font-size: 0.85rem; font-weight: 700; color: #065f46; width: 35%; border-bottom: 1px solid #e2e8f0;">${item.label}</th>
+                <td style="padding: 11px 20px; font-size: 0.9rem; color: #0f172a; font-weight: 600; border-bottom: 1px solid #e2e8f0;"><span style="color: #10b981; font-weight: 800;">✓ موثق</span> • من خلال: ${item.source}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
+  }
+
   return `<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -538,6 +579,7 @@ function buildExportHTML(state, progress) {
     <div class="progress-badge">نسبة اكتمال الخطة: ${progress}%</div>
   </div>
   ${sectionsHTML}
+  ${integrityHTML}
   <div class="export-footer">
     تم إنشاء هذه الخطة بواسطة لوحة تحكم ميديا باينج التفاعلية • ${new Date().toLocaleDateString('ar-SA')}
   </div>
