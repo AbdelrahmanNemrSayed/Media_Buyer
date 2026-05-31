@@ -2090,3 +2090,76 @@ hr {
     to { opacity: 1; transform: translateY(0); }
 }
 
+/* Premium Button Group (Undo/Redo Grouping) */
+.btn-group {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--glass-border);
+    padding: 2px;
+}
+
+.btn-group .btn {
+    border: none !important;
+    background: transparent !important;
+    border-radius: 8px !important;
+    margin: 0 !important;
+    padding: 6px 12px !important;
+    box-shadow: none !important;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-smooth);
+}
+
+.btn-group .btn:hover {
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: var(--neon-cyan) !important;
+}
+
+[data-theme="light"] .btn-group {
+    background: rgba(15, 23, 42, 0.02);
+}
+
+[data-theme="light"] .btn-group .btn:hover {
+    background: rgba(15, 23, 42, 0.06) !important;
+}
+
+/* Data Dropdown Styling Overrides & Premium Alignment */
+.data-dropdown {
+    left: 0 !important;
+    right: auto !important;
+    min-width: 250px;
+    background: rgba(12, 16, 28, 0.98) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.65) !important;
+    padding: 8px !important;
+}
+
+[data-theme="light"] .data-dropdown {
+    background: rgba(255, 255, 255, 0.98) !important;
+    box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08) !important;
+}
+
+.data-dropdown .campaign-dropdown-item {
+    font-size: 0.88rem !important;
+    padding: 10px 14px !important;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-align: right;
+}
+
+.data-dropdown .campaign-dropdown-item:hover {
+    background: rgba(0, 82, 255, 0.08) !important;
+    color: var(--neon-cyan) !important;
+}
+
+[data-theme="light"] .data-dropdown .campaign-dropdown-item:hover {
+    background: rgba(0, 82, 255, 0.05) !important;
+    color: var(--neon-blue) !important;
+}
+
+

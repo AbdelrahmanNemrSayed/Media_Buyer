@@ -25,11 +25,12 @@ export default function Header({
     onOpenGuide,
 }) {
     const [showCampaigns, setShowCampaigns] = useState(false);
+    const [showDataMenu, setShowDataMenu] = useState(false);
     const campaignList = Object.entries(campaigns);
 
     return (
         <header className="dashboard-header">
-            {/* Logo + Badge */}
+            {/* 1) Right Side: Logo & Campaign Switcher */}
             <div className="header-logo-container">
                 <span 
                     id="live-badge" 
@@ -39,24 +40,18 @@ export default function Header({
                 </span>
                 <span className="header-title">خطة ميديا باينج</span>
 
-                {lastSavedTime && (
-                    <span className="last-saved-indicator" title="آخر عملية حفظ تلقائي آمنة">
-                        🟢 آخر حفظ: {lastSavedTime}
-                    </span>
-                )}
-
                 {/* Campaign Switcher */}
                 <div className="campaign-switcher-wrap">
                     <button 
                         className="campaign-switch-btn"
-                        onClick={() => setShowCampaigns(s => !s)}
+                        onClick={() => { setShowCampaigns(s => !s); setShowDataMenu(false); }}
                         title="تبديل الحملة"
                     >
                         📋 {campaigns[activeCampaignId]?.name || 'الحملة الرئيسية'}
                         <span className="campaign-chevron">{showCampaigns ? '▲' : '▼'}</span>
                     </button>
                     {showCampaigns && (
-                        <div className="campaign-dropdown">
+                        <div className="campaign-dropdown" style={{ right: '0', left: 'auto' }}>
                             {campaignList.map(([id, camp]) => (
                                 <button
                                     key={id}
@@ -91,9 +86,9 @@ export default function Header({
                 </div>
             </div>
             
-            {/* Progress bar */}
-            <div className="progress-wrapper">
-                <span className="progress-label">اكتمال: {progressPercentage}%</span>
+            {/* 2) Center: Expanded Progress Bar */}
+            <div className="progress-wrapper" style={{ flexGrow: 1.5 }}>
+                <span className="progress-label">اكتمال الخطة: {progressPercentage}%</span>
                 <div className="progress-container">
                     <div 
                         className="progress-fill" 
@@ -102,49 +97,70 @@ export default function Header({
                 </div>
             </div>
             
-            {/* Controls */}
+            {/* 3) Left Side: Organised Control Panel */}
             <div className="header-controls">
-                {/* Manual Save Button */}
-                <button className="btn btn-save" onClick={onManualSave} title="حفظ التغييرات يدوياً فوراً">
-                    <span>💾</span> حفظ الآن
-                </button>
-
-                {/* Undo / Redo */}
-                <button className="btn btn-secondary btn-icon" onClick={onUndo} title="تراجع (Ctrl+Z)">↩</button>
-                <button className="btn btn-secondary btn-icon" onClick={onRedo} title="إعادة (Ctrl+Y)">↪</button>
-
-                <button className="btn btn-secondary" onClick={onOpenGuide} title="دليل الاستخدام السريع">
-                    <span>📖</span> دليل
-                </button>
-                <button className="btn btn-secondary" onClick={onShareURL} title="نسخ رابط المشاهدة">
-                    <span>🔗</span> مشاركة
-                </button>
-                <button className="btn btn-secondary" onClick={onToggleTheme} title="تبديل الإضاءة">
-                    <span>{isDarkMode ? '☀️' : '🌙'}</span>
-                </button>
-                <button className="btn btn-danger" onClick={onReset} title="تفريغ الخطة">
-                    <span>🧹</span> مسح
-                </button>
-                
-                <div style={{ width: '1px', height: '24px', background: 'rgba(255,255,255,0.2)', margin: '0 8px' }} />
-
-                <div className="export-menu-wrap" style={{ position: 'relative' }}>
-                    <button className="btn btn-primary" onClick={onDownload} title="تصدير كملف PDF">
-                        <span>🖨️</span> PDF
-                    </button>
-                    <button className="btn btn-secondary" onClick={onExportCSV} title="تصدير كملف Excel (CSV)" style={{ marginLeft: '8px' }}>
-                        <span>📊</span> CSV
+                {/* Save Section (glowing button + micro-status) */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', position: 'relative' }}>
+                    {lastSavedTime && (
+                        <span className="last-saved-indicator" title="آخر عملية حفظ تلقائي ناجحة">
+                            🟢 {lastSavedTime}
+                        </span>
+                    )}
+                    <button className="btn btn-save" onClick={onManualSave} title="حفظ التغييرات يدوياً فوراً">
+                        <span>💾</span> حفظ الآن
                     </button>
                 </div>
 
-                <div className="export-menu-wrap" style={{ position: 'relative' }}>
+                {/* Divider */}
+                <div style={{ width: '1px', height: '20px', background: 'var(--glass-border)', margin: '0 4px' }} />
+
+                {/* Undo / Redo Group */}
+                <div className="btn-group">
+                    <button className="btn btn-secondary btn-icon" onClick={onUndo} title="تراجع (Ctrl+Z)">↩</button>
+                    <button className="btn btn-secondary btn-icon" onClick={onRedo} title="إعادة (Ctrl+Y)">↪</button>
+                </div>
+
+                {/* Quick Guide Button */}
+                <button className="btn btn-secondary" onClick={onOpenGuide} title="دليل الاستخدام السريع">
+                    <span>📖</span> دليل
+                </button>
+
+                {/* Major PDF Print Button */}
+                <button className="btn btn-primary" onClick={onDownload} title="تصدير كملف PDF للطباعة">
+                    <span>🖨️</span> PDF
+                </button>
+
+                {/* Premium Data Options Dropdown */}
+                <div className="data-menu-wrap" style={{ position: 'relative' }}>
                     <button 
                         className="btn btn-secondary" 
-                        onClick={() => document.getElementById('import-json').click()} 
-                        title="استيراد نسخة احتياطية"
+                        onClick={() => { setShowDataMenu(s => !s); setShowCampaigns(false); }}
+                        title="أدوات إدارة وتصدير واستيراد البيانات"
                     >
-                        <span>⬆️</span> استيراد
+                        <span>⚙️</span> خيارات الخطة
+                        <span className="campaign-chevron">{showDataMenu ? '▲' : '▼'}</span>
                     </button>
+                    {showDataMenu && (
+                        <div className="campaign-dropdown data-dropdown" style={{ left: 0, right: 'auto' }}>
+                            <button className="campaign-dropdown-item" onClick={() => { onShareURL(); setShowDataMenu(false); }} title="نسخ رابط مشفر لمشاركة الخطة مع الزملاء">
+                                🔗 مشاركة الرابط السري
+                            </button>
+                            <button className="campaign-dropdown-item" onClick={() => { onExportCSV(); setShowDataMenu(false); }} title="تحميل البيانات بصيغة CSV لتشغيلها على إكسل">
+                                📊 تصدير Excel (CSV)
+                            </button>
+                            <button className="campaign-dropdown-item" onClick={() => { onExportJSON(); setShowDataMenu(false); }} title="تصدير ملف JSON كنسخة احتياطية آمنة على جهازك">
+                                ⬇️ تصدير نسخة احتياطية
+                            </button>
+                            <button className="campaign-dropdown-item" onClick={() => { document.getElementById('import-json').click(); setShowDataMenu(false); }} title="استرجاع وتطبيق نسخة احتياطية سابقة من جهازك">
+                                ⬆️ استيراد نسخة احتياطية
+                            </button>
+                            <div className="campaign-dropdown-divider" />
+                            <button className="campaign-dropdown-item" style={{ color: 'var(--red)' }} onClick={() => { onReset(); setShowDataMenu(false); }} title="تفريغ وإعادة تعيين كافة خانات المتصفح">
+                                🧹 تفريغ الخطة بالكامل
+                            </button>
+                        </div>
+                    )}
+                    {/* Hidden Import Input */}
                     <input 
                         type="file" 
                         id="import-json" 
@@ -152,15 +168,12 @@ export default function Header({
                         style={{ display: 'none' }} 
                         onChange={onImportJSON} 
                     />
-                    <button 
-                        className="btn btn-secondary" 
-                        style={{ marginLeft: '8px' }} 
-                        onClick={onExportJSON} 
-                        title="تصدير نسخة احتياطية"
-                    >
-                        <span>⬇️</span> نسخة احتياطية
-                    </button>
                 </div>
+
+                {/* Light/Dark Toggle */}
+                <button className="btn btn-secondary btn-icon" onClick={onToggleTheme} title="تبديل الإضاءة" style={{ borderRadius: '50%', width: '36px', height: '36px', justifyContent: 'center' }}>
+                    <span>{isDarkMode ? '☀️' : '🌙'}</span>
+                </button>
             </div>
         </header>
     );
