@@ -131,6 +131,63 @@ export default function ProToolsGuide() {
                         </p>
                     </div>
                 </div>
+
+                {/* 6. قسم استخراج مقاييس المنصات الثلاثة */}
+                <div className="card-item" style={{ borderLeft: '4px solid var(--neon-cyan)', gridColumn: 'span 2' }}>
+                    <h3 style={{ fontSize: '1.25rem', marginBottom: '16px', color: 'var(--neon-cyan)' }}>
+                        <span style={{ marginRight: '8px' }}>🚀</span> الدليل العملي لاستخراج البيانات من منصات الإعلانات
+                    </h3>
+                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '20px', lineHeight: '1.7' }}>
+                        لسحب أرقام الميزانيات، الصرف، والمبيعات بشكل صحيح وإدخالها في خطتك، اتبع التخصيص الدقيق لكل منصة:
+                    </p>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px' }}>
+                        <div style={{ background: 'rgba(0, 0, 0, 0.15)', padding: '16px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.03)' }}>
+                            <h4 style={{ color: 'var(--text-primary)', marginBottom: '10px', borderBottom: '1px solid var(--glass-border)', paddingBottom: '6px' }}>🔵 إعلانات ميتا (Meta Ads)</h4>
+                            <p style={{ color: 'var(--text-secondary)', fontSize: '0.82rem', lineHeight: '1.6' }}>
+                                1. من مدير الإعلانات، اضغط <strong>Columns: Performance ▼</strong>.<br />
+                                2. اختر <strong>Customize Columns</strong>.<br />
+                                3. حدد كلاً من:<br />
+                                • <strong>Amount Spent</strong> (المصروف)<br />
+                                • <strong>Purchases</strong> (المبيعات)<br />
+                                • <strong>Cost per Purchase</strong> (تكلفة الطلب CPA)<br />
+                                • <strong>Purchase ROAS</strong> (العائد الإعلاني)<br />
+                                • <strong>Link CTR</strong> (معدل النقر على الرابط)<br />
+                                4. احفظ القالب (Preset) باسم <code>Media Buyer</code> للرجوع له دائماً.
+                            </p>
+                        </div>
+
+                        <div style={{ background: 'rgba(0, 0, 0, 0.15)', padding: '16px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.03)' }}>
+                            <h4 style={{ color: 'var(--text-primary)', marginBottom: '10px', borderBottom: '1px solid var(--glass-border)', paddingBottom: '6px' }}>⚫ إعلانات تيك توك (TikTok Ads)</h4>
+                            <p style={{ color: 'var(--text-secondary)', fontSize: '0.82rem', lineHeight: '1.6' }}>
+                                1. اذهب لتبويب <strong>Campaign</strong>.<br />
+                                2. اضغط زر <strong>Columns &gt; Custom Columns ▼</strong>.<br />
+                                3. حدد المقاييس الآتية:<br />
+                                • <strong>Cost</strong> (المصروف الإجمالي)<br />
+                                • <strong>Complete Payment</strong> (المبيعات الفعالة)<br />
+                                • <strong>Cost per Complete Payment</strong> (CPA)<br />
+                                • <strong>Complete Payment ROAS</strong> (العائد الإعلاني)<br />
+                                • <strong>CTR</strong> (معدل النقر الإجمالي)<br />
+                                4. احفظ القالب للتحميل التلقائي يومياً.
+                            </p>
+                        </div>
+
+                        <div style={{ background: 'rgba(0, 0, 0, 0.15)', padding: '16px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.03)' }}>
+                            <h4 style={{ color: 'var(--text-primary)', marginBottom: '10px', borderBottom: '1px solid var(--glass-border)', paddingBottom: '6px' }}>🟡 إعلانات سناب شات (Snapchat Ads)</h4>
+                            <p style={{ color: 'var(--text-secondary)', fontSize: '0.82rem', lineHeight: '1.6' }}>
+                                1. ادخل لـ <strong>Manage Ads</strong> واضغط <strong>Columns ▼</strong>.<br />
+                                2. اختر <strong>Customize Columns</strong>.<br />
+                                3. حدد المقاييس من قسم الـ Conversions والـ Spend:<br />
+                                • <strong>Spend</strong> (الإنفاق الإجمالي)<br />
+                                • <strong>Purchases</strong> (المبيعات)<br />
+                                • <strong>Cost per Purchase</strong> (CPA)<br />
+                                • <strong>Purchase ROAS</strong> (العائد الإعلاني)<br />
+                                • <strong>eCTR</strong> (معدل النقر المتوقع)<br />
+                                4. احفظ التنسيق كقالب دائم.
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );

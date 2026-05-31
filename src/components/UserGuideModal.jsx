@@ -105,6 +105,28 @@ function UserGuideModal({ isOpen, onClose }) {
                     path: 'القاعدة: إذا صرف الإعلان ما يعادل (3 أضعاف الـ CPA المستهدف) ولم يحقق أي مبيعة، يتم إيقافه تلقائياً لمنع نزيف الميزانية.'
                 }
             ]
+        },
+        {
+            title: '7) دليل استخراج الأرقام الإعلانية (Meta / TikTok / Snapchat)',
+            icon: '🎯',
+            borderColor: 'rgba(236, 72, 153, 0.25)',
+            items: [
+                {
+                    name: 'ميتا - مدير الإعلانات (Meta Ads Manager)',
+                    source: 'مدير إعلانات فيسبوك (Facebook Ads Manager)',
+                    path: '1. ادخل لحسابك الإعلاني. 2. اضغط على زر الأعمدة Columns: Performance. 3. اختر Customize Columns. 4. ابحث وحدد: Amount Spent (المصروف)، Purchases (المبيعات)، CPA/Cost per Purchase (تكلفة الشراء)، Purchase ROAS (عائد الإعلانات)، Link CTR (معدل النقر). 5. احفظ التنسيق كـ Preset باسم (Media Buyer).'
+                },
+                {
+                    name: 'تيك توك - مدير الإعلانات (TikTok Ads Manager)',
+                    source: 'مدير إعلانات تيك توك (TikTok Ads Manager)',
+                    path: '1. اذهب لتبويب Campaign. 2. اضغط Columns > Custom Columns. 3. حدد المقاييس: Cost (المصروف)، CTR (معدل النقر)، Complete Payment (المبيعات المكتملة)، CPA/Cost per Complete Payment (تكلفة الطلب)، Complete Payment ROAS (العائد). 4. احفظ القالب للرجوع الفوري.'
+                },
+                {
+                    name: 'سناب شات - مدير الإعلانات (Snapchat Ads)',
+                    source: 'مدير إعلانات سناب شات (Snapchat Ads Manager)',
+                    path: '1. ادخل لصفحة Manage Ads. 2. اضغط زر Columns > Customize Columns. 3. أضف المقاييس الأساسية: Spend (المصروف)، Purchases (المبيعات)، Cost per Purchase (تكلفة الشراء)، Purchase ROAS (العائد الإعلاني)، Link eCTR (معدل النقر المتوقع). 4. احفظ القالب.'
+                }
+            ]
         }
     ];
 
