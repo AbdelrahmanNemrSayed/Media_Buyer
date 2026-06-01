@@ -1067,7 +1067,7 @@ export default function App() {
         try {
           // Try new encrypted/compressed format first
           parsedState = decryptState(dataParam);
-        } catch (err) {
+        } catch {
           // Fallback to old format
           const decodedStr = decodeURIComponent(atob(dataParam));
           parsedState = JSON.parse(decodedStr);
