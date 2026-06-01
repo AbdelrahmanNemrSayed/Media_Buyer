@@ -925,7 +925,10 @@ function buildExportHTML(state, progress) {
           <h2><span>💸</span> وتيرة صرف الميزانية والجدول الزمني</h2>
           <div class="pacing-overview">
             <span style="font-weight: 800; font-size: 0.95rem;">وتيرة الإنفاق الحالية:</span>
-            <span class="pacing-status-pill" style="background: ${pacingColor};">${pacingText}</span>
+            <div style="text-align: left; display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+              <span class="pacing-status-pill" style="background: ${pacingColor};">${pacingText}</span>
+              ${pacingDelta !== 0 ? `<span style="font-size: 0.72rem; font-weight: 700; color: ${pacingDelta > 0 ? '#ff0055' : '#0052ff'};">انحراف الوتيرة: ${pacingDelta > 0 ? '+' : ''}${pacingDelta.toFixed(1)}%</span>` : ''}
+            </div>
           </div>
           
           <div class="bar-split-item">
