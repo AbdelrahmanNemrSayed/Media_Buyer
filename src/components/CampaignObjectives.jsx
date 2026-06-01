@@ -2,26 +2,56 @@ import { useEffect } from 'react';
 import EditableSlot from './EditableSlot';
 
 // ── Industry Benchmarks & Evaluation Logic ──
-const getConversionRateBenchmark = (valStr) => {
+const getConversionRateBenchmark = (valStr, industry) => {
     if (!valStr) return null;
     const numeric = parseFloat(valStr.replace(/[^\d.]/g, ''));
     if (isNaN(numeric)) return null;
-    if (numeric < 1.0) {
-        return { text: 'معدل تحويل منخفض (ينصح بتحسين سرعة وسلاسل إقناع المتجر لحماية الصرف إعلانيًا)', color: 'var(--neon-crimson)', bg: 'rgba(255, 0, 85, 0.05)', icon: '🔴' };
-    } else if (numeric <= 2.5) {
-        return { text: 'معدل تحويل طبيعي ومناسب تماماً للبدء والتسويق الإعلاني الناجح', color: 'var(--neon-green)', bg: 'rgba(16, 185, 129, 0.05)', icon: '🟢' };
+
+    let low = 1.0;
+    let high = 2.5;
+
+    if (industry === 'beauty') {
+        low = 1.5;
+        high = 3.5;
+    } else if (industry === 'fashion') {
+        low = 1.2;
+        high = 3.0;
+    } else if (industry === 'services') {
+        low = 2.5;
+        high = 7.0;
+    }
+
+    if (numeric < low) {
+        return { text: `معدل تحويل منخفض لهذا القطاع (ينصح بتحسين سلاسل إقناع المتجر لحماية الصرف إعلانيًا، المألوف > ${low}%)`, color: 'var(--neon-crimson)', bg: 'rgba(255, 0, 85, 0.05)', icon: '🔴' };
+    } else if (numeric <= high) {
+        return { text: 'معدل تحويل طبيعي ومناسب تماماً للبدء والتسويق الإعلاني الناجح في قطاعك', color: 'var(--neon-green)', bg: 'rgba(16, 185, 129, 0.05)', icon: '🟢' };
     } else {
-        return { text: 'معدل تحويل فائق ومثالي للتوسع والنمو ومضاعفة الميزانية بثقة', color: 'var(--neon-cyan)', bg: 'rgba(0, 240, 255, 0.05)', icon: '🔵' };
+        return { text: 'معدل تحويل فائق ومثالي للتوسع والنمو ومضاعفة الميزانية بثقة في قطاعك', color: 'var(--neon-cyan)', bg: 'rgba(0, 240, 255, 0.05)', icon: '🔵' };
     }
 };
 
-const getMarginBenchmark = (valStr) => {
+const getMarginBenchmark = (valStr, industry) => {
     if (!valStr) return null;
     const numeric = parseFloat(valStr.replace(/[^\d.]/g, ''));
     if (isNaN(numeric)) return null;
-    if (numeric < 30) {
-        return { text: 'هامش ربح منخفض (يزيد من مخاطر الحملات، استهدف رفع قيمة السلة AOV)', color: 'var(--neon-amber)', bg: 'rgba(245, 158, 11, 0.05)', icon: '🟡' };
-    } else if (numeric <= 50) {
+
+    let low = 30;
+    let high = 50;
+
+    if (industry === 'beauty') {
+        low = 50;
+        high = 70;
+    } else if (industry === 'fashion') {
+        low = 40;
+        high = 60;
+    } else if (industry === 'services') {
+        low = 20;
+        high = 40;
+    }
+
+    if (numeric < low) {
+        return { text: `هامش ربح منخفض لهذا القطاع (يزيد مخاطر الحملات، المألوف > ${low}%، استهدف رفع قيمة السلة AOV)`, color: 'var(--neon-amber)', bg: 'rgba(245, 158, 11, 0.05)', icon: '🟡' };
+    } else if (numeric <= high) {
         return { text: 'هامش ربح مناسب جداً ومريح للتحكم في تكاليف الحصول على مبيعات CPA', color: 'var(--neon-green)', bg: 'rgba(16, 185, 129, 0.05)', icon: '🟢' };
     } else {
         return { text: 'هامش ربح ممتاز ومرتفع (فرصة هائلة للتوسع والمضاعفة السريعة للمبيعات)', color: 'var(--neon-cyan)', bg: 'rgba(0, 240, 255, 0.05)', icon: '🔵' };
@@ -52,6 +82,31 @@ export default function CampaignObjectives({ state, onChange }) {
         onChange('other_calculated_val', otherVal.toString());
     }, [totalBudget, metaPct, tiktokPct, googlePct, otherPct, metaVal, tiktokVal, googleVal, otherVal, onChange]);
 
+    // ── Smart Financial Estimator Calculations ──
+    const salesRevenue = parseFloat(state.target_sales_revenue?.replace(/[^\d.]/g, '')) || 0;
+    const aov = parseFloat(state.assumption_aov?.replace(/[^\d.]/g, '')) || 0;
+    const cr = parseFloat(state.assumption_cr?.replace(/[^\d.]/g, '')) || 0;
+    const margin = parseFloat(state.assumption_margin?.replace(/[^\d.]/g, '')) || 0;
+
+    const hasEstimatorData = salesRevenue > 0 && aov > 0 && cr > 0;
+    let suggestedOrders = 0;
+    let suggestedVisitors = 0;
+    let breakevenCPA = 0;
+    let targetCPA = 0;
+    let suggestedBudget = 0;
+    let estimatedROAS = 0;
+
+    if (hasEstimatorData) {
+        suggestedOrders = Math.ceil(salesRevenue / aov);
+        suggestedVisitors = Math.ceil(suggestedOrders / (cr / 100));
+        if (margin > 0) {
+            breakevenCPA = aov * (margin / 100);
+            targetCPA = Math.round(breakevenCPA * 0.7 * 10) / 10;
+            suggestedBudget = Math.round(suggestedOrders * targetCPA);
+            estimatedROAS = Math.round((aov / targetCPA) * 100) / 100;
+        }
+    }
+
     return (
         <div className="glass-panel">
             <h2 className="panel-title">الأهداف والميزانيات التفاعلية</h2>
@@ -79,16 +134,41 @@ export default function CampaignObjectives({ state, onChange }) {
                 <div className="card-item" style={{ borderColor: 'rgba(0, 240, 255, 0.22)' }}>
                     <h3>📊 الافتراضات الحسابية وتدقيق البيانات (Assumptions)</h3>
                     
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '12px' }}>
+                    <div style={{ marginBottom: '14px', borderBottom: '1px dashed var(--glass-border)', paddingBottom: '12px', marginTop: '10px' }}>
+                        <label style={{ display: 'block', fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '6px', fontWeight: '700' }}>
+                            🛒 تخصص قطاع المتجر / البراند لتعديل المعايير:
+                        </label>
+                        <select 
+                            value={state.industry_category || 'general'} 
+                            onChange={(e) => onChange('industry_category', e.target.value)}
+                            style={{
+                                width: '100%',
+                                background: 'rgba(0,0,0,0.3)',
+                                border: '1px solid var(--glass-border)',
+                                color: 'var(--text-primary)',
+                                padding: '8px 12px',
+                                borderRadius: '8px',
+                                fontSize: '0.85rem',
+                                outline: 'none'
+                            }}
+                        >
+                            <option value="general">🛍️ التجارة الإلكترونية العامة (General E-Commerce)</option>
+                            <option value="beauty">💄 مستحضرات التجميل والعناية (Beauty &amp; Cosmetics)</option>
+                            <option value="fashion">👗 الملابس والأزياء والترند (Apparel &amp; Fashion)</option>
+                            <option value="services">⚡ الخدمات والتسجيل والليدز (Services &amp; Leads)</option>
+                        </select>
+                    </div>
+                    
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                         {/* AOV block */}
                         <div className="integrity-row-item">
                             <div className="integrity-field-main">
                                 <span className="integrity-field-label">
-                                    متوسط قيمة السلة (AOV)
+                                    متوسط قيمة السلة (AOV) {state.verify_aov_checked ? '🔒' : ''}
                                     <span className="info-tooltip-trigger" title="متوسط القيمة المالية للطلب الواحد في المتجر. احصل عليه من: لوحة المتجر > الإحصائيات > متوسط قيمة الطلب لآخر 90 يوم.">ℹ️</span>
                                 </span>
                                 <div className="integrity-input-wrap">
-                                    <strong><EditableSlot id="assumption_aov" placeholder="متوسط الطلب" value={state.assumption_aov} onChange={onChange} /></strong>
+                                    <strong><EditableSlot id="assumption_aov" placeholder="متوسط الطلب" value={state.assumption_aov} onChange={onChange} disabled={state.verify_aov_checked} /></strong>
                                     <span className="currency-badge">{state.currency || 'ج.م'}</span>
                                 </div>
                             </div>
@@ -121,11 +201,11 @@ export default function CampaignObjectives({ state, onChange }) {
                         <div className="integrity-row-item">
                             <div className="integrity-field-main">
                                 <span className="integrity-field-label">
-                                    معدل تحويل الموقع المتوقع (CR)
+                                    معدل تحويل الموقع المتوقع (CR) {state.verify_cr_checked ? '🔒' : ''}
                                     <span className="info-tooltip-trigger" title="نسبة زوار الموقع الذين يقومون بعملية شراء فعلية. احصل عليه من: لوحة المتجر > الإحصائيات > معدل تحويل المتجر.">ℹ️</span>
                                 </span>
                                 <div className="integrity-input-wrap">
-                                    <strong><EditableSlot id="assumption_cr" placeholder="نسبة التحويل" value={state.assumption_cr} onChange={onChange} /></strong>
+                                    <strong><EditableSlot id="assumption_cr" placeholder="نسبة التحويل" value={state.assumption_cr} onChange={onChange} disabled={state.verify_cr_checked} /></strong>
                                     <span className="currency-badge">%</span>
                                 </div>
                             </div>
@@ -153,7 +233,7 @@ export default function CampaignObjectives({ state, onChange }) {
                                 </select>
                             </div>
                             {state.assumption_cr && (() => {
-                                const benchmark = getConversionRateBenchmark(state.assumption_cr);
+                                const benchmark = getConversionRateBenchmark(state.assumption_cr, state.industry_category);
                                 if (!benchmark) return null;
                                 return (
                                     <div className="benchmark-badge" style={{ backgroundColor: benchmark.bg, color: benchmark.color, borderColor: benchmark.color + '22' }}>
@@ -167,11 +247,11 @@ export default function CampaignObjectives({ state, onChange }) {
                         <div className="integrity-row-item">
                             <div className="integrity-field-main">
                                 <span className="integrity-field-label">
-                                    هامش ربح المنتجات التقريبي
+                                    هامش ربح المنتجات التقريبي {state.verify_margin_checked ? '🔒' : ''}
                                     <span className="info-tooltip-trigger" title="صافي هامش الربح التقريبي للمنتجات البطلة. المعادلة: (سعر البيع - التكلفة شاملة الشحن والتغليف) ÷ سعر البيع.">ℹ️</span>
                                 </span>
                                 <div className="integrity-input-wrap">
-                                    <strong><EditableSlot id="assumption_margin" placeholder="هامش الربح" value={state.assumption_margin} onChange={onChange} /></strong>
+                                    <strong><EditableSlot id="assumption_margin" placeholder="هامش الربح" value={state.assumption_margin} onChange={onChange} disabled={state.verify_margin_checked} /></strong>
                                     <span className="currency-badge">%</span>
                                 </div>
                             </div>
@@ -198,7 +278,7 @@ export default function CampaignObjectives({ state, onChange }) {
                                 </select>
                             </div>
                             {state.assumption_margin && (() => {
-                                const benchmark = getMarginBenchmark(state.assumption_margin);
+                                const benchmark = getMarginBenchmark(state.assumption_margin, state.industry_category);
                                 if (!benchmark) return null;
                                 return (
                                     <div className="benchmark-badge" style={{ backgroundColor: benchmark.bg, color: benchmark.color, borderColor: benchmark.color + '22' }}>
@@ -210,6 +290,71 @@ export default function CampaignObjectives({ state, onChange }) {
                     </div>
                 </div>
             </div>
+
+            {/* Smart Financial Estimator Card */}
+            {hasEstimatorData ? (
+                <div className="card-item" style={{ marginTop: '20px', borderColor: 'var(--neon-green)', background: 'rgba(16, 185, 129, 0.015)' }}>
+                    <h3 style={{ color: 'var(--neon-green)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        💡 التقدير المالي والميزانية الذكية المقترحة (Budget Estimator)
+                    </h3>
+                    <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '14px', lineHeight: '1.6' }}>
+                        بناءً على أهداف المبيعات والافتراضات التي أدخلتها، إليك الهيكل المالي المقترح لتحقيق أهدافك بأمان وربحية:
+                    </p>
+                    <div className="grid-cols-3" style={{ margin: '10px 0', gap: '16px' }}>
+                        <div style={{ background: 'rgba(255,255,255,0.02)', padding: '12px 16px', borderRadius: '10px', border: '1px solid var(--glass-border)' }}>
+                            <span style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>الطلبات المطلوبة لتحقيق الهدف:</span>
+                            <div style={{ fontSize: '1.3rem', fontWeight: '800', color: '#ffffff', marginTop: '4px' }}>
+                                {suggestedOrders.toLocaleString()} طلب
+                            </div>
+                            <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>معدل زيارات مطلوب: {suggestedVisitors.toLocaleString()} زائر</span>
+                        </div>
+                        
+                        {margin > 0 ? (
+                            <>
+                                <div style={{ background: 'rgba(255,255,255,0.02)', padding: '12px 16px', borderRadius: '10px', border: '1px solid var(--glass-border)' }}>
+                                    <span style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>الـ CPA المستهدفة والـ ROAS:</span>
+                                    <div style={{ fontSize: '1.3rem', fontWeight: '800', color: 'var(--neon-cyan)', marginTop: '4px' }}>
+                                        {targetCPA} {state.currency || 'ج.م'}
+                                    </div>
+                                    <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>CPA التعادل: {breakevenCPA.toFixed(1)} | ROAS: {estimatedROAS}x</span>
+                                </div>
+                                
+                                <div style={{ background: 'rgba(255,255,255,0.02)', padding: '12px 16px', borderRadius: '10px', border: '1.5px solid var(--neon-green)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                                    <div>
+                                        <span style={{ fontSize: '0.78rem', color: 'var(--neon-green)', fontWeight: '700' }}>الميزانية الإعلانية المقترحة:</span>
+                                        <div style={{ fontSize: '1.3rem', fontWeight: '800', color: '#ffffff', marginTop: '4px' }}>
+                                            {suggestedBudget.toLocaleString()} {state.currency || 'ج.م'}
+                                        </div>
+                                    </div>
+                                    <button 
+                                        className="btn btn-save" 
+                                        style={{ padding: '4px 8px', fontSize: '0.75rem', marginTop: '8px', height: '26px', width: '100%', justifyContent: 'center', boxShadow: 'none' }}
+                                        onClick={() => {
+                                            onChange('calc_total_budget', suggestedBudget.toString());
+                                            onChange('verify_budget_checked', true);
+                                            onChange('verify_budget_source', 'التقدير المالي والميزانية الذكية المقترحة');
+                                        }}
+                                    >
+                                        💾 تطبيق الميزانية تلقائياً
+                                    </button>
+                                </div>
+                            </>
+                        ) : (
+                            <div style={{ gridColumn: 'span 2', background: 'rgba(245, 158, 11, 0.02)', padding: '16px', borderRadius: '10px', border: '1px dashed var(--neon-amber)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <span style={{ fontSize: '0.85rem', color: 'var(--neon-amber)', textAlign: 'center', fontWeight: '600' }}>
+                                    ⚠️ أدخل **هامش ربح المنتجات %** في حقل الافتراضات لحساب الـ CPA والميزانية الذكية.
+                                </span>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            ) : (
+                <div className="card-item" style={{ marginTop: '20px', border: '1px dashed var(--glass-border)', background: 'rgba(255,255,255,0.005)', textAlign: 'center', padding: '16px' }}>
+                    <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
+                        💡 أدخل قيم **المبيعات المستهدفة**، و**متوسط الطلب AOV**، و**معدل تحويل المتجر CR** لتفعيل حاسبة التقدير المالي الذكية تلقائياً.
+                    </span>
+                </div>
+            )}
 
             <details>
                 <summary>توجيهات الإدارة لـ KPIs ومحددات الإسناد</summary>
@@ -229,13 +374,14 @@ export default function CampaignObjectives({ state, onChange }) {
 
             <div className="budget-calculator-box">
                 <div className="budget-input-group" style={{ flexWrap: 'wrap' }}>
-                    <span style={{ fontSize: '1rem', fontWeight: '700' }}>الميزانية الكلية للحسابات:</span>
+                    <span style={{ fontSize: '1rem', fontWeight: '700' }}>الميزانية الكلية للحسابات {state.verify_budget_checked ? '🔒' : ''}:</span>
                     <input 
                         type="number" 
-                        className="budget-input-field"
+                        className={`budget-input-field ${state.verify_budget_checked ? 'disabled-slot' : ''}`}
                         placeholder="أدخل ميزانيتك الكلية" 
                         value={state.calc_total_budget || ''}
                         onChange={(e) => onChange('calc_total_budget', e.target.value)}
+                        disabled={state.verify_budget_checked}
                     />
                     <span style={{ fontSize: '1rem', fontWeight: '700', color: 'var(--neon-cyan)', marginLeft: '24px' }}>
                         {state.currency || 'ج.م'}

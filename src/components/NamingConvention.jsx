@@ -4,6 +4,13 @@ import EditableSlot from './EditableSlot';
 export default function NamingConvention({ state, onChange }) {
     const [generatedName, setGeneratedName] = useState('');
     const [copied, setCopied] = useState(false);
+    const [synced, setSynced] = useState(false);
+
+    const handleSyncToUTM = () => {
+        onChange('utm_campaign', generatedName);
+        setSynced(true);
+        setTimeout(() => setSynced(false), 2000);
+    };
 
     const platform = state.naming_platform || 'FB';
     const objective = state.naming_objective || 'Conv';
@@ -74,9 +81,17 @@ export default function NamingConvention({ state, onChange }) {
                             onClick={handleCopy} 
                             disabled={!generatedName}
                             className="btn btn-primary"
-                            style={{ minWidth: '120px', background: 'var(--purple)' }}
+                            style={{ minWidth: '120px', background: 'var(--purple)', display: 'flex', alignItems: 'center', gap: '6px' }}
                         >
                             {copied ? '✅ تم النسخ' : '📋 انسخ الاسم'}
+                        </button>
+                        <button 
+                            onClick={handleSyncToUTM} 
+                            disabled={!generatedName}
+                            className="btn btn-save"
+                            style={{ minWidth: '135px', background: 'var(--neon-green)', borderColor: 'var(--neon-green)', display: 'flex', alignItems: 'center', gap: '6px', color: '#fff' }}
+                        >
+                            {synced ? '✓ تم المزامنة' : '🔗 مزامنة مع UTM'}
                         </button>
                     </div>
                 </div>

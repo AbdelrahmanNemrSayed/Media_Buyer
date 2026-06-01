@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export default function PerformanceReports({ onChange }) {
+export default function PerformanceReports({ state, onChange }) {
     const [activeInputTab, setActiveInputTab] = useState('upload'); // 'upload' | 'paste'
     const [pastedText, setPastedText] = useState('');
     const [reportData, setReportData] = useState([]);
@@ -330,7 +330,133 @@ export default function PerformanceReports({ onChange }) {
             setSuccessMessage('🎉 تم تحديث "متتبع وتيرة الصرف (Pacing)" بنجاح!');
         }
 
-        setTimeout(() => setSuccessMessage(''), 5000);
+    };
+
+    const generateDiagnostics = () => {
+        const { averageRoas, averageCtr, averageCr, averageCpa } = summaryMetrics;
+        const diagnostics = [];
+        const cur = (state && state.currency) || 'ج.م';
+
+        // ROAS Diagnostic
+        if (averageRoas > 0) {
+            if (averageRoas < 1.5) {
+                diagnostics.push({
+                    type: 'danger',
+                    title: `العائد على الإنفاق (ROAS) منخفض جداً (${averageRoas.toFixed(2)}x)`,
+                    desc: `الحملات تخسر حالياً. افحص العروض فوراً، وتأكد من جودة صفحة الهبوط وعدم وجود مشاكل تقنية تمنع الشراء.`,
+                    icon: '🔴'
+                });
+            } else if (averageRoas < 2.5) {
+                diagnostics.push({
+                    type: 'warning',
+                    title: `العائد على الإنفاق في منطقة التعادل (${averageRoas.toFixed(2)}x)`,
+                    desc: `الأداء مقبول ولكنه غير مربح بالكامل. ينصح برفع قيمة السلة المتوسطة AOV أو تحسين جودة الجمهور المستهدف لرفع الربحية.`,
+                    icon: '🟡'
+                });
+            } else {
+                diagnostics.push({
+                    type: 'success',
+                    title: `العائد على الإنفاق رابح وممتاز (${averageRoas.toFixed(2)}x) 🎉`,
+                    desc: `أداء قوي ومثالي للتوسع! يمكنك زيادة الميزانية اليومية تدريجياً بنسبة 15-20% كل 3 أيام مع مراقبة ثبات النتائج.`,
+                    icon: '🔵'
+                });
+            }
+        }
+
+        // CTR Diagnostic
+        if (averageCtr > 0) {
+            if (averageCtr < 1.0) {
+                diagnostics.push({
+                    type: 'danger',
+                    title: `نسبة النقر CTR منخفضة دون المألوف (${averageCtr.toFixed(2)}%)`,
+                    desc: `الفيديوهات والصور الإعلانية لم تجذب الجمهور. يجب فحص وتغيير أول 3 ثوانٍ من الفيديوهات (Hooks) فوراً، وجرب تصاميم وعناوين أكثر جاذبية.`,
+                    icon: '🔴'
+                });
+            } else if (averageCtr < 2.0) {
+                diagnostics.push({
+                    type: 'warning',
+                    title: `نسبة النقر CTR مقبولة ولكن متوسطة (${averageCtr.toFixed(2)}%)`,
+                    desc: `المحتوى الإبداعي يعمل، ولكن يمكن تحسينه. جرّب إبراز الفوائد الرئيسية للمنتج في السطر الأول من الإعلان ورفع جودة تصوير الموشن.`,
+                    icon: '🟡'
+                });
+            } else {
+                diagnostics.push({
+                    type: 'success',
+                    title: `نسبة النقر CTR قوية وجذابة (${averageCtr.toFixed(2)}%) ✨`,
+                    desc: `المحتوى الإبداعي ممتاز وينال إعجاب الجمهور بشكل رائع. احتفظ بهذا النمط الإبداعي وقم بصياغة زوايا جديدة تعتمد على نفس الفكرة.`,
+                    icon: '🔵'
+                });
+            }
+        }
+
+        // CR Diagnostic
+        if (averageCr > 0) {
+            if (averageCr < 1.0) {
+                diagnostics.push({
+                    type: 'danger',
+                    title: `معدل تحويل المتجر CR ضعيف وحرج (${averageCr.toFixed(2)}%)`,
+                    desc: `الزوار يدخلون المتجر ولكنهم يغادرون دون شراء. افحص سرعة تحميل موقعك، وسهّل عملية الدفع (Checkout) مثل تفعيل خيار الدفع السريع والـ COD.`,
+                    icon: '🔴'
+                });
+            } else if (averageCr < 2.5) {
+                diagnostics.push({
+                    type: 'warning',
+                    title: `معدل تحويل المتجر CR متوسط ومستقر (${averageCr.toFixed(2)}%)`,
+                    desc: `المتجر يعمل بشكل جيد، ولكن يمكنك مضاعفة مبيعاتك بتعديل بسيط. أضف مراجعات وصور حقيقية للعملاء، وأبرز سياسة الاستبدال والضمان لرفع الثقة.`,
+                    icon: '🟡'
+                });
+            } else {
+                diagnostics.push({
+                    type: 'success',
+                    title: `معدل تحويل المتجر CR ممتاز وفائق الجودة (${averageCr.toFixed(2)}%) 🚀`,
+                    desc: `رحلة مستخدم رائعة وعرض مقنع للغاية بداخل المتجر. أنت مستعد تماماً لاستيعاب كميات أكبر من الزوار ومضاعفة الحملات الإعلانية.`,
+                    icon: '🔵'
+                });
+            }
+        }
+
+        // CPA vs AOV Diagnostic
+        const aov = parseFloat(state.assumption_aov?.replace(/[^\d.]/g, '')) || 0;
+        if (averageCpa > 0 && aov > 0) {
+            const cpaRatio = averageCpa / aov;
+            if (cpaRatio > 0.4) {
+                diagnostics.push({
+                    type: 'danger',
+                    title: `تكلفة الحصول على عميل (CPA) مرتفعة مقارنة بـ AOV (${averageCpa.toFixed(2)} ${cur})`,
+                    desc: `تكلفة الشراء تلتهم أكثر من 40% من قيمة السلة (${aov} ${cur}). ينصح فوراً بتحسين العروض الترويجية أو تغيير الجماهير لخفض الـ CPA وتفادي الخسارة.`,
+                    icon: '🔴'
+                });
+            } else if (cpaRatio > 0.25) {
+                diagnostics.push({
+                    type: 'warning',
+                    title: `تكلفة الحصول على عميل (CPA) مقبولة ولكنها تحتاج ترشيد (${averageCpa.toFixed(2)} ${cur})`,
+                    desc: `تكلفة الشراء تمثل حوالي ${Math.round(cpaRatio * 100)}% من قيمة السلة. يمكنك خفض الأثر بتقديم باقات ترفع الـ AOV أو تحسين استهداف الإعلان.`,
+                    icon: '🟡'
+                });
+            } else {
+                diagnostics.push({
+                    type: 'success',
+                    title: `تكلفة الحصول على عميل (CPA) ممتازة ومثالية للربح (${averageCpa.toFixed(2)} ${cur}) 💸`,
+                    desc: `تكلفة الطلب تمثل أقل من 25% من قيمة السلة (${aov} ${cur}). هذه ميزة تنافسية فائقة تتيح لك توسيع الحملات الإعلانية ومضاعفة الإنفاق بأمان!`,
+                    icon: '🔵'
+                });
+            }
+        }
+
+        // Individual Campaign diagnostic
+        if (reportData.length > 0) {
+            const topCampaign = reportData[0]; // sorted by spend desc
+            if (topCampaign.spend > 0 && topCampaign.purchases === 0) {
+                diagnostics.push({
+                    type: 'danger',
+                    title: `حملة الإنفاق الأعلى [${topCampaign.name}] تصرف بلا مبيعات!`,
+                    desc: `أنفقت الحملة الكبرى مبلغ ${topCampaign.spend.toLocaleString()} ${cur} دون تحقيق أي طلبات. أوقف هذه الحملة فوراً أو وجّه ميزانيتها لجمهور آخر.`,
+                    icon: '🔴'
+                });
+            }
+        }
+
+        return diagnostics;
     };
 
     return (
@@ -525,8 +651,56 @@ export default function PerformanceReports({ onChange }) {
                         </div>
                     )}
                 </div>
-
             </div>
+
+            {/* الطبيب الإعلاني الآلي AI Ad-Doctor Diagnostics */}
+            {reportData.length > 0 && (
+                <div style={{ marginTop: '36px' }}>
+                    <h3 style={{ marginBottom: '16px', color: 'var(--primary-color)', fontSize: '1.2rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <span>🩺</span> الطبيب الإعلاني الآلي الذكي (AI Ad-Doctor)
+                    </h3>
+                    <div style={{
+                        background: 'rgba(15, 18, 28, 0.5)',
+                        border: '1px dashed var(--glass-border)',
+                        borderRadius: '12px',
+                        padding: '20px',
+                        marginBottom: '20px'
+                    }}>
+                        <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', marginBottom: '16px' }}>
+                            يقوم الطبيب الآلي بفحص مؤشرات أداء الحملات ومطابقتها بالمعايير العالمية لتحديد مكامن الخلل وحلول تحسين العائد:
+                        </p>
+                        
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                            {generateDiagnostics().map((item, idx) => (
+                                <div key={idx} style={{
+                                    display: 'flex',
+                                    gap: '12px',
+                                    padding: '14px 16px',
+                                    borderRadius: '10px',
+                                    background: item.type === 'danger' ? 'rgba(255, 0, 85, 0.05)' : item.type === 'warning' ? 'rgba(245, 158, 11, 0.05)' : 'rgba(0, 240, 255, 0.05)',
+                                    border: `1px solid ${item.type === 'danger' ? 'rgba(255, 0, 85, 0.15)' : item.type === 'warning' ? 'rgba(245, 158, 11, 0.15)' : 'rgba(0, 240, 255, 0.15)'}`,
+                                    alignItems: 'flex-start'
+                                }}>
+                                    <span style={{ fontSize: '1.2rem', marginTop: '2px' }}>{item.icon}</span>
+                                    <div>
+                                        <h4 style={{ 
+                                            fontSize: '0.92rem', 
+                                            fontWeight: '700', 
+                                            color: item.type === 'danger' ? 'var(--neon-crimson)' : item.type === 'warning' ? 'var(--neon-amber)' : 'var(--neon-cyan)',
+                                            marginBottom: '4px'
+                                        }}>
+                                            {item.title}
+                                        </h4>
+                                        <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: '1.5' }}>
+                                            {item.desc}
+                                        </p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* جدول تفصيلي بالحملات المكتشفة */}
             {reportData.length > 0 && (

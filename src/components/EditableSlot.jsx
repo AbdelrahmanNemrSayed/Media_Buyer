@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, memo } from 'react';
 
-function EditableSlot({ id, placeholder, value, onChange }) {
+function EditableSlot({ id, placeholder, value, onChange, disabled }) {
     const [localValue, setLocalValue] = useState(value || '');
     const debounceTimerRef = useRef(null);
 
@@ -38,12 +38,13 @@ function EditableSlot({ id, placeholder, value, onChange }) {
     return (
         <input
             type="text"
-            className={`editable-slot ${isFilled ? 'has-value' : ''}`}
+            className={`editable-slot ${isFilled ? 'has-value' : ''} ${disabled ? 'disabled-slot' : ''}`}
             style={{ width: `${inputWidth}px` }}
             placeholder={`[${placeholder}]`}
             value={localValue}
             onChange={handleChange}
             onBlur={handleBlur}
+            disabled={disabled}
         />
     );
 }

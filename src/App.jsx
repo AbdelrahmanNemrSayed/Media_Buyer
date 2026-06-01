@@ -240,6 +240,45 @@ const INITIAL_STATE = {
 };
 
 // ─────────────────────────────────────────────────────────────────
+// SECURE & COMPACT SHAREABLE STATE HELPERS
+// ─────────────────────────────────────────────────────────────────
+function encryptState(state) {
+  const filtered = {};
+  Object.keys(INITIAL_STATE).forEach(key => {
+    if (JSON.stringify(state[key]) !== JSON.stringify(INITIAL_STATE[key])) {
+      filtered[key] = state[key];
+    }
+  });
+  
+  Object.keys(state).forEach(key => {
+    if (!(key in INITIAL_STATE)) {
+      filtered[key] = state[key];
+    }
+  });
+
+  const jsonStr = JSON.stringify(filtered);
+  const salt = "MB_SALT_2026_SECURE";
+  let cipher = "";
+  for (let i = 0; i < jsonStr.length; i++) {
+    const charCode = jsonStr.charCodeAt(i) ^ salt.charCodeAt(i % salt.length);
+    cipher += String.fromCharCode(charCode);
+  }
+  return btoa(unescape(encodeURIComponent(cipher)));
+}
+
+function decryptState(encodedStr) {
+  const cipher = decodeURIComponent(escape(atob(encodedStr)));
+  const salt = "MB_SALT_2026_SECURE";
+  let jsonStr = "";
+  for (let i = 0; i < cipher.length; i++) {
+    const charCode = cipher.charCodeAt(i) ^ salt.charCodeAt(i % salt.length);
+    jsonStr += String.fromCharCode(charCode);
+  }
+  const parsed = JSON.parse(jsonStr);
+  return { ...INITIAL_STATE, ...parsed };
+}
+
+// ─────────────────────────────────────────────────────────────────
 // LOCAL STORAGE PERSISTENCE HELPERS
 // ─────────────────────────────────────────────────────────────────
 
@@ -369,90 +408,52 @@ function ToastContainer({ toasts }) {
 // HTML EXPORTER
 // ─────────────────────────────────────────────────────────────────
 function buildExportHTML(state, progress) {
-  const sections = [
-    { title: 'الملخص التنفيذي', fields: [
-      ['اسم الحملة', state.campaign_name],
-      ['الفترة الزمنية', `${state.period_from} → ${state.period_to}`],
-      ['الهدف الأساسي', state.main_objective],
-      ['الميزانية الإجمالية', `${state.total_budget_summary} ${state.currency}`],
-      ['القنوات الأساسية', state.primary_channels],
-      ['الـ KPI المستهدف', `${state.target_kpi_type}: ${state.target_kpi_value}`],
-    ]},
-    { title: 'الأهداف والميزانيات', fields: [
-      ['المبيعات المستهدفة', state.target_sales_revenue],
-      ['عدد الليدز المستهدف', state.target_leads_count],
-      ['متوسط قيمة السلة (AOV)', state.assumption_aov],
-      ['معدل التحويل المتوقع (CR)', state.assumption_cr],
-      ['هامش الربح', state.assumption_margin],
-      ['تعريف التحويل', state.conversion_event_def],
-      ['نافذة الإسناد', state.attribution_window],
-      [`Meta (${state.budget_meta_pct}%)`, `${state.meta_calculated_val} ${state.currency}`],
-      [`TikTok (${state.budget_tiktok_pct}%)`, `${state.tiktok_calculated_val} ${state.currency}`],
-      [`Google (${state.budget_google_pct}%)`, `${state.google_calculated_val} ${state.currency}`],
-      [`أخرى (${state.budget_other_pct}%)`, `${state.other_calculated_val} ${state.currency}`],
-    ]},
-    { title: 'الجمهور والرسالة', fields: [
-      ['شريحة 1 — الاسم', state.seg1_name],
-      ['شريحة 1 — الفئة العمرية', state.seg1_age],
-      ['شريحة 1 — الجغرافيا', state.seg1_geo],
-      ['شريحة 1 — الاهتمامات', state.seg1_interests],
-      ['شريحة 1 — نقطة الألم', state.seg1_pain],
-      ['شريحة 1 — زاوية الرسالة', state.seg1_angle],
-      ['شريحة 2 — الاسم', state.seg2_name],
-      ['شريحة 2 — الفئة العمرية', state.seg2_age],
-      ['شريحة 2 — الجغرافيا', state.seg2_geo],
-      ['شريحة 2 — الاهتمامات', state.seg2_interests],
-      ['شريحة 2 — نقطة الألم', state.seg2_pain],
-      ['شريحة 2 — زاوية الرسالة', state.seg2_angle],
-    ]},
-    { title: 'استراتيجية القمع وإعادة الاستهداف', fields: [
-      ['ميزانية TOFU', state.funnel_tofu_budget],
-      ['ميزانية MOFU', state.funnel_mofu_budget],
-      ['ميزانية BOFU', state.funnel_bofu_budget],
-      ['Retargeting 1 — النافذة', state.retarget_window_1],
-      ['Retargeting 1 — الجمهور', state.retarget_audience_1],
-      ['Retargeting 1 — الرسالة', state.retarget_msg_1],
-    ]},
-    { title: 'قواعد القرارات', fields: [
-      ['Scale — المحفز', state.rule_scale_trigger],
-      ['Scale — الإجراء', state.rule_scale_action],
-      ['Kill — المحفز', state.rule_kill_trigger],
-      ['Kill — الإجراء', state.rule_kill_action],
-      ['Pause — المحفز', state.rule_pause_trigger],
-      ['Pause — الإجراء', state.rule_pause_action],
-      ['ميزانية الاختبار', state.rule_test_budget],
-      ['مدة الاختبار', state.rule_test_duration],
-    ]},
-    { title: 'Post-Mortem التعلميات', fields: [
-      ['الحملة', state.pm_campaign_name],
-      ['الفترة', state.pm_period],
-      ['الإنفاق', state.pm_spend],
-      ['الإيرادات', state.pm_revenue],
-      ['ROAS المحقق', state.pm_roas],
-      ['CPL المحقق', state.pm_cpl],
-      ['التعلميات الرئيسية', state.pm_learnings],
-      ['الخطوات القادمة', state.pm_next_steps],
-      ['الكرييتف الفائز', state.pm_winner_creative],
-      ['الجمهور الفائز', state.pm_winner_audience],
-    ]},
-  ];
+  // Pacing Calculations
+  const pacingBudget = parseFloat(state.pacing_budget || state.calc_total_budget || '0') || 0;
+  const pacingSpend = parseFloat(state.pacing_spend || '0') || 0;
+  const pacingDaysTotal = parseFloat(state.pacing_days_total || '30') || 30;
+  const pacingDaysPassed = parseFloat(state.pacing_days_passed || '1') || 1;
 
-  const sectionsHTML = sections.map(sec => `
-    <div class="export-section">
-      <h2>${sec.title}</h2>
-      <table>
-        <tbody>
-          ${sec.fields.map(([label, val]) => `
-            <tr>
-              <th>${label}</th>
-              <td>${val || '<span class="empty">—</span>'}</td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>
-    </div>
-  `).join('');
+  const spendPct = pacingBudget > 0 ? Math.min(100, (pacingSpend / pacingBudget) * 100) : 0;
+  const timePct = pacingDaysTotal > 0 ? Math.min(100, (pacingDaysPassed / pacingDaysTotal) * 100) : 0;
 
+  const idealDailySpend = pacingBudget / pacingDaysTotal;
+  const currentDailySpend = pacingSpend / pacingDaysPassed;
+  const pacingRatio = idealDailySpend > 0 ? (currentDailySpend / idealDailySpend) : 0;
+
+  let pacingText = 'متوازن وعلي المسار الصحيح (On Pace) ✅';
+  let pacingColor = '#10b981';
+  let pacingDelta = 0;
+  if (pacingBudget > 0 && pacingDaysTotal > 0) {
+    pacingDelta = (pacingSpend / pacingBudget) * 100 - (pacingDaysPassed / pacingDaysTotal) * 100;
+  }
+  
+  if (pacingRatio > 1.15) {
+    pacingText = 'إنفاق متسارع (Over-pacing) ⚠️';
+    pacingColor = '#ff0055';
+  } else if (pacingRatio < 0.85) {
+    pacingText = 'إنفاق متباطئ (Under-pacing) 🐢';
+    pacingColor = '#0052ff';
+  }
+
+  const remainingBudget = Math.max(0, pacingBudget - pacingSpend);
+  const remainingDays = Math.max(1, pacingDaysTotal - pacingDaysPassed);
+  const requiredDailySpend = remainingBudget / remainingDays;
+
+  // Budget split Calculations
+  const totalBudget = parseFloat(state.calc_total_budget || state.total_budget_summary || 0) || 0;
+  const currency = state.currency || 'ج.م';
+  const metaPct = parseInt(state.budget_meta_pct) || 40;
+  const tiktokPct = parseInt(state.budget_tiktok_pct) || 30;
+  const googlePct = parseInt(state.budget_google_pct) || 20;
+  const otherPct = parseInt(state.budget_other_pct) || 10;
+
+  const metaVal = Math.round(totalBudget * (metaPct / 100));
+  const tiktokVal = Math.round(totalBudget * (tiktokPct / 100));
+  const googleVal = Math.round(totalBudget * (googlePct / 100));
+  const otherVal = Math.round(totalBudget * (otherPct / 100));
+
+  // Verified items
   const verifiedItems = [
     { label: 'متوسط قيمة السلة (AOV)', checked: state.verify_aov_checked, source: state.verify_aov_source },
     { label: 'معدل تحويل الموقع (CR)', checked: state.verify_cr_checked, source: state.verify_cr_source },
@@ -463,19 +464,19 @@ function buildExportHTML(state, progress) {
   let integrityHTML = '';
   if (verifiedItems.length > 0) {
     integrityHTML = `
-      <div class="export-section" style="border: 2px solid #10b981; border-radius: 12px; overflow: hidden; page-break-inside: avoid; margin-top: 24px;">
-        <h2 style="background: #ecfdf5; color: #065f46; border-bottom: 2px solid #10b981; font-size: 1.1rem; font-weight: 800; padding: 14px 20px;">
+      <div class="bento-card data-integrity-cert" style="grid-column: 1 / -1;">
+        <div class="cert-header">
           🛡️ تقرير موثوقية وجودة البيانات (Data Integrity Certificate)
-        </h2>
-        <p style="padding: 12px 20px; font-size: 0.85rem; color: #047857; background: #f0fdf4; font-weight: 600;">
+        </div>
+        <p class="cert-desc">
           تم تدقيق وتأكيد صحة هذه البيانات الإدارية والمالية وإسنادها إلى مصادرها الرسمية الفعالة:
         </p>
-        <table style="width: 100%; border-collapse: collapse;">
+        <table class="cert-table">
           <tbody>
             ${verifiedItems.map(item => `
               <tr>
-                <th style="text-align: right; padding: 11px 20px; background: #f8fafc; font-size: 0.85rem; font-weight: 700; color: #065f46; width: 35%; border-bottom: 1px solid #e2e8f0;">${item.label}</th>
-                <td style="padding: 11px 20px; font-size: 0.9rem; color: #0f172a; font-weight: 600; border-bottom: 1px solid #e2e8f0;"><span style="color: #10b981; font-weight: 800;">✓ موثق</span> • من خلال: ${item.source}</td>
+                <th>${item.label}</th>
+                <td><span class="cert-badge">✓ موثق</span> • من خلال: ${item.source}</td>
               </tr>
             `).join('')}
           </tbody>
@@ -491,97 +492,524 @@ function buildExportHTML(state, progress) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>خطة ميديا باينج — ${state.campaign_name || 'بدون اسم'}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Cairo', sans-serif;
       background: #f8fafc;
-      color: #1e293b;
+      color: #0f172a;
       padding: 40px;
       line-height: 1.6;
     }
-    .export-header {
-      text-align: center;
-      margin-bottom: 48px;
-      padding: 32px;
-      background: linear-gradient(135deg, #0052ff 0%, #00f0ff 100%);
-      border-radius: 16px;
-      color: white;
+    .export-container {
+      max-width: 1200px;
+      margin: 0 auto;
     }
-    .export-header h1 { font-size: 2rem; font-weight: 800; margin-bottom: 8px; }
-    .export-header p { font-size: 1rem; opacity: 0.85; }
+    .export-header {
+      margin-bottom: 32px;
+      padding: 40px;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      border-radius: 24px;
+      color: white;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .export-header::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 80% 20%, rgba(0, 82, 255, 0.15) 0%, transparent 50%),
+                  radial-gradient(circle at 20% 80%, rgba(0, 240, 255, 0.1) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .export-header h1 {
+      font-size: 2.2rem;
+      font-weight: 900;
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #ffffff 40%, #a5b4fc 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .export-header p { font-size: 1rem; color: #94a3b8; font-weight: 500; }
     .export-header .progress-badge {
       display: inline-block;
-      margin-top: 12px;
+      margin-top: 16px;
       padding: 6px 20px;
-      background: rgba(255,255,255,0.2);
+      background: rgba(255, 255, 255, 0.07);
       border-radius: 20px;
       font-weight: 700;
       font-size: 0.9rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
-    .export-section {
-      margin-bottom: 36px;
+
+    /* Bento Grid Layout */
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+    .bento-card {
+      background: white;
       border: 1px solid #e2e8f0;
-      border-radius: 12px;
-      overflow: hidden;
-      page-break-inside: avoid;
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.02);
+      break-inside: avoid;
+      transition: all 0.3s ease;
     }
-    .export-section h2 {
-      font-size: 1.1rem;
+    .bento-card:hover {
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
+      border-color: #cbd5e1;
+    }
+    .bento-card h2 {
+      font-size: 1.2rem;
       font-weight: 800;
-      padding: 14px 20px;
-      background: #f1f5f9;
-      border-bottom: 2px solid #e2e8f0;
       color: #0f172a;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 2px solid #f1f5f9;
+      padding-bottom: 12px;
     }
-    table { width: 100%; border-collapse: collapse; }
+    .bento-card h2 span {
+      font-size: 1.4rem;
+    }
+
+    /* Standardized Tables */
+    table { width: 100%; border-collapse: collapse; margin-bottom: 8px; }
+    tr { border-bottom: 1px solid #f1f5f9; }
+    tr:last-child { border-bottom: none; }
     th {
       text-align: right;
-      padding: 11px 20px;
-      background: #f8fafc;
+      padding: 10px 12px;
       font-size: 0.85rem;
-      font-weight: 600;
+      font-weight: 700;
       color: #64748b;
-      width: 30%;
-      border-bottom: 1px solid #e2e8f0;
+      width: 40%;
     }
     td {
-      padding: 11px 20px;
+      padding: 10px 12px;
       font-size: 0.9rem;
       color: #1e293b;
-      font-weight: 500;
-      border-bottom: 1px solid #e2e8f0;
+      font-weight: 600;
+      text-align: left;
     }
-    tr:last-child th, tr:last-child td { border-bottom: none; }
     .empty { color: #94a3b8; font-style: italic; }
+
+    /* Custom visual component: Progress split bars */
+    .bar-split-item {
+      margin-bottom: 16px;
+    }
+    .bar-split-top {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #334155;
+    }
+    .bar-split-track {
+      height: 8px;
+      background: #f1f5f9;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .bar-split-fill {
+      height: 100%;
+      border-radius: 10px;
+    }
+
+    /* Data Integrity Certificate box */
+    .data-integrity-cert {
+      border: 2px solid #10b981;
+      background: #f0fdf4;
+    }
+    .cert-header {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #065f46;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .cert-desc {
+      font-size: 0.88rem;
+      color: #047857;
+      margin-bottom: 16px;
+      font-weight: 600;
+    }
+    .cert-table th {
+      color: #047857;
+      background: transparent;
+      border-bottom: 1px solid #d1fae5;
+    }
+    .cert-table td {
+      color: #065f46;
+      border-bottom: 1px solid #d1fae5;
+    }
+    .cert-badge {
+      color: #10b981;
+      font-weight: 800;
+    }
+
+    /* Pacing layout components */
+    .pacing-overview {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 20px;
+      background: #f8fafc;
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px dashed #e2e8f0;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .pacing-status-pill {
+      font-size: 0.8rem;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-weight: 800;
+      color: white;
+    }
+
     .export-footer {
       text-align: center;
-      margin-top: 48px;
-      padding: 20px;
+      margin-top: 56px;
+      padding: 24px;
       color: #94a3b8;
-      font-size: 0.8rem;
+      font-size: 0.85rem;
+      border-top: 1px solid #e2e8f0;
     }
+
+    /* Print Specific styles to prevent gaps and splits */
     @media print {
-      body { padding: 0; background: #fff; }
-      .export-header { background: #0052ff !important; -webkit-print-color-adjust: exact; padding: 40px; margin-bottom: 20px; }
-      .export-section { page-break-inside: avoid; border: 1px solid #ccc; margin-bottom: 20px; }
-      table { border-collapse: collapse; width: 100%; }
-      th, td { padding: 8px; border: 1px solid #ddd; }
+      body { padding: 0; background: #fff; color: #000; }
+      .export-header { background: #0f172a !important; -webkit-print-color-adjust: exact; padding: 30px; margin-bottom: 24px; border-radius: 12px; }
+      .bento-card { box-shadow: none !important; border: 1px solid #ccc !important; padding: 20px !important; margin-bottom: 24px !important; page-break-inside: avoid; }
+      .bento-grid { display: block !important; }
+      th, td { padding: 6px 10px; border-bottom: 1px solid #ddd !important; }
+      .bar-split-track { background: #eee !important; -webkit-print-color-adjust: exact; }
+      .bar-split-fill { -webkit-print-color-adjust: exact; }
+      .pacing-overview { background: #fdfdfd !important; border: 1px solid #ddd !important; -webkit-print-color-adjust: exact; }
+      .pacing-status-pill { border: 1px solid #777 !important; -webkit-print-color-adjust: exact; }
+      .data-integrity-cert { border: 2px solid #10b981 !important; background: #f9fffb !important; -webkit-print-color-adjust: exact; }
     }
   </style>
 </head>
 <body>
-  <div class="export-header">
-    ${state.agency_name ? `<p style="font-size:1.2rem; margin-bottom:10px; font-weight:bold;">مُقدمة بواسطة: ${state.agency_name}</p>` : ''}
-    <h1>🎯 خطة ميديا باينج</h1>
-    <p>${state.campaign_name || 'الحملة الإعلانية'} • ${state.period_from || '—'} إلى ${state.period_to || '—'}</p>
-    <div class="progress-badge">نسبة اكتمال الخطة: ${progress}%</div>
-  </div>
-  ${sectionsHTML}
-  ${integrityHTML}
-  <div class="export-footer">
-    تم إنشاء هذه الخطة بواسطة لوحة تحكم ميديا باينج التفاعلية • ${new Date().toLocaleDateString('ar-SA')}
+  <div class="export-container">
+    <div class="export-header">
+      ${state.agency_name ? `<p style="font-size:1.15rem; margin-bottom:8px; font-weight:bold; color: #a5b4fc;">مُقدمة بواسطة: ${state.agency_name}</p>` : ''}
+      <h1>🎯 خطة ميديا باينج متكاملة</h1>
+      <p>${state.campaign_name || 'الحملة الإعلانية'} • الفترة: ${state.period_from || '—'} إلى ${state.period_to || '—'}</p>
+      <div class="progress-badge">نسبة اكتمال تخطيط الحملة: ${progress}%</div>
+    </div>
+
+    <div class="bento-grid">
+      
+      <!-- Card 1: Executive Summary -->
+      <div class="bento-card">
+        <h2><span>📝</span> الملخص التنفيذي للمشروع</h2>
+        <table>
+          <tbody>
+            <tr>
+              <th>اسم الحملة الإعلانية</th>
+              <td>${state.campaign_name || '<span class="empty">—</span>'}</td>
+            </tr>
+            <tr>
+              <th>الفترة الزمنية للحملة</th>
+              <td>${state.period_from ? `${state.period_from} ← ${state.period_to}` : '<span class="empty">—</span>'}</td>
+            </tr>
+            <tr>
+              <th>الهدف الأساسي للحملة</th>
+              <td>${state.main_objective || '<span class="empty">—</span>'}</td>
+            </tr>
+            <tr>
+              <th>الميزانية الإجمالية المعتمدة</th>
+              <td>${state.total_budget_summary ? `${state.total_budget_summary} ${state.currency}` : '<span class="empty">—</span>'}</td>
+            </tr>
+            <tr>
+              <th>القنوات الإعلانية الأساسية</th>
+              <td>${state.primary_channels || '<span class="empty">—</span>'}</td>
+            </tr>
+            <tr>
+              <th>مؤشر الأداء المستهدف KPI</th>
+              <td>${state.target_kpi_type ? `${state.target_kpi_type}: ${state.target_kpi_value}` : '<span class="empty">—</span>'}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Card 2: Financial Objectives & Channel Split -->
+      <div class="bento-card">
+        <h2><span>📊</span> الأهداف الإستراتيجية وتوزيع الميزانية</h2>
+        <table>
+          <tbody>
+            <tr>
+              <th>المبيعات المستهدفة الكلية</th>
+              <td>${state.target_sales_revenue ? `${state.target_sales_revenue} ${currency}` : '<span class="empty">—</span>'}</td>
+            </tr>
+            <tr>
+              <th>عدد المبيعات/الليدز المستهدف</th>
+              <td>${state.target_leads_count ? `${state.target_leads_count} عميل` : '<span class="empty">—</span>'}</td>
+            </tr>
+            <tr>
+              <th>متوسط قيمة السلة (AOV)</th>
+              <td>${state.assumption_aov ? `${state.assumption_aov} ${currency}` : '<span class="empty">—</span>'}</td>
+            </tr>
+            <tr>
+              <th>معدل تحويل المتجر المتوقع (CR)</th>
+              <td>${state.assumption_cr ? `${state.assumption_cr}%` : '<span class="empty">—</span>'}</td>
+            </tr>
+            <tr>
+              <th>هامش ربح المنتجات التقريبي</th>
+              <td>${state.assumption_margin ? `${state.assumption_margin}%` : '<span class="empty">—</span>'}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        ${totalBudget > 0 ? `
+          <div style="margin-top: 20px;">
+            <p style="font-size: 0.88rem; font-weight: 800; color: #475569; margin-bottom: 12px; border-top: 1px solid #f1f5f9; padding-top: 12px;">
+              💡 توزيع الحصص الإعلانية المنصات الإعلانية:
+            </p>
+            
+            <div class="bar-split-item">
+              <div class="bar-split-top">
+                <span>Meta (Facebook / Instagram)</span>
+                <span>${metaPct}% (${metaVal.toLocaleString()} ${currency})</span>
+              </div>
+              <div class="bar-split-track">
+                <div class="bar-split-fill" style="width: ${metaPct}%; background: #0052ff;"></div>
+              </div>
+            </div>
+
+            <div class="bar-split-item">
+              <div class="bar-split-top">
+                <span>TikTok Ads</span>
+                <span>${tiktokPct}% (${tiktokVal.toLocaleString()} ${currency})</span>
+              </div>
+              <div class="bar-split-track">
+                <div class="bar-split-fill" style="width: ${tiktokPct}%; background: #ff0050;"></div>
+              </div>
+            </div>
+
+            <div class="bar-split-item">
+              <div class="bar-split-top">
+                <span>Google Ads</span>
+                <span>${googlePct}% (${googleVal.toLocaleString()} ${currency})</span>
+              </div>
+              <div class="bar-split-track">
+                <div class="bar-split-fill" style="width: ${googlePct}%; background: #fbbc04;"></div>
+              </div>
+            </div>
+
+            <div class="bar-split-item" style="margin-bottom: 0;">
+              <div class="bar-split-top">
+                <span>قنوات أخرى (Snapchat / X)</span>
+                <span>${otherPct}% (${otherVal.toLocaleString()} ${currency})</span>
+              </div>
+              <div class="bar-split-track">
+                <div class="bar-split-fill" style="width: ${otherPct}%; background: #10b981;"></div>
+              </div>
+            </div>
+          </div>
+        ` : ''}
+      </div>
+
+      <!-- Card 3: Target Audience & Persona Specs -->
+      <div class="bento-card">
+        <h2><span>🧲</span> شرائح الجمهور والرسائل الإقناعية</h2>
+        
+        ${state.seg1_name ? `
+          <div style="margin-bottom: 16px; background: #f8fafc; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0;">
+            <p style="font-weight: 800; font-size: 0.95rem; color: #0052ff; margin-bottom: 8px;">👤 شريحة الجمهور 1: ${state.seg1_name}</p>
+            <p style="font-size: 0.85rem; color: #334155;">• <strong>الديموغرافيا:</strong> ${state.seg1_age || '—'} | ${state.seg1_geo || '—'}</p>
+            <p style="font-size: 0.85rem; color: #334155;">• <strong>الاهتمامات الأساسية:</strong> ${state.seg1_interests || '—'}</p>
+            <p style="font-size: 0.85rem; color: #334155;">• <strong>نقطة الألم / المخاوف:</strong> ${state.seg1_pain || '—'}</p>
+            <p style="font-size: 0.85rem; color: #334155;">• <strong>زاوية الرسالة الإعلانية:</strong> ${state.seg1_angle || '—'}</p>
+          </div>
+        ` : ''}
+
+        ${state.seg2_name ? `
+          <div style="background: #f8fafc; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0;">
+            <p style="font-weight: 800; font-size: 0.95rem; color: #f59e0b; margin-bottom: 8px;">👤 شريحة الجمهور 2: ${state.seg2_name}</p>
+            <p style="font-size: 0.85rem; color: #334155;">• <strong>الديموغرافيا:</strong> ${state.seg2_age || '—'} | ${state.seg2_geo || '—'}</p>
+            <p style="font-size: 0.85rem; color: #334155;">• <strong>الاهتمامات الأساسية:</strong> ${state.seg2_interests || '—'}</p>
+            <p style="font-size: 0.85rem; color: #334155;">• <strong>نقطة الألم / المخاوف:</strong> ${state.seg2_pain || '—'}</p>
+            <p style="font-size: 0.85rem; color: #334155;">• <strong>زاوية الرسالة الإعلانية:</strong> ${state.seg2_angle || '—'}</p>
+          </div>
+        ` : ''}
+
+        ${!state.seg1_name && !state.seg2_name ? '<p class="empty">لا يوجد شرائح جمهور مسجلة بعد في هذه الخطة.</p>' : ''}
+      </div>
+
+      <!-- Card 4: Funnel Strategy & Retargeting Playbook -->
+      <div class="bento-card">
+        <h2><span>🔽</span> استراتيجية القمع وإعادة الاستهداف</h2>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+          <div>
+            <p style="font-size: 0.8rem; color: #64748b; font-weight: 700;">🔷 TOFU (الميزانية والمستهدف):</p>
+            <p style="font-size: 0.9rem; font-weight: 700; color: #0f172a;">${state.funnel_tofu_budget ? `${state.funnel_tofu_budget} ${currency}` : '—'}</p>
+          </div>
+          <div>
+            <p style="font-size: 0.8rem; color: #64748b; font-weight: 700;">🔶 MOFU (الميزانية والمستهدف):</p>
+            <p style="font-size: 0.9rem; font-weight: 700; color: #0f172a;">${state.funnel_mofu_budget ? `${state.funnel_mofu_budget} ${currency}` : '—'}</p>
+          </div>
+          <div style="grid-column: span 2; border-top: 1px solid #f1f5f9; padding-top: 8px;">
+            <p style="font-size: 0.8rem; color: #64748b; font-weight: 700;">🔹 BOFU (ميزانية إعادة الاستهداف):</p>
+            <p style="font-size: 0.9rem; font-weight: 700; color: #0f172a;">${state.funnel_bofu_budget ? `${state.funnel_bofu_budget} ${currency}` : '—'}</p>
+          </div>
+        </div>
+
+        ${state.retarget_audience_1 ? `
+          <div style="background: #f8fafc; padding: 12px; border-radius: 10px; border: 1px solid #e2e8f0;">
+            <p style="font-weight: 800; font-size: 0.88rem; color: #8b5cf6; margin-bottom: 6px;">🎯 إعادة استهداف 1 (النافذة: ${state.retarget_window_1 || '—'})</p>
+            <p style="font-size: 0.8rem; color: #334155;">• <strong>الجمهور المستهدف:</strong> ${state.retarget_audience_1}</p>
+            <p style="font-size: 0.8rem; color: #334155; margin-top: 2px;">• <strong>الرسالة الإعلانية:</strong> ${state.retarget_msg_1}</p>
+          </div>
+        ` : ''}
+      </div>
+
+      <!-- Card 5: Automation & Decision Rules Playbook -->
+      <div class="bento-card">
+        <h2><span>⚡</span> قواعد الأتمتة والتحكم في المخاطر</h2>
+        <table>
+          <tbody>
+            <tr>
+              <th style="color: #10b981;">🚀 قاعدة التوسيع (Scale)</th>
+              <td style="text-align: right;">
+                <strong>المحفز:</strong> ${state.rule_scale_trigger || '—'}<br/>
+                <strong>الإجراء:</strong> ${state.rule_scale_action || '—'}
+              </td>
+            </tr>
+            <tr>
+              <th style="color: #ff0055;">🔴 قاعدة الإيقاف (Kill)</th>
+              <td style="text-align: right;">
+                <strong>المحفز:</strong> ${state.rule_kill_trigger || '—'}<br/>
+                <strong>الإجراء:</strong> ${state.rule_kill_action || '—'}
+              </td>
+            </tr>
+            <tr>
+              <th style="color: #f59e0b;">⏳ قاعدة الإيقاف المؤقت (Pause)</th>
+              <td style="text-align: right;">
+                <strong>المحفز:</strong> ${state.rule_pause_trigger || '—'}<br/>
+                <strong>الإجراء:</strong> ${state.rule_pause_action || '—'}
+              </td>
+            </tr>
+            <tr>
+              <th>🔬 معايير الاختبار (Testing)</th>
+              <td style="text-align: right;">
+                <strong>ميزانية الاختبار:</strong> ${state.rule_test_budget || '—'}<br/>
+                <strong>مدة الاختبار الفنية:</strong> ${state.rule_test_duration || '—'}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Card 6: Smart Budget Pacing Tracker -->
+      ${pacingBudget > 0 ? `
+        <div class="bento-card">
+          <h2><span>💸</span> وتيرة صرف الميزانية والجدول الزمني</h2>
+          <div class="pacing-overview">
+            <span style="font-weight: 800; font-size: 0.95rem;">وتيرة الإنفاق الحالية:</span>
+            <span class="pacing-status-pill" style="background: ${pacingColor};">${pacingText}</span>
+          </div>
+          
+          <div class="bar-split-item">
+            <div class="bar-split-top">
+              <span>💸 نسبة الميزانية المصروفة</span>
+              <span>${spendPct.toFixed(1)}% (${pacingSpend.toLocaleString()} / ${pacingBudget.toLocaleString()} ${currency})</span>
+            </div>
+            <div class="bar-split-track">
+              <div class="bar-split-fill" style="width: ${spendPct}%; background: #00f0ff;"></div>
+            </div>
+          </div>
+
+          <div class="bar-split-item">
+            <div class="bar-split-top">
+              <span>⏳ نسبة الأيام المنقضية للحملة</span>
+              <span>${timePct.toFixed(1)}% (${pacingDaysPassed} / ${pacingDaysTotal} يوم)</span>
+            </div>
+            <div class="bar-split-track">
+              <div class="bar-split-fill" style="width: ${timePct}%; background: #f59e0b;"></div>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; border-top: 1px solid #f1f5f9; padding-top: 14px;">
+            <div style="background: #f8fafc; padding: 10px; border-radius: 8px;">
+              <span style="font-size: 0.72rem; color: #64748b; display: block;">الصرف اليومي الفعلي الحالي:</span>
+              <strong style="color: #0f172a; font-size: 0.9rem;">${currentDailySpend.toLocaleString(undefined, { maximumFractionDigits: 1 })} ${currency} / يوم</strong>
+            </div>
+            <div style="background: #f8fafc; padding: 10px; border-radius: 8px;">
+              <span style="font-size: 0.72rem; color: #64748b; display: block;">الصرف اليومي المطلوب المتبقي:</span>
+              <strong style="color: #0f172a; font-size: 0.9rem;">${requiredDailySpend.toLocaleString(undefined, { maximumFractionDigits: 1 })} ${currency} / يوم</strong>
+            </div>
+          </div>
+        </div>
+      ` : ''}
+
+      <!-- Card 7: Post-Mortem Performance Learnings -->
+      ${(state.pm_spend || state.pm_learnings || state.pm_campaign_name) ? `
+        <div class="bento-card" style="${pacingBudget > 0 ? '' : 'grid-column: span 2;'}">
+          <h2><span>🏆</span> تقرير أداء وإغلاق الشهر (Post-Mortem)</h2>
+          <table>
+            <tbody>
+              <tr>
+                <th>إجمالي المبالغ المصروفة فعلياً</th>
+                <td>${state.pm_spend ? `${state.pm_spend} ${currency}` : '—'}</td>
+              </tr>
+              <tr>
+                <th>إجمالي الإيرادات المحققة</th>
+                <td>${state.pm_revenue ? `${state.pm_revenue} ${currency}` : '—'}</td>
+              </tr>
+              <tr>
+                <th style="color: #10b981;">العائد الإعلاني الفعلي المحقق ROAS</th>
+                <td>${state.pm_roas ? `${state.pm_roas}x` : '—'}</td>
+              </tr>
+              <tr>
+                <th>تكلفة الطلب CPA المحققة</th>
+                <td>${state.pm_cpl ? `${state.pm_cpl} ${currency}` : '—'}</td>
+              </tr>
+              <tr>
+                <th>الجمهور والابتكار الفائز</th>
+                <td style="text-align: right;">
+                  <strong>الجمهور:</strong> ${state.pm_winner_audience || '—'}<br/>
+                  <strong>المحتوى:</strong> ${state.pm_winner_creative || '—'}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          ${state.pm_learnings ? `
+            <div style="margin-top: 14px; background: #faf5ff; border: 1px solid #f3e8ff; padding: 12px; border-radius: 10px;">
+              <p style="font-weight: 800; font-size: 0.85rem; color: #8b5cf6; margin-bottom: 4px;">📝 الدروس المستفادة والخطوات القادمة:</p>
+              <p style="font-size: 0.8rem; color: #5b21b6; line-height: 1.5;">${state.pm_learnings}</p>
+              ${state.pm_next_steps ? `<p style="font-size: 0.8rem; color: #5b21b6; line-height: 1.5; margin-top: 4px;"><strong>الخطوات:</strong> ${state.pm_next_steps}</p>` : ''}
+            </div>
+          ` : ''}
+        </div>
+      ` : ''}
+
+      <!-- Data Integrity Certificate inside Bento -->
+      ${integrityHTML}
+
+    </div>
+
+    <div class="export-footer">
+      تم إنشاء وتدقيق هذه الخطة بواسطة لوحة تحكم ميديا باينج التفاعلية • ${new Date().toLocaleDateString('ar-SA')}
+    </div>
   </div>
 </body>
 </html>`;
@@ -632,8 +1060,15 @@ export default function App() {
     const dataParam = params.get('data');
     if (dataParam) {
       try {
-        const decodedStr = decodeURIComponent(atob(dataParam));
-        const parsedState = JSON.parse(decodedStr);
+        let parsedState;
+        try {
+          // Try new encrypted/compressed format first
+          parsedState = decryptState(dataParam);
+        } catch (err) {
+          // Fallback to old format
+          const decodedStr = decodeURIComponent(atob(dataParam));
+          parsedState = JSON.parse(decodedStr);
+        }
         const id = 'shared_' + Date.now();
         setCampaigns(prev => ({ ...prev, [id]: { name: 'حملة مشتركة', state: parsedState } }));
         setActiveCampaignIdState(id);
@@ -813,8 +1248,7 @@ export default function App() {
   // Share URL
   const handleShareURL = useCallback(() => {
     try {
-      const dataStr = JSON.stringify(state);
-      const encoded = btoa(encodeURIComponent(dataStr));
+      const encoded = encryptState(state);
       const url = `${window.location.origin}${window.location.pathname}?data=${encoded}`;
       navigator.clipboard.writeText(url);
       addToast('تم نسخ الرابط السري! يمكنك إرساله لزميلك.', 'success', '🔗');

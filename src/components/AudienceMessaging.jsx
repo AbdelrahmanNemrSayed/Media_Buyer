@@ -1,6 +1,18 @@
+import { useState } from 'react';
 import EditableSlot from './EditableSlot';
 
 export default function AudienceMessaging({ state, onChange }) {
+    const [hookProd, setHookProd] = useState('حذاء مشي طبي مريح');
+    const [hookPain, setHookPain] = useState('آلام الظهر والقدمين أثناء الوقوف والمشي الطويل');
+    const [hookUsp, setHookUsp] = useState('وسائد امتصاص صدمات سداسية وفرش سيليكوني داعم');
+    const [copiedId, setCopiedId] = useState('');
+
+    const handleCopyCopy = (text, id) => {
+        navigator.clipboard.writeText(text);
+        setCopiedId(id);
+        setTimeout(() => setCopiedId(''), 2000);
+    };
+
     return (
         <div className="glass-panel">
             <h2 className="panel-title">الجمهور والرسالة الإعلانية</h2>
@@ -101,6 +113,155 @@ export default function AudienceMessaging({ state, onChange }) {
                     
                     <p style={{ marginTop: '8px' }}><strong>• رابط الهبوط المستهدف:</strong></p>
                     <p>• صفحة التشكيلات الجديدة والترند: <EditableSlot id="hb_tofu_landing" placeholder="New In / Best Sellers" value={state.hb_tofu_landing} onChange={onChange} /></p>
+                </div>
+            </div>
+
+            {/* 3.5 مولد زوايا الكرييتف التلقائي (Creative Hook Generator) */}
+            <hr />
+            <h3 className="section-title">3.5 🪄 مولد زوايا الكرييتف وحطافات الإعلانات الذكي (Creative Hook Generator)</h3>
+            <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '20px' }}>
+                أدخل مواصفات منتجك والمشكلة التي يحلها، وسيقوم النظام بتصميم 3 صيغ إعلانية متكاملة (خطاف + نص إقناعي + زر دعوة) جاهزة للنسخ والاستخدام:
+            </p>
+
+            <div className="card-item" style={{ borderColor: 'var(--neon-cyan)', background: 'rgba(0, 240, 255, 0.01)', marginBottom: '24px' }}>
+                <div className="grid-cols-3" style={{ gap: '16px' }}>
+                    <div>
+                        <label style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px', fontWeight: '600' }}>🛍️ اسم المنتج / الخدمة:</label>
+                        <input 
+                            type="text" 
+                            className="budget-input-field" 
+                            style={{ width: '100%', padding: '8px 12px', fontSize: '0.85rem', height: '36px', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--glass-border)', color: '#fff', borderRadius: '8px' }}
+                            placeholder="مثال: حذاء مشي طبي" 
+                            value={hookProd}
+                            onChange={(e) => setHookProd(e.target.value)}
+                        />
+                    </div>
+                    <div>
+                        <label style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px', fontWeight: '600' }}>🚨 نقطة الألم / المشكلة الكبرى للعميل:</label>
+                        <input 
+                            type="text" 
+                            className="budget-input-field" 
+                            style={{ width: '100%', padding: '8px 12px', fontSize: '0.85rem', height: '36px', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--glass-border)', color: '#fff', borderRadius: '8px' }}
+                            placeholder="مثال: آلام القدمين عند المشي الطويل" 
+                            value={hookPain}
+                            onChange={(e) => setHookPain(e.target.value)}
+                        />
+                    </div>
+                    <div>
+                        <label style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px', fontWeight: '600' }}>💎 الميزة التنافسية الكبرى (USP):</label>
+                        <input 
+                            type="text" 
+                            className="budget-input-field" 
+                            style={{ width: '100%', padding: '8px 12px', fontSize: '0.85rem', height: '36px', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--glass-border)', color: '#fff', borderRadius: '8px' }}
+                            placeholder="مثال: فرش سيليكوني مرن يمتص الصدمات" 
+                            value={hookUsp}
+                            onChange={(e) => setHookUsp(e.target.value)}
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <div className="grid-cols-3" style={{ gap: '20px' }}>
+                {/* Option 1 */}
+                <div className="card-item" style={{ position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                    <div>
+                        <span className="benchmark-badge" style={{ backgroundColor: 'rgba(255, 0, 85, 0.05)', color: 'var(--neon-crimson)', borderColor: 'rgba(255, 0, 85, 0.2)', marginBottom: '12px', width: 'fit-content' }}>
+                            🚨 زاوية الألم والحل (PAS)
+                        </span>
+                        <div style={{ marginTop: '10px' }}>
+                            <strong style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'block' }}>🪝 الخطاف البصري (Hook):</strong>
+                            <p style={{ fontSize: '0.92rem', fontWeight: '700', margin: '4px 0 12px 0', color: '#ffffff', lineHeight: '1.4' }}>
+                                "{hookPain ? `هل تعبت من ${hookPain}؟` : 'هل تعبت من هذه المشكلة المستمرة؟'} 🤔✋"
+                            </p>
+                        </div>
+                        <div>
+                            <strong style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'block' }}>📝 نص الإعلان الإقناعي (Body):</strong>
+                            <p style={{ fontSize: '0.88rem', margin: '4px 0 12px 0', color: 'var(--text-secondary)', lineHeight: '1.6' }}>
+                                كل خطوة بتدفع تمنها؟ بلاش تضحي براحتك. مع {hookProd || 'منتجنا الرائد'}، الحل صار بين يديك! بفضل {hookUsp || 'تقنيتنا الفائقة'}، ستشعر بالخفة والنشاط طول اليوم.
+                            </p>
+                        </div>
+                        <div>
+                            <strong style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'block' }}>🎯 زر اتخاذ الإجراء (CTA):</strong>
+                            <p style={{ fontSize: '0.88rem', margin: '4px 0', color: 'var(--neon-green)', fontWeight: '600' }}>
+                                🛍️ اطلب الآن بخصم 15% والدفع عند الاستلام!
+                            </p>
+                        </div>
+                    </div>
+                    <button 
+                        className="btn btn-save" 
+                        style={{ marginTop: '16px', width: '100%', justifyContent: 'center', height: '36px', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '6px' }}
+                        onClick={() => handleCopyCopy(`🪝 الخطاف: "هل تعبت من ${hookPain}؟ 🤔✋"\n\n📝 النص: كل خطوة بتدفع تمنها؟ بلاش تضحي براحتك. مع ${hookProd}، الحل صار بين يديك! بفضل ${hookUsp}، ستشعر بالخفة والنشاط طول اليوم.\n\n🎯 العرض: 🛍️ اطلب الآن بخصم 15% والدفع عند الاستلام!`, 'copy1')}
+                    >
+                        {copiedId === 'copy1' ? '✓ تم النسخ بنجاح' : '📋 نسخ الإعلان بالكامل'}
+                    </button>
+                </div>
+
+                {/* Option 2 */}
+                <div className="card-item" style={{ position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                    <div>
+                        <span className="benchmark-badge" style={{ backgroundColor: 'rgba(0, 82, 255, 0.05)', color: 'var(--neon-blue)', borderColor: 'rgba(0, 82, 255, 0.2)', marginBottom: '12px', width: 'fit-content' }}>
+                            🧐 زاوية الفضول والأسئلة
+                        </span>
+                        <div style={{ marginTop: '10px' }}>
+                            <strong style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'block' }}>🪝 الخطاف البصري (Hook):</strong>
+                            <p style={{ fontSize: '0.92rem', fontWeight: '700', margin: '4px 0 12px 0', color: '#ffffff', lineHeight: '1.4' }}>
+                                "لماذا يستمر الكثيرون في تحمل {hookPain || 'هذه الآلام المزعجة'}؟ 🧐"
+                            </p>
+                        </div>
+                        <div>
+                            <strong style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'block' }}>📝 نص الإعلان الإقناعي (Body):</strong>
+                            <p style={{ fontSize: '0.88rem', margin: '4px 0 12px 0', color: 'var(--text-secondary)', lineHeight: '1.6' }}>
+                                السر مش في المجهود الزايد، السر هو الدعم اللي ناقصك! {hookProd || 'هذا الحل المبتكر'} يغير القواعد تماماً بفضل {hookUsp || 'الميزات الاستثنائية'}. لا تستسلم للتعب بعد اليوم وجرب الفرق بنفسك!
+                            </p>
+                        </div>
+                        <div>
+                            <strong style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'block' }}>🎯 زر اتخاذ الإجراء (CTA):</strong>
+                            <p style={{ fontSize: '0.88rem', margin: '4px 0', color: 'var(--neon-green)', fontWeight: '600' }}>
+                                🔗 اضغط هنا واكتشف سر الراحة اليومية!
+                            </p>
+                        </div>
+                    </div>
+                    <button 
+                        className="btn btn-save" 
+                        style={{ marginTop: '16px', width: '100%', justifyContent: 'center', height: '36px', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '6px' }}
+                        onClick={() => handleCopyCopy(`🪝 الخطاف: "لماذا يستمر الكثيرون في تحمل ${hookPain}؟ 🧐"\n\n📝 النص: السر مش في المجهود الزايد، السر هو الدعم اللي ناقصك! ${hookProd} يغير القواعد تماماً بفضل ${hookUsp}. لا تستسلم للتعب بعد اليوم وجرب الفرق بنفسك!\n\n🎯 العرض: 🔗 اضغط هنا واكتشف سر الراحة اليومية!`, 'copy2')}
+                    >
+                        {copiedId === 'copy2' ? '✓ تم النسخ بنجاح' : '📋 نسخ الإعلان بالكامل'}
+                    </button>
+                </div>
+
+                {/* Option 3 */}
+                <div className="card-item" style={{ position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                    <div>
+                        <span className="benchmark-badge" style={{ backgroundColor: 'rgba(16, 185, 129, 0.05)', color: 'var(--neon-green)', borderColor: 'rgba(16, 185, 129, 0.2)', marginBottom: '12px', width: 'fit-content' }}>
+                            🛑 زاوية التحدي المباشر
+                        </span>
+                        <div style={{ marginTop: '10px' }}>
+                            <strong style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'block' }}>🪝 الخطاف البصري (Hook):</strong>
+                            <p style={{ fontSize: '0.92rem', fontWeight: '700', margin: '4px 0 12px 0', color: '#ffffff', lineHeight: '1.4' }}>
+                                "توقف عن إهمال صحتك والتأقلم مع {hookPain || 'التعب اليومي'}! 🛑🛡️"
+                            </p>
+                        </div>
+                        <div>
+                            <strong style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'block' }}>📝 نص الإعلان الإقناعي (Body):</strong>
+                            <p style={{ fontSize: '0.88rem', margin: '4px 0 12px 0', color: 'var(--text-secondary)', lineHeight: '1.6' }}>
+                                صحتك تبدأ من خطوتك الأولى. حان الوقت للاستثمار في {hookProd || 'الحل الطبي الأصلي'} المدعوم بـ {hookUsp || 'تقنيات دعم المفاصل والعظام'}. راحة تدوم طويلاً تليق بك وبنشاطك المستمر.
+                            </p>
+                        </div>
+                        <div>
+                            <strong style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'block' }}>🎯 زر اتخاذ الإجراء (CTA):</strong>
+                            <p style={{ fontSize: '0.88rem', margin: '4px 0', color: 'var(--neon-green)', fontWeight: '600' }}>
+                                ⚡ احصل على التوصيل السريع والضمان الذهبي 100%!
+                            </p>
+                        </div>
+                    </div>
+                    <button 
+                        className="btn btn-save" 
+                        style={{ marginTop: '16px', width: '100%', justifyContent: 'center', height: '36px', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '6px' }}
+                        onClick={() => handleCopyCopy(`🪝 الخطاف: "توقف عن إهمال صحتك والتأقلم مع ${hookPain}! 🛑🛡️"\n\n📝 النص: صحتك تبدأ من خطوتك الأولى. حان الوقت للاستثمار في ${hookProd} المدعوم بـ ${hookUsp}. راحة تدوم طويلاً تليق بك وبنشاطك المستمر.\n\n🎯 العرض: ⚡ احصل على التوصيل السريع والضمان الذهبي 100%!`, 'copy3')}
+                    >
+                        {copiedId === 'copy3' ? '✓ تم النسخ بنجاح' : '📋 نسخ الإعلان بالكامل'}
+                    </button>
                 </div>
             </div>
         </div>

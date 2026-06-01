@@ -2379,5 +2379,18 @@ hr {
     border-color: rgba(15, 23, 42, 0.03);
 }
 
+/* Disabled verified EditableSlot styles */
+.disabled-slot {
+    opacity: 0.65;
+    background: rgba(255, 255, 255, 0.03) !important;
+    border-style: dotted !important;
+    cursor: not-allowed !important;
+    pointer-events: none;
+}
+
+[data-theme="light"] .disabled-slot {
+    background: rgba(0, 0, 0, 0.03) !important;
+}
+
 
 

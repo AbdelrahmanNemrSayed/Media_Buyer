@@ -2,56 +2,41 @@ import { useState } from 'react';
 
 const MENU_GROUPS = [
     {
-        title: 'لوحة التحكم',
+        title: '📂 1. التجهيز والملف العام (Setup)',
         items: [
-            { id: 'dashboard', icon: '🏠', title: 'Dashboard — نظرة عامة' },
-        ]
-    },
-    {
-        title: '📋 التخطيط والأهداف',
-        items: [
+            { id: 'dashboard',  icon: '🏠', title: 'لوحة التحكم العامة' },
             { id: 'summary',    icon: '📝', title: 'الملخص التنفيذي' },
             { id: 'objectives', icon: '🎯', title: 'الأهداف والميزانيات' },
+            { id: 'audience',   icon: '🧲', title: 'الجمهور والرسالة' },
+            { id: 'funnel',     icon: '🔽', title: 'استراتيجية القمع' },
         ]
     },
     {
-        title: '👥 الجمهور والقمع',
-        items: [
-            { id: 'audience',  icon: '🧲', title: 'الجمهور والرسالة' },
-            { id: 'funnel',    icon: '🔽', title: 'استراتيجية القمع' },
-        ]
-    },
-    {
-        title: '🎨 الكرييتف والإنتاج',
+        title: '🎬 2. أصول وإعدادات الحملة (Launch)',
         items: [
             { id: 'creative',  icon: '🎬', title: 'مكتبة الكرييتف والموشن' },
-        ]
-    },
-    {
-        title: '🚀 الإطلاق والتتبع',
-        items: [
             { id: 'timeline',  icon: '📅', title: 'الجدول الزمني (Timeline)' },
             { id: 'checklist', icon: '✅', title: 'قائمة ما قبل الإطلاق' },
-            { id: 'rules',     icon: '⚡', title: 'قواعد التحجيم والإيقاف' },
-        ]
-    },
-    {
-        title: '📊 التحليل والتعلم',
-        items: [
-            { id: 'pacing',     icon: '💸', title: 'متتبع سرعة الإنفاق' },
-            { id: 'reports',    icon: '📈', title: 'تقارير الأداء المتقدمة' },
-            { id: 'postmortem', icon: '🏆', title: 'Post-Mortem والتعلميات' },
-            { id: 'protools',   icon: '🧰', title: 'ترسانة الميديا باير' },
-        ]
-    },
-    {
-        title: '🛠️ أدوات إضافية',
-        items: [
             { id: 'naming',     icon: '🏷️', title: 'أداة تسمية الحملات' },
-            { id: 'calculator', icon: '🧮', title: 'حاسبة الربحية والتعادل' },
             { id: 'utm',        icon: '🔗', title: 'منشئ روابط UTM' },
-            { id: 'ai',         icon: '🤖', title: 'مساعد الذكاء الاصطناعي' },
             { id: 'spyvault',   icon: '🕵️', title: 'مخزن المنافسين (Spy Vault)' },
+        ]
+    },
+    {
+        title: '📊 3. تشخيص الأداء والتقارير (Reports)',
+        items: [
+            { id: 'reports',    icon: '📈', title: 'تقارير الأداء المتقدمة' },
+            { id: 'pacing',     icon: '💸', title: 'متتبع سرعة الإنفاق' },
+            { id: 'rules',      icon: '⚡', title: 'قواعد التحجيم والإيقاف' },
+            { id: 'postmortem', icon: '🏆', title: 'Post-Mortem والتعلميات' },
+        ]
+    },
+    {
+        title: '🛠️ 4. أدوات Pro المساعدة (Helpers)',
+        items: [
+            { id: 'calculator', icon: '🧮', title: 'حاسبة الربحية والتعادل' },
+            { id: 'ai',         icon: '🤖', title: 'مساعد الذكاء الاصطناعي' },
+            { id: 'protools',   icon: '🧰', title: 'ترسانة الميديا باير' },
             { id: 'extras',     icon: '⚙️', title: 'A/B Testing • Notes' },
         ]
     },

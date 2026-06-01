@@ -1,7 +1,35 @@
+import { useState } from 'react';
 import EditableSlot from './EditableSlot';
 
 export default function SpyVault({ state, onChange }) {
     const vaultItems = state.spy_vault_items || [];
+    const [sentId, setSentId] = useState('');
+
+    const sendToCreativeLibrary = (item) => {
+        const currentCreatives = state.creative_library || [
+            { id: 1, name: 'HFL_TOFU_DealHook_01', brand: 'H For Less', stage: 'TOFU', angle: 'توفير / Bundle', format: 'UGC / Demo', hook: 'هوك جذاب أول ثانيتين', length: '12s', cta: 'اشترِ الآن', status: 'Live', link: 'https://drive.google.com/...' }
+        ];
+
+        const nextId = currentCreatives.length > 0 ? Math.max(...currentCreatives.map(r => r.id)) + 1 : 1;
+        const newRow = {
+            id: nextId,
+            name: `Spy_Idea_${nextId}`,
+            brand: 'H For Less',
+            stage: 'TOFU',
+            angle: item.notes || 'مستوحى من المنافسين',
+            format: 'Spy UGC',
+            hook: item.hook || 'هوك المنافس',
+            length: '15s',
+            cta: 'اشترِ الآن',
+            status: 'Ready',
+            link: item.url || ''
+        };
+
+        onChange('creative_library', [...currentCreatives, newRow]);
+        
+        setSentId(item.id);
+        setTimeout(() => setSentId(''), 2000);
+    };
 
     const handleItemChange = (index, field, value) => {
         const newItems = [...vaultItems];
@@ -82,6 +110,14 @@ export default function SpyVault({ state, onChange }) {
                                     style={{ width: '100%', minHeight: '80px', padding: '8px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'var(--text-primary)', borderRadius: '4px', resize: 'vertical' }}
                                 />
                             </div>
+
+                            <button 
+                                className="btn btn-save"
+                                style={{ width: '100%', justifyContent: 'center', height: '36px', fontSize: '0.82rem', marginTop: '4px', background: 'var(--neon-blue)', borderColor: 'var(--neon-blue)', display: 'flex', alignItems: 'center', gap: '6px', color: '#fff' }}
+                                onClick={() => sendToCreativeLibrary(item)}
+                            >
+                                {sentId === item.id ? '🎬 تم الإرسال للمكتبة ✓' : '🎬 إرسال لمكتبة الكرييتف'}
+                            </button>
                         </div>
                     ))
                 )}
